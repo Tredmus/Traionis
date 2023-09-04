@@ -1,0 +1,36 @@
+.btn {
+	@include btn-reset;
+
+	flex-shrink: 0;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	gap: 0px 8px;
+	font-size: 16px;
+	font-weight: 400;
+	color: var(--c-white);
+	border-radius: 6px;
+	background-color: var(--c-base);
+	padding: 12px 18px;
+	transition-property: color, background-color;
+	transition-duration: var(--t-dur);
+	transition-timing-function: var(--t-easing);
+
+	> * {
+		flex-shrink: 0;
+	}
+
+	&:hover {
+		background-color: #6d49d3;
+	}
+}
+
+.btn--full {
+	width: 100%;
+}
+
+.btn--full-mobile {
+	@include breakpoint-down(mobile) {
+		width: 100%;
+	}
+}

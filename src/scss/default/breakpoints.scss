@@ -1,0 +1,56 @@
+/*  Variables  */
+
+$breakpoints: (
+	mobile-small: 374px,
+	mobile-small-alt: 424px,
+	mobile-medium: 575px,
+	mobile: 767px,
+	tablet: 1023px,
+	small-desktop: 1199px,
+	large-desktop: 1399px,
+	extra-large-desktop: 1599px
+);
+
+/*  Functions  */
+
+@function breakpoint-next($name, $breakpoints: $breakpoints, $breakpoint-names: map-keys($breakpoints)) {
+	$n: index($breakpoint-names, $name);
+	@return if($n != null and $n < length($breakpoint-names), nth($breakpoint-names, $n + 1), null);
+}
+
+@function breakpoint-min($name, $breakpoints: $breakpoints) {
+	$min: map-get($breakpoints, $name);
+	@return if($min != 0, $min + .02, null);
+}
+
+@function breakpoint-max($name, $breakpoints: $breakpoints) {
+	$max: map-get($breakpoints, $name);
+	@return if($max != 0, $max, null);
+}
+
+/*  Mixins  */
+
+@mixin breakpoint-up($name, $breakpoints: $breakpoints) {
+	$min: breakpoint-min($name, $breakpoints);
+
+	@media (min-width: $min) {
+		@content;
+	}
+}
+
+@mixin breakpoint-down($name, $breakpoints: $breakpoints) {
+	$max: breakpoint-max($name, $breakpoints);
+
+	@media (max-width: $max) {
+		@content;
+	}
+}
+
+@mixin breakpoint-between($lower, $upper, $breakpoints: $breakpoints) {
+	$min: breakpoint-min($lower, $breakpoints);
+	$max: breakpoint-max($upper, $breakpoints);
+
+	@media (min-width: $min) and (max-width: $max) {
+		@content;
+	}
+}

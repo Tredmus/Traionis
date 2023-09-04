@@ -1,0 +1,13 @@
+//@import 'vendor-name/css/vendor.css';
+
+@import 'default/breakpoints';
+@import 'default/mixins';
+@import 'default/variables';
+@import 'default/reset';
+@import 'default/fonts';
+@import 'default/base';
+@import 'default/animations';
+
+@import 'components/*';
+
+@import 'overwrites/*';

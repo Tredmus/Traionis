@@ -1,0 +1,85 @@
+@mixin image-fit($hasZoom: false) {
+	position: relative;
+	overflow: hidden;
+
+	> a:not([class]),
+	img {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+	> a:not([class]) {
+		z-index: 2;
+		text-decoration: none;
+	}
+
+	img {
+		object-fit: cover;
+		transition: transform calc(var(--t-dur) * 2) cubic-bezier(0, 0, 0.2, 1);
+	}
+
+	@if($hasZoom == true) {
+		&:hover > img,
+		> a:not([class]):hover img {
+			transform: scale(1.09);
+		}
+	}
+}
+
+@mixin sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	border: 0;
+}
+
+@mixin btn-reset {
+	appearance: none;
+	display: inline-block;
+	text-align: center;
+	text-decoration: none;
+	vertical-align: middle;
+	border: 0;
+	border-radius: 0;
+	box-shadow: none;
+	background: transparent;
+	cursor: pointer;
+}
+
+@mixin max-lines($lines: 2) {
+	display: block;
+	display: -webkit-box;
+	text-overflow: ellipsis;
+	-webkit-line-clamp: $lines;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+@mixin headings {
+	:is(.h1, .h2, .h3, .h4, .h5, .h6) {
+		@content;
+	}
+}
+
+@mixin headingsInherit {
+	@include headings {
+		color: inherit;
+		font: inherit;
+		letter-spacing: inherit;
+	}
+}
+
+@mixin hover {
+	@media (hover: hover) {
+		&:hover {
+			@content;
+		}
+	}
+}

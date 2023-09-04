@@ -1,0 +1,38 @@
+:root {
+	--vh: 1vh; // Fallback
+	--vh: 1svh;
+	--window-height: calc(100 * var(--vh));
+
+	--fsz-base: 16px;
+	--fw-base: 400;
+	--lh-base: 1.3;
+	--ff-sans-serif: Helvetica, Arial, sans-serif;
+	--ff-serif: 'Times New Roman', Times, Georgia, serif;
+	--ff-roboto: 'Roboto', var(--ff-sans-serif);
+	--ff-base: var(--ff-roboto);
+
+	--t-dur: .3s;
+	--t-easing: ease;
+
+	--c-black: #000000;
+	--c-white: #FFFFFF;
+	--c-gray: #EEEEEE;
+	--c-gray-2: #AAAAAA;
+	--c-base: #7F57F1;
+
+	--section-spacing: 100px;
+	--container-width: 1280px;
+	--container-gutter: 80px;
+
+	@include breakpoint-down(tablet) {
+		--section-spacing: 75px;
+		--container-gutter: 40px;
+	}
+
+	@include breakpoint-down(mobile) {
+		--fsz-base: 16px;
+
+		--section-spacing: 45px;
+		--container-gutter: 24px;
+	}
+}

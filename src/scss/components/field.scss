@@ -1,0 +1,26 @@
+.field {
+	display: block;
+	background: none;
+	box-shadow: none;
+	outline: none;
+	border: none;
+	min-height: initial;
+	border-radius: 0;
+	width: 100%;
+	text-transform: none;
+	font-size: 16px;
+	line-height: 1;
+	font-weight: inherit;
+	border-bottom: 1px solid currentColor;
+	padding: 0 0 8px;
+}
+
+.field--textarea {
+	line-height: 1.2;
+	border-radius: 12px;
+	border: 1px solid currentColor;
+	resize: none;
+	min-height: initial;
+	height: 160px;
+	padding: 18px 24px;
+}

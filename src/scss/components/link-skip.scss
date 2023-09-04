@@ -1,0 +1,27 @@
+.link-skip {
+	z-index: 9999;
+	position: fixed;
+	inset: 0 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--c-white);
+	text-align: center;
+	text-decoration: none;
+	text-transform: uppercase;
+	font: 700 var(--fsz-base)/var(--lh-base) var(--ff-base);
+	background-color: var(--c-base);
+	outline: none;
+	border-bottom: 1px solid currentColor;
+	height: 60px;
+	transform: translateY(-100%);
+	opacity: 0;
+	transition-property: opacity, transform;
+	transition-duration: var(--t-dur);
+	transition-timing-function: var(--t-easing);
+
+	&:focus-visible {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
