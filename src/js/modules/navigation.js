@@ -1,36 +1,27 @@
-import { $, $win, $doc, $body, classes, breakpoints } from '../includes/globals';
+import { $, $doc, $body, classes, breakpoints } from '../includes/globals';
 import { ScrollController } from '../includes/scroll-controller';
 
-const $menu      = $('.js-menu'),
-	  breakpoint = breakpoints.smallDesktop;
+const breakpoint = breakpoints.tablet;
 
-$doc.on('click', '.js-menu-toggle', toggleMenu);
+$doc.on('click', '.js-menu-toggle', event => {
+	event.stopPropagation();
+	toggleMenu();
+});
+
+$doc.on('click', () => toggleMenu(false));
+$doc.on('click', '.js-header .header__content', event => event.stopPropagation());
 
 $(breakpoint).on('change', resetMenuOnBreakpoint);
 
-$menu.on('click', '> .menu-item-has-children > a', function(event) {
-	event.stopPropagation();
-
-	const $this   = $(event.target),
-		  $parent = $this.closest('.menu-item-has-children');
-
-	if($parent.hasClass(classes.current)) return;
-
-	event.preventDefault();
-
-	$parent
-		.toggleClass(classes.current)
-		.siblings()
-			.removeClass(classes.current);
-});
-
-function toggleMenu() {
-	$body.toggleClass(classes.menuOpen);
+export function toggleMenu(state = () => $body.hasClass(classes.menuOpen)) {
+	$body.toggleClass(classes.menuOpen, state);
 	ScrollController.toggleScroll(!$body.hasClass(classes.menuOpen));
 }
 
 function resetMenuOnBreakpoint() {
-	if(!$body.hasClass(classes.menuOpen)) return;
+	if(!$body.hasClass(classes.menuOpen)) {
+		return;
+	}
 
 	ScrollController.toggleScroll(!breakpoint.matches);
 }

@@ -35,3 +35,4 @@ export const classes = {
 };
 
 export const getHeaderHeight = () => $header.length ? $header.innerHeight() : 0;
+export const hasFixedHeader = true;

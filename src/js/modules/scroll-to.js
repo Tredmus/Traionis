@@ -1,8 +1,6 @@
-import { $, $doc, $win, getHeaderHeight } from '../includes/globals';
+import { $, $doc, $win, getHeaderHeight, hasFixedHeader } from '../includes/globals';
 import { debounce } from '../includes/debounce';
 import '../includes/easing';
-
-const hasFixedHeader = false;
 
 $win.on('load', debounce(() => {
 	const hash = window.location.hash;
@@ -22,6 +20,12 @@ $doc.on('click', 'a[href*="#"]:not([href="#"])', function(event) {
 		url = cleanURL(href, hash);
 
 	scrollByDataID(hash);
+});
+
+$doc.on('click', '.js-top', event => {
+	event.preventDefault();
+
+	scrollToTop();
 });
 
 function checkRedirect(href) {

@@ -29,14 +29,14 @@ $doc.on('click', '.js-skip-link', function(event) {
 	}
 });
 
-function isTabbable($elem) {
-	if(tabbableTags.some(selector => $elem.is(selector))) return true;
+export function isTabbable($elem) {
+	if(tabbableTags.some(selector => $elem.is(selector))) {
+		return true;
+	}
 
-	if($elem.attr('tabindex')) return true;
+	if($elem.attr('tabindex')) {
+		return true;
+	}
 
 	return false;
-};
-
-export {
-	isTabbable
 };
