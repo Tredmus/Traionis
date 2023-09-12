@@ -5,20 +5,21 @@
 
 	--fsz-base: 16px;
 	--fw-base: 400;
-	--lh-base: 1.3;
+	--lh-base: 1.22;
 	--ff-sans-serif: Helvetica, Arial, sans-serif;
 	--ff-serif: 'Times New Roman', Times, Georgia, serif;
-	--ff-roboto: 'Roboto', var(--ff-sans-serif);
-	--ff-base: var(--ff-roboto);
+	--ff-montserrat: 'Montserrat', var(--ff-sans-serif);
+	--ff-base: var(--ff-montserrat);
 
 	--t-dur: .3s;
 	--t-easing: ease;
 
 	--c-black: #000000;
 	--c-white: #FFFFFF;
-	--c-gray: #EEEEEE;
-	--c-gray-2: #AAAAAA;
-	--c-base: #7F57F1;
+	--c-blue: var(--c-blue-rgb);
+	--c-lightblue: var(--c-lightblue-rgb);
+	--c-blue-rgb: 0, 132, 255;
+	--c-lightblue-rgb: 0, 187, 255;
 
 	--section-spacing: 100px;
 	--container-width: 1280px;
