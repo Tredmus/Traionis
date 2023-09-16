@@ -14,12 +14,18 @@
 	--t-dur: .3s;
 	--t-easing: ease;
 
-	--c-black: #000000;
-	--c-white: #FFFFFF;
-	--c-blue: var(--c-blue-rgb);
-	--c-lightblue: var(--c-lightblue-rgb);
+	--c-white-rgb: 255, 255, 255;
+	--c-white-2-rgb: 251, 251, 251;
+	--c-black-rgb: 0, 0, 0;
 	--c-blue-rgb: 0, 132, 255;
 	--c-lightblue-rgb: 0, 187, 255;
+
+	--c-white: rgb(var(--c-white-rgb));
+	--c-white-2: rgb(var(--c-white-2-rgb));
+	--c-black: rgb(var(--c-black-rgb));
+	--c-blue: rgb(var(--c-blue-rgb));
+	--c-lightblue: rgb(var(--c-lightblue-rgb));
+
 
 	--section-spacing: 100px;
 	--container-width: 1280px;

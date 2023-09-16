@@ -14,34 +14,36 @@ body {
 }
 
 .h1 {
-	font-size: 48px;
+	font-size: 42px;
+	line-height: 1.2;
 
 	@include breakpoint-down(tablet) {
-		font-size: 40px;
+		font-size: 38px;
 	}
 
 	@include breakpoint-down(mobile) {
-		font-size: 32px;
+		font-size: 34px;
 	}
 }
 
 .h2 {
-	font-size: 40px;
+	font-size: 34px;
+	line-height: 1.2;
 
 	@include breakpoint-down(tablet) {
-		font-size: 36px;
+		font-size: 31px;
 	}
 
 	@include breakpoint-down(mobile) {
-		font-size: 32px;
+		font-size: 28px;
 	}
 }
 
 .h3 {
-	font-size: 32px;
+	font-size: 28px;
 
 	@include breakpoint-down(tablet) {
-		font-size: 28px;
+		font-size: 26px;
 	}
 
 	@include breakpoint-down(mobile) {
@@ -51,14 +53,26 @@ body {
 
 .h4 {
 	font-size: 24px;
+
+	@include breakpoint-down(mobile) {
+		font-size: 21px;
+	}
 }
 
 .h5 {
-	font-size: 20px;
+	font-size: 21px;
+
+	@include breakpoint-down(mobile) {
+		font-size: 18px;
+	}
 }
 
 .h6 {
 	font-size: 18px;
+
+	@include breakpoint-down(mobile) {
+		font-size: 16px;
+	}
 }
 
 h1 { @extend .h1; }

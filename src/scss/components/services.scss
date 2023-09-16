@@ -1,0 +1,18 @@
+.services {
+	--row-gap: 32px;
+	--col-gap: 32px;
+	--items: 4;
+
+	.services__items {
+		display: flex;
+		justify-content: center;
+		flex-wrap: wrap;
+		row-gap: var(--row-gap);
+		margin-inline: calc(var(--col-gap) / -2);
+	}
+
+	.services__item {
+		flex: 0 0 calc(100% / var(--items));
+		padding-inline: calc(var(--col-gap) / 2);
+	}
+}

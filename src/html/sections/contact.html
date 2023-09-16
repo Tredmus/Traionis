@@ -1,8 +1,8 @@
-<section class="section">
+<section class="section section--contact">
 	<div class="container">
 		<div class="section__inner">
 			<div class="section__image">
-
+				<img src="/media/temp/contact.png" alt="">
 			</div><!-- /.section__image -->
 
 			<div class="section__content">
@@ -18,21 +18,35 @@
 					</h2>
 				</header><!-- /.section__head -->
 
-				<form class="form">
-					<div class="form__body">
-						<div class="form__fields">
-							<div class="form__field">
-								<label for="">
+				<form class="form section__form">
+					<div class="form__fields">
+						<div class="form__field form__field--1of2">
+							<label for="name" class="form__label">
+								Name
+							</label>
 
-								</label>
+							<input type="text" class="field" name="name" id="name" placeholder="Name">
+						</div><!-- /.form__field -->
 
-								<input type="text" class="field" name="field-1#" id="field-1#" placeholder="1#">
-							</div><!-- /.form__field -->
-						</div><!-- /.form__fields -->
-					</div><!-- /.form__body -->
+						<div class="form__field form__field--1of2">
+							<label for="email" class="form__label">
+								Email
+							</label>
+
+							<input type="email" class="field" name="email" id="email" placeholder="Email">
+						</div><!-- /.form__field -->
+
+						<div class="form__field">
+							<label for="message" class="form__label">
+								Message
+							</label>
+
+							<input type="text" class="field" name="message" id="message" placeholder="Message">
+						</div><!-- /.form__field -->
+					</div><!-- /.form__fields -->
 
 					<div class="actions form__actions">
-						<button type="submit">
+						<button type="submit" class="btn">
 							Send
 						</button>
 					</div><!-- /.actions form__actions -->
@@ -40,4 +54,6 @@
 			</div><!-- /.section__content -->
 		</div><!-- /.section__inner -->
 	</div><!-- /.container -->
+
+	<div class="section__background"></div><!-- /.section__background -->
 </section><!-- /.section -->

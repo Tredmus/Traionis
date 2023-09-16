@@ -1,0 +1,29 @@
+.tabs {
+	.tabs__head {
+		margin-bottom: 48px;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	.tabs__nav {
+		ul {
+			list-style: none;
+			display: flex;
+			justify-content: space-between;
+			gap: 16px 24px;
+			flex-wrap: wrap;
+		}
+	}
+
+	.tabs__tab:not(.is-current) {
+		@include sr-only;
+	}
+
+	.tabs__tab-head {
+		@include breakpoint-up(mobile) {
+			display: none;
+		}
+	}
+}

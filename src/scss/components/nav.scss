@@ -1,6 +1,10 @@
 .nav {
 	ul {
 		list-style: none;
+		display: flex;
+		justify-content: flex-end;
+		flex-wrap: wrap;
+		gap: 20px;
 	}
 
 	a {

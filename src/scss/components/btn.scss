@@ -2,16 +2,18 @@
 	@include btn-reset;
 
 	flex-shrink: 0;
+	position: relative;
 	display: inline-flex;
 	justify-content: center;
 	align-items: center;
 	gap: 0px 8px;
-	font-size: 16px;
-	font-weight: 400;
+	font-size: 18px;
+	font-weight: 600;
 	color: var(--c-white);
-	border-radius: 6px;
+	border-radius: 12px;
 	background-color: var(--c-blue);
-	padding: 12px 18px;
+	min-width: 185px;
+	padding: 20px 38px;
 	transition-property: color, background-color;
 	transition-duration: var(--t-dur);
 	transition-timing-function: var(--t-easing);
@@ -21,7 +23,64 @@
 	}
 
 	&:hover {
-		background-color: #6d49d3;
+		background-color: var(--c-lightblue);
+	}
+}
+
+.btn--white {
+	color: var(--c-lightblue);
+	background-color: var(--c-white);
+
+	&:hover {
+		color: var(--c-lightblue);
+		background-color: var(--c-white-2);
+	}
+}
+
+.btn--border {
+	color: var(--c-lightblue);
+	background-color: transparent;
+
+	&:after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		border-radius: inherit;
+		border: 2px solid var(--c-lightblue);
+		transition: border-color var(--t-dur) ease;
+
+		@include breakpoint-down(mobile) {
+			border-width: 1px;
+		}
+	}
+
+	&:hover {
+		color: var(--c-white);
+		background-color: var(--c-lightblue);
+
+		&:after {
+			border-color: var(--c-lightblue);
+		}
+	}
+}
+
+.btn--border-white {
+	@extend .btn--border;
+
+	color: var(--c-white);
+
+	&:after {
+		border-color: var(--c-white);
+	}
+
+	&:hover {
+		color: var(--c-lightblue);
+		background-color: var(--c-white);
+
+		&:after {
+			border-color: var(--c-white);
+		}
 	}
 }
 

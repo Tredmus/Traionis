@@ -30,7 +30,7 @@
 
 	img {
 		object-fit: cover;
-		transition: transform calc(var(--t-dur) * 2) cubic-bezier(0, 0, 0.2, 1);
+		transition: transform var(--t-dur) var(--t-easing);
 	}
 
 	@if($hasZoom == true) {

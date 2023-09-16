@@ -1,0 +1,9 @@
+.project {
+	@include image-fit(true);
+
+	aspect-ratio: 1;
+	width: 100%;
+	display: block;
+	border-radius: 20px;
+	text-decoration: none;
+}

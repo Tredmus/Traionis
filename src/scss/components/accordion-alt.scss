@@ -1,0 +1,89 @@
+.accordion-alt {
+	--icon-size: 58px;
+	--toggle-gap: 16px;
+
+	.accordion__section.is-current {
+		background-color: var(--c-white-2);
+
+		.accordion__content {
+			opacity: 1;
+			grid-template-rows: 1fr;
+		}
+
+		.accordion__toggle {
+			&:after {
+				transform: rotateX(-180deg);
+			}
+		}
+	}
+
+	.accordion__section {
+		border-radius: 20px;
+		padding: 20px 32px;
+		transition: background-color var(--t-dur) var(--t-easing);
+	}
+
+	.accordion__toggle {
+		@include btn-reset;
+
+		width: 100%;
+		display: flex;
+		align-items: center;
+		gap: var(--toggle-gap);
+
+		&:after {
+			content: '';
+			flex-shrink: 0;
+			width: 19px;
+			aspect-ratio: 1.9;
+			background-color: currentColor;
+			mask-repeat: no-repeat;
+			mask-size: cover;
+			mask-position: center center;
+			mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 19 10'%3E%3Cpath fill='%23606060' d='M.422.408a1.333 1.333 0 0 0 0 1.946l7.044 6.724c1.124 1.073 2.947 1.073 4.071-.001l7.041-6.728a1.333 1.333 0 0 0 0-1.946 1.488 1.488 0 0 0-2.036 0l-6.027 5.758a1.488 1.488 0 0 1-2.036 0L2.458.408a1.488 1.488 0 0 0-2.036 0Z'/%3E%3C/svg%3E");
+			margin-left: auto;
+			transition-property: transform;
+			transition-duration: var(--t-dur);
+			transition-timing-function: var(--t-easing);
+		}
+	}
+
+	.accordion__title {
+		padding-block: 12px;
+	}
+
+	.accordion__icon {
+		flex-shrink: 0;
+		width: var(--icon-size);
+		aspect-ratio: 1;
+		border-radius: 50%;
+		background-color: var(--c-blue);
+		color: var(--c-white);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		svg {
+			display: block;
+			max-width: 100%;
+			max-height: 100%;
+		}
+	}
+
+	.accordion__content {
+		display: grid;
+		transform: translate3d(0, 0, 0);
+		will-change: grid-template-rows, opacity;
+		transition-property: grid-template-rows, opacity;
+		transition-duration: var(--t-dur);
+		transition-timing-function: var(--t-easing);
+		grid-template-rows: 0fr;
+		opacity: 0;
+	}
+
+	.accordion__content-inner {
+		min-height: 0;
+		overflow: hidden;
+		padding-left: calc(var(--icon-size) + var(--toggle-gap));
+	}
+}

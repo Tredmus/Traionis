@@ -1,3 +1,48 @@
 .footer {
+	margin-top: -1px;
+	color: var(--c-white);
+	background: linear-gradient(to bottom, var(--c-lightblue), var(--c-blue));
+	padding-block: 32px 64px;
 
+	.footer__inner {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		grid-gap: 32px;
+	}
+
+	.footer__entry {
+		margin-bottom: 24px;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	.footer__contacts {
+		font-weight: 700;
+
+		ul {
+			list-style: none;
+		}
+
+		li {
+			margin-bottom: 8px;
+
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+	}
+
+	.footer__copyright {
+		margin-top: 100px;
+
+		&:first-child {
+			margin-top: 0;
+		}
+	}
+
+	.footer__aside {
+		align-self: flex-end;
+	}
 }

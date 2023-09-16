@@ -1,0 +1,25 @@
+.form {
+	.form__label {
+		@include sr-only;
+	}
+
+	.form__fields {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		grid-gap: 16px;
+	}
+
+	.form__field:not(.form__field--1of2) {
+		grid-column: span 2;
+	}
+
+	.form__actions {
+		display: flex;
+		justify-content: flex-end;
+		margin-top: 24px;
+
+		&:first-child {
+			margin-top: 0;
+		}
+	}
+}

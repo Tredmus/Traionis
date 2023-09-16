@@ -2,14 +2,11 @@
 	z-index: 100;
 	position: sticky;
 	top: 0;
-	background-color: var(--c-white);
 	padding: 20px 0;
-	transition: box-shadow var(--t-dur) var(--t-easing);
+	transition-property: box-shadow, background-color;
+	transition-duration: var(--t-dur);
+	transition-timing-function: var(--t-easing);
 	will-change: box-shadow;
-
-	@include breakpoint-down(mobile) {
-		padding: 16px 0;
-	}
 
 	.header__inner {
 		display: flex;
@@ -31,8 +28,13 @@
 			flex-shrink: 0;
 		}
 	}
+
+	.header__logo {
+		max-width: 160px;
+	}
 }
 
 body.has-scrolled .header {
-	box-shadow: 0px 2px 8px rgba(0, 0, 0, .1);
+	background-color: var(--c-white);
+	box-shadow: 0px 2px 8px 2px rgba(var(--c-black-rgb), .1);
 }
