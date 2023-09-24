@@ -1,12 +1,17 @@
 .list-features {
+	--line-height: var(--lh-base);
+
+	line-height: var(--line-height);
+
 	ul {
 		list-style: none;
 	}
 
 	li {
 		display: flex;
+		align-items: flex-start;
 		gap: 12px;
-		margin-bottom: 16px;
+		margin-bottom: 18px;
 
 		&:last-child {
 			margin-bottom: 0;
@@ -15,6 +20,9 @@
 		&:before {
 			content: '';
 			flex-shrink: 0;
+			position: relative;
+			top: calc(.5em * var(--line-height));
+			transform: translateY(-50%);
 			width: 19px;
 			aspect-ratio: 1;
 			background-color: currentColor;

@@ -13,7 +13,7 @@
 	border-radius: 12px;
 	background-color: var(--c-blue);
 	min-width: 185px;
-	padding: 20px 38px;
+	padding: 20px 30px;
 	transition-property: color, background-color;
 	transition-duration: var(--t-dur);
 	transition-timing-function: var(--t-easing);
@@ -25,6 +25,12 @@
 	&:hover {
 		background-color: var(--c-lightblue);
 	}
+}
+
+.btn--sm {
+	font-size: 16px;
+	min-width: 140px;
+	padding: 15px 20px;
 }
 
 .btn--white {

@@ -1,6 +1,6 @@
 .tabs {
 	.tabs__head {
-		margin-bottom: 48px;
+		margin-bottom: 72px;
 
 		&:last-child {
 			margin-bottom: 0;
@@ -8,10 +8,13 @@
 	}
 
 	.tabs__nav {
+		font-size: 24px;
+
 		ul {
 			list-style: none;
 			display: flex;
 			justify-content: space-between;
+			justify-content: center;
 			gap: 16px 24px;
 			flex-wrap: wrap;
 		}

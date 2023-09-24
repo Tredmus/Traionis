@@ -2,7 +2,7 @@
 	z-index: 100;
 	position: sticky;
 	top: 0;
-	padding: 20px 0;
+	padding-block: 20px;
 	transition-property: box-shadow, background-color;
 	transition-duration: var(--t-dur);
 	transition-timing-function: var(--t-easing);
@@ -18,7 +18,7 @@
 	.header__content {
 		display: flex;
 		align-items: center;
-		gap: 16px 32px;
+		gap: 16px 66px;
 
 		@include breakpoint-down(tablet) {
 			display: none;

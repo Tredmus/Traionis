@@ -14,5 +14,17 @@
 	.services__item {
 		flex: 0 0 calc(100% / var(--items));
 		padding-inline: calc(var(--col-gap) / 2);
+
+		&:nth-child(4n + 2) .service {
+			--icon-transform: rotate(-195deg);
+		}
+
+		&:nth-child(4n + 3) .service {
+			--icon-transform: rotateX(-180deg);
+		}
+
+		&:nth-child(4n + 4) .service {
+			--icon-transform: rotateY(-180deg);
+		}
 	}
 }

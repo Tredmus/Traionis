@@ -20,6 +20,7 @@
 	}
 
 	.plan__title {
+		height: calc(var(--title-height));
 		margin-bottom: 32px;
 
 		&:last-child {
@@ -28,6 +29,7 @@
 	}
 
 	.plan__pricing {
+		height: calc(var(--pricing-height));
 		font-size: 48px;
 		font-weight: 700;
 
@@ -39,6 +41,10 @@
 	}
 
 	.plan__entry {
+		height: calc(var(--entry-height));
+		font-size: 16px;
+		font-weight: 500;
+		line-height: var(--lh-entry);
 		margin-bottom: 48px;
 
 		&:last-child {
@@ -47,6 +53,7 @@
 	}
 
 	.plan__features {
+		font-size: 16px;
 		margin-bottom: 64px;
 
 		&:last-child {

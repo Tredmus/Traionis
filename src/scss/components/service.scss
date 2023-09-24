@@ -1,4 +1,6 @@
 .service {
+	--icon-transform: none;
+
 	text-align: left;
 
 	.service__link {
@@ -7,34 +9,93 @@
 	}
 
 	.service__content {
+		position: relative;
+		isolation: isolate;
 		border-radius: 20px;
 		background-color: var(--c-white);
 		box-shadow: 3px 2px 14px -6px rgba(var(--c-black-rgb), .25);
 		padding: 30px;
-		transition-property: color, background, box-shadow;
+		transition-property: color, box-shadow;
 		transition-duration: var(--t-dur);
 		transition-timing-function: var(--t-easing);
+
+		&:before {
+			content: '';
+			z-index: -1;
+			position: absolute;
+			inset: 0;
+			border-radius: inherit;
+			background: linear-gradient(to right, var(--c-blue), var(--c-lightblue));
+			transition-property: opacity;
+			transition-duration: var(--t-dur);
+			transition-timing-function: var(--t-easing);
+			opacity: 0;
+		}
 	}
 
 	.service__link:hover .service__content {
 		color: var(--c-white);
-		background-color: var(--c-blue);
 		box-shadow: 0px 0px 51px 3px rgba(var(--c-black-rgb), .25);
+
+		&:before {
+			opacity: 1;
+		}
 	}
 
 	.service__icon {
-		margin-bottom: 24px;
+		display: grid;
+		grid-template-columns: auto 1fr;
+		place-items: center;
+		margin-bottom: 14px;
 
 		&:last-child {
 			margin-bottom: 0;
+		}
+
+		&:before {
+			content: '';
+			position: relative;
+			z-index: -1;
+			display: block;
+			width: 100px;
+			aspect-ratio: 1;
+			mask-repeat: no-repeat;
+			mask-size: contain;
+			mask-position: center center;
+			mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='18.34 31.99 103.28 76.25'%3E%3Cpath fill='%230084FF'  d='M121.594 65.143c.848 25.738-19.799 37.948-34.648 41.719-26.281 4.361-76.58.919-67.53-47.73 4.95-36.062 37.831-31.466 61.52-13.435 23.687 18.031 39.597-12.728 40.658 19.446Z'/%3E%3C/svg%3E");
+			transform: var(--icon-transform);
+			transition: background-color var(--t-dur) var(--t-easing);
+			background-color: rgba(var(--c-blue-rgb), .22);
+		}
+
+		> *,
+		&:before {
+			grid-column: 1;
+			grid-row: 1;
+		}
+	}
+
+	.service__link:hover .service__icon {
+		&:before {
+			background-color: var(--c-lightblue);
 		}
 	}
 
 	.service__title {
-		margin-bottom: 16px;
+		margin-bottom: 12px;
 
 		&:last-child {
 			margin-bottom: 0;
 		}
+	}
+
+	.service__view {
+		color: var(--c-blue);
+		font-size: .9em;
+		transition: color var(--t-dur) var(--t-easing);
+	}
+
+	.service__link:hover .service__view {
+		color: var(--c-white);
 	}
 }

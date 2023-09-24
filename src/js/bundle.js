@@ -9,6 +9,7 @@ import './modules/navigation';
 import './modules/header';
 import './modules/accordion';
 import './modules/tabs';
+import './modules/plans';
 
 /**
  * Styles
