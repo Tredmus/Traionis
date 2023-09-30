@@ -69,6 +69,7 @@
 		gap: var(--icon-gap);
 		padding-inline: var(--padding-inline);
 		padding-block: 20px;
+		border-radius: inherit;
 
 		@include breakpoint-down(small-desktop) {
 			padding-block: 16px;
@@ -129,6 +130,10 @@
 				transition-duration: var(--t-dur);
 				transition-timing-function: var(--t-easing);
 			}
+		}
+
+		&:focus-visible .accordion__title {
+			text-decoration: underline;
 		}
 	}
 

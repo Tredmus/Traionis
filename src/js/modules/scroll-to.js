@@ -1,5 +1,6 @@
 import { $, $doc, $win, getHeaderHeight, hasFixedHeader } from '../includes/globals';
 import { toggleMenu } from './navigation';
+import { isTabbable, isKeyboardUser } from './accessibility';
 import '../includes/easing';
 
 $win.on('load popstate hashchange', () => {
@@ -80,10 +81,10 @@ export function scrollToElement($elem, offset = -1) {
 
 	const dataTop = $elem.first().offset().top;
 
-	scrollToPosition(dataTop, offset);
+	scrollToPosition(dataTop, offset, $elem);
 }
 
-export function scrollToPosition(dataTop, offset = -1) {
+export function scrollToPosition(dataTop, offset = -1, $focusElement = '') {
 	if(offset === -1) {
 		offset = $win.height() * 0.03;
 	}
@@ -104,7 +105,18 @@ export function scrollToPosition(dataTop, offset = -1) {
 
 	$('html, body').stop().animate({
 		scrollTop,
-	}, scrollDuration, 'easeInOutExpo');
+	}, scrollDuration, 'easeInOutExpo', () => {
+		if(!$focusElement.length) {
+			return;
+		}
+
+		if(!isTabbable($focusElement) && isKeyboardUser()) {
+			$focusElement.attr('tabindex', '-1');
+			$focusElement.addClass('skipped-element');
+
+			$focusElement[0].focus({ preventScroll: true });
+		}
+	});
 }
 
 export function scrollToTop() {

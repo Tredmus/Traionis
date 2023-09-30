@@ -1,4 +1,4 @@
-.field {
+.input {
 	display: block;
 	background: none;
 	box-shadow: none;
@@ -23,7 +23,7 @@
 	}
 }
 
-.field:is(textarea) {
+.input:is(textarea) {
 	line-height: 1.2;
 	resize: none;
 	height: 120px;

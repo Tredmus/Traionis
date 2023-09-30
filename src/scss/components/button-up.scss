@@ -18,7 +18,8 @@
 		width: 54px;
 	}
 
-	&:hover {
+	&:hover,
+	&:focus-visible {
 		color: var(--c-lightblue);
 		background-color: var(--c-white);
 	}

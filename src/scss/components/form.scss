@@ -3,7 +3,7 @@
 		@include sr-only;
 	}
 
-	.form__fields {
+	.form__inputs {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
 		grid-gap: 16px;
@@ -14,7 +14,7 @@
 		}
 	}
 
-	.form__field:not(.form__field--1of2) {
+	.form__input:not(.form__input--column) {
 		grid-column: span 2;
 
 		@include breakpoint-down(mobile-medium) {

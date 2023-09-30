@@ -1,11 +1,11 @@
 <load ="html/partials/head.html"/>
 
 <body>
-	<a href="#main" class="link-skip js-skip-link">
+	<a href="#main" class="link-skip js-link-skip">
 		Skip to Main Content
 	</a>
 
-	<div class="page-container">
+	<div class="page-container" id="main">
 		<header class="header js-header">
 			<div class="container">
 				<div class="header__grid">
@@ -61,7 +61,7 @@
 						</div><!-- /.buttons header__buttons -->
 					</div><!-- /.header__content -->
 
-					<button class="menu-toggle js-menu-toggle">
+					<button class="menu-toggle js-menu-toggle" aria-label="Toggle Menu" title="Toggle Menu">
 						<span></span>
 
 						<span></span>
@@ -72,4 +72,4 @@
 			</div><!-- /.container -->
 		</header><!-- /.header -->
 
-		<main id="main" class="main">
+		<main class="main">

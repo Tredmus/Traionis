@@ -1,3 +1,8 @@
+@mixin focus-outline {
+	outline: 2px dotted currentColor;
+	outline-offset: 2px;
+}
+
 @mixin font-face($name, $file, $weight: 400, $style: normal) {
 	@font-face {
 		font-family: '#{$name}';
@@ -59,6 +64,7 @@
 	text-decoration: none;
 	vertical-align: middle;
 	border: 0;
+	outline: none;
 	border-radius: 0;
 	box-shadow: none;
 	background: transparent;

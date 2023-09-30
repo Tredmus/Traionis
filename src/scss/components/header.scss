@@ -49,6 +49,8 @@
 	}
 
 	.header__logo {
+		color: var(--c-lightblue);
+		border-radius: 4px;
 		max-width: 160px;
 
 		@include breakpoint-down(tablet) {

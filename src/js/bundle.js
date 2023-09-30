@@ -3,7 +3,7 @@
  */
 
 import './modules/scroll-to';
-import './modules/accessibility-functions';
+import './modules/accessibility';
 import './modules/navigation';
 import './modules/header';
 import './modules/accordion';

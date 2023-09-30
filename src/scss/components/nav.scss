@@ -39,11 +39,17 @@
 		transition-property: color;
 		transition-duration: var(--t-dur);
 		transition-timing-function: var(--t-easing);
+		outline: none;
 
 		&:before {
 			content: '';
 			position: absolute;
 			inset: -8px;
+			border-radius: 8px;
+		}
+
+		&:focus-visible:before {
+			@include focus-outline;
 		}
 	}
 }

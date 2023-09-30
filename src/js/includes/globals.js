@@ -31,7 +31,8 @@ export const classes = {
 	scrollLock: 'scroll-lock',
 	menuOpen: 'menu-opened',
 	swiperButtonDisabled: 'swiper-button-disabled',
-	scrolled: 'has-scrolled'
+	scrolled: 'has-scrolled',
+	keyboardUser: 'is-keyboard-user'
 };
 
 export const getHeaderHeight = () => $header.length ? $header.innerHeight() : 0;

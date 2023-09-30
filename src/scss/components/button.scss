@@ -37,7 +37,8 @@
 		flex-shrink: 0;
 	}
 
-	&:hover {
+	&:hover,
+	&:focus-visible {
 		background-color: var(--c-lightblue);
 	}
 }
@@ -52,9 +53,10 @@
 	color: var(--c-lightblue);
 	background-color: var(--c-white);
 
-	&:hover {
-		color: var(--c-lightblue);
-		background-color: var(--c-white-2);
+	&:hover,
+	&:focus-visible {
+		color: var(--c-blue);
+		background-color: var(--c-white-3);
 	}
 }
 
@@ -76,7 +78,8 @@
 		}
 	}
 
-	&:hover {
+	&:hover,
+	&:focus-visible {
 		color: var(--c-white);
 		background-color: var(--c-lightblue);
 
@@ -95,7 +98,8 @@
 		border-color: var(--c-white);
 	}
 
-	&:hover {
+	&:hover,
+	&:focus-visible {
 		color: var(--c-lightblue);
 		background-color: var(--c-white);
 

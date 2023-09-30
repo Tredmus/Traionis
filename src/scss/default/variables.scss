@@ -17,13 +17,15 @@
 
 	--c-white-rgb: 250, 252, 255;
 	--c-white-2-rgb: 243, 245, 248;
+	--c-white-3-rgb: 235, 237, 240;
 	--c-black-rgb: 5, 10, 15;
-	 --c-gray-rgb: 120, 123, 128;
+	 --c-gray-rgb: 114, 116, 121;
 	--c-blue-rgb: 0, 132, 255;
 	--c-lightblue-rgb: 0, 187, 255;
 
 	--c-white: rgb(var(--c-white-rgb));
 	--c-white-2: rgb(var(--c-white-2-rgb));
+	--c-white-3: rgb(var(--c-white-3-rgb));
 	--c-black: rgb(var(--c-black-rgb));
 	 --c-gray: rgb(var( --c-gray-rgb));
 	--c-blue: rgb(var(--c-blue-rgb));

@@ -69,6 +69,10 @@
 			transition-duration: var(--t-dur);
 			transition-timing-function: var(--t-easing);
 		}
+
+		&:focus-visible .accordion__title {
+			text-decoration: underline;
+		}
 	}
 
 	.accordion__content {

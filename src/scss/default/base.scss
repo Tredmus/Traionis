@@ -1,3 +1,8 @@
+:where(*:focus-visible) {
+	@include focus-outline;
+}
+
+
 body {
 	min-width: 320px;
 	background: var(--c-white);

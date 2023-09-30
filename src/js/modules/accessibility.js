@@ -1,4 +1,4 @@
-import { $, $doc } from '../includes/globals';
+import { $, $doc, $body, classes } from '../includes/globals';
 
 // Test Focusing of Elements
 // document.addEventListener('focus', event => {
@@ -13,22 +13,6 @@ export const tabbableTags = [
 	'select',
 ];
 
-// Skip links
-$doc.on('click', '.js-skip-link', function(event) {
-	event.preventDefault();
-
-	const $hash = $(this.hash);
-
-	if($hash.length) {
-		if(!isTabbable($hash)) {
-			$hash.attr('tabindex', '-1');
-			$hash.addClass('skipped-element');
-		}
-
-		$hash.focus();
-	}
-});
-
 export function isTabbable($elem) {
 	if(tabbableTags.some(selector => $elem.is(selector))) {
 		return true;
@@ -40,3 +24,14 @@ export function isTabbable($elem) {
 
 	return false;
 };
+
+// Detect if the user navigates with a keyboard
+$doc.on('keydown', event => {
+	if(event.keyCode === 9) {
+		$body.addClass(classes.keyboardUser);
+	}
+});
+
+export function isKeyboardUser() {
+	return $body.hasClass(classes.keyboardUser);
+}
