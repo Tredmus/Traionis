@@ -8,13 +8,17 @@ const plansObserver = new ResizeObserver(debounce(() => {
 	const $prices = $plans.find('.plan__pricing');
 	const $entries = $plans.find('.plan__entry');
 
-	$plans.css({
-		'--title-height': `${$titles.maxHeight()}px`,
-		'--pricing-height': `${$prices.maxHeight()}px`,
-		'--entry-height': `${$entries.maxHeight()}px`,
-	});
+	if($titles.length) {
+		$plans.css({ '--title-height': `${$titles.maxHeight()}px` });
+	}
+
+	if($prices.length) {
+		$plans.css({ '--pricing-height': `${$prices.maxHeight()}px` });
+	}
+
+	if($entries.length) {
+		$plans.css({ '--entry-height': `${$entries.maxHeight()}px` });
+	}
 }, 100));
 
-// plansObserver.observe(document.documentElement)
-
-$('.js-plan').each((i, plan) => plansObserver.observe(plan))
+$('.js-plan').each((i, plan) => plansObserver.observe(plan));

@@ -8,9 +8,6 @@ $doc.on('click', '.js-menu-toggle', event => {
 	toggleMenu();
 });
 
-$doc.on('click', () => toggleMenu(false));
-$doc.on('click', '.js-header .header__content', event => event.stopPropagation());
-
 $(breakpoint).on('change', resetMenuOnBreakpoint);
 
 export function toggleMenu(state = () => $body.hasClass(classes.menuOpen)) {

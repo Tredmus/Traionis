@@ -6,22 +6,29 @@ import '../includes/easing';
 $win.on('load', debounce(() => {
 	const hash = window.location.hash;
 
-	if(hash.length) {
-		scrollByDataID(hash);
+	if(!hash.length) {
+		return;
 	}
+
+	scrollByDataID(hash);
 }, 100));
 
 $doc.on('click', 'a[href*="#"]:not([href="#"])', function(event) {
-	const $link = $(this),
-		  hash = this.hash;
+	const $link = $(this);
+	const hash = this.hash;
+	const href = $(this).attr('href');
+	const url = cleanURL(href, hash);
 
-	if(!hash.length) return;
+	if(!hash.length) {
+		return;
+	}
 
-	let href = $(this).attr('href'),
-		url = cleanURL(href, hash);
+	if(url.length && !checkRedirect(url)) {
+		return;
+	}
 
-	toggleMenu(false);
 	scrollByDataID(hash);
+	toggleMenu(false);
 });
 
 $doc.on('click', '.js-top', event => {
@@ -31,10 +38,12 @@ $doc.on('click', '.js-top', event => {
 });
 
 function checkRedirect(href) {
-	if(!href) return;
+	if(!href) {
+		return;
+	}
 
-	let currentUrl  = window.location.href,
-		currentHash = window.location.hash;
+	let currentUrl  = window.location.href;
+	let currentHash = window.location.hash;
 
 	currentUrl = cleanURL(currentUrl, currentHash);
 
@@ -50,7 +59,9 @@ function checkRedirect(href) {
 }
 
 function cleanURL(url, hash) {
-	if(!url) return false;
+	if(!url) {
+		return false;
+	}
 
 	if(hash) {
 		url = url.replace(hash, '');
@@ -60,18 +71,24 @@ function cleanURL(url, hash) {
 }
 
 export function scrollByDataID(data, offset = -1) {
-	if(!data) return false;
+	if(!data) {
+		return false;
+	}
 
 	data = data.replace(/^#/, '');
 	const $data = $(`*[data-id="${data}"]`);
 
-	if(!$data.length) return;
+	if(!$data.length) {
+		return;
+	}
 
 	scrollToElement($data, offset);
 }
 
 export function scrollToElement($elem, offset = -1) {
-	if(!$elem.length) return;
+	if(!$elem.length) {
+		return;
+	}
 
 	const dataTop = $elem.first().offset().top;
 
@@ -83,22 +100,17 @@ export function scrollToPosition(dataTop, offset = -1) {
 		offset = $win.height() * 0.05;
 	}
 
-	const top              = $win.scrollTop(),
-		  scrollDifference = Math.abs(Math.round(top - dataTop)),
-		  scrollMultiplier = scrollDifference * .75;
+	const top = $win.scrollTop();
+	const scrollDifference = Math.abs(Math.round(top - dataTop));
+	const scrollMultiplier = scrollDifference * .75;
+	const headerHeight = hasFixedHeader ? getHeaderHeight() : 0;
 
-	let headerHeight   = 0,
-		scrollDuration = 0;
-
-	if(hasFixedHeader) {
-		headerHeight = getHeaderHeight();
-	}
-
+	let scrollDuration = 0;
 	let scrollTop = dataTop - headerHeight - offset;
 
 	if(scrollTop + $win.height() > $doc.height()) {
 		scrollTop = $doc.height() - $win.height();
-}
+	}
 
 	if(scrollTop < 0) {
 		scrollTop = 0;
