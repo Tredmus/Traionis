@@ -13,7 +13,7 @@
 		padding-bottom: 32px;
 	}
 
-	.footer__inner {
+	.footer__grid {
 		display: grid;
 		grid-template-columns: 1fr auto;
 		grid-gap: 32px;
@@ -23,7 +23,7 @@
 		}
 	}
 
-	.footer__entry {
+	.footer__text {
 		text-wrap: balance;
 		margin-bottom: 24px;
 

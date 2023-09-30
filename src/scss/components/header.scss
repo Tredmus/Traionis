@@ -41,7 +41,7 @@
 		opacity: 0;
 	}
 
-	.header__inner {
+	.header__grid {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -98,13 +98,13 @@
 		}
 	}
 
-	.header__actions {
+	.header__buttons {
 		@include breakpoint-down(mobile) {
 			flex-direction: column;
 			width: 100%;
 		}
 
-		.btn {
+		.button {
 			@include breakpoint-down(mobile) {
 				width: 100%;
 			}

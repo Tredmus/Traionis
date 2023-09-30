@@ -43,7 +43,7 @@
 	}
 
 	.accordion__toggle {
-		@include btn-reset;
+		@include button-reset;
 
 		text-wrap: balance;
 		text-align: left;
@@ -82,13 +82,13 @@
 		opacity: 0;
 	}
 
-	.accordion__content-inner {
+	.accordion__content-body {
 		min-height: 0;
 		overflow: hidden;
 		padding-inline: var(--padding-inline);
 	}
 
-	.accordion__entry {
+	.accordion__text {
 		color: var( --c-gray);
 		font-size: 16px;
 		line-height: var(--lh-entry);

@@ -6,7 +6,7 @@ const plansObserver = new ResizeObserver(debounce(() => {
 	const $plans = $('.js-plan');
 	const $titles = $plans.find('.plan__title');
 	const $prices = $plans.find('.plan__pricing');
-	const $entries = $plans.find('.plan__entry');
+	const $entries = $plans.find('.plan__text');
 
 	if($titles.length) {
 		$plans.css({ '--title-height': `${$titles.maxHeight()}px` });

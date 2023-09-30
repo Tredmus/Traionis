@@ -16,7 +16,7 @@
 		--col-gap: 0px;
 	}
 
-	.plans__items {
+	.plans__grid {
 		display: flex;
 		justify-content: center;
 		flex-wrap: wrap;
@@ -24,7 +24,7 @@
 		margin-inline: calc(var(--col-gap) / -2);
 	}
 
-	.plans__item {
+	.plans__grid-item {
 		flex: 0 0 calc(100% / var(--items));
 		padding-inline: calc(var(--col-gap) / 2);
 	}

@@ -1,5 +1,5 @@
-.btn {
-	@include btn-reset;
+.button {
+	@include button-reset;
 
 	flex-shrink: 0;
 	position: relative;
@@ -42,13 +42,13 @@
 	}
 }
 
-.btn--sm {
+.button--sm {
 	font-size: 16px;
 	min-width: 140px;
 	padding: 15px 20px;
 }
 
-.btn--white {
+.button--white {
 	color: var(--c-lightblue);
 	background-color: var(--c-white);
 
@@ -58,7 +58,7 @@
 	}
 }
 
-.btn--border {
+.button--border {
 	color: var(--c-lightblue);
 	background-color: transparent;
 
@@ -86,8 +86,8 @@
 	}
 }
 
-.btn--border-white {
-	@extend .btn--border;
+.button--border-white {
+	@extend .button--border;
 
 	color: var(--c-white);
 
@@ -105,11 +105,11 @@
 	}
 }
 
-.btn--full {
+.button--full {
 	width: 100%;
 }
 
-.btn--full-mobile {
+.button--full-mobile {
 	@include breakpoint-down(mobile) {
 		width: 100%;
 	}
