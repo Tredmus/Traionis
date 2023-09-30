@@ -1,5 +1,6 @@
 import { $, $doc, $win, getHeaderHeight, hasFixedHeader } from '../includes/globals';
 import { debounce } from '../includes/debounce';
+import { toggleMenu } from './navigation';
 import '../includes/easing';
 
 $win.on('load', debounce(() => {
@@ -19,6 +20,7 @@ $doc.on('click', 'a[href*="#"]:not([href="#"])', function(event) {
 	let href = $(this).attr('href'),
 		url = cleanURL(href, hash);
 
+	toggleMenu(false);
 	scrollByDataID(hash);
 });
 

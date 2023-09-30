@@ -5,6 +5,12 @@
 		font-size: 16px;
 	}
 
+	@include breakpoint-down(tablet) {
+		font-size: 20px;
+		text-align: center;
+		margin-block: auto;
+	}
+
 	ul {
 		list-style: none;
 		display: flex;
@@ -19,13 +25,25 @@
 		@include breakpoint-down(small-desktop) {
 			gap: 15px 32px;
 		}
+
+		@include breakpoint-down(mobile) {
+			flex-direction: column;
+			gap: 24px;
+		}
 	}
 
 	a {
+		position: relative;
 		display: block;
 		text-decoration: none;
 		transition-property: color;
 		transition-duration: var(--t-dur);
 		transition-timing-function: var(--t-easing);
+
+		&:before {
+			content: '';
+			position: absolute;
+			inset: -8px;
+		}
 	}
 }
