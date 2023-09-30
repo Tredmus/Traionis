@@ -1,22 +1,10 @@
 import { $, $doc, $win, getHeaderHeight, hasFixedHeader } from '../includes/globals';
-import { debounce } from '../includes/debounce';
 import { toggleMenu } from './navigation';
 import '../includes/easing';
 
-$win.on('load', debounce(() => {
+$win.on('load popstate hashchange', () => {
 	const hash = window.location.hash;
-
-	if(!hash.length) {
-		return;
-	}
-
-	scrollByDataID(hash);
-}, 100));
-
-$doc.on('click', 'a[href*="#"]:not([href="#"])', function(event) {
-	const $link = $(this);
-	const hash = this.hash;
-	const href = $(this).attr('href');
+	const href = window.location.href;
 	const url = cleanURL(href, hash);
 
 	if(!hash.length) {
@@ -97,15 +85,13 @@ export function scrollToElement($elem, offset = -1) {
 
 export function scrollToPosition(dataTop, offset = -1) {
 	if(offset === -1) {
-		offset = $win.height() * 0.05;
+		offset = $win.height() * 0.03;
 	}
 
-	const top = $win.scrollTop();
-	const scrollDifference = Math.abs(Math.round(top - dataTop));
+	const scrollDifference = Math.abs(Math.round($win.scrollTop() - dataTop));
 	const scrollMultiplier = scrollDifference * .75;
 	const headerHeight = hasFixedHeader ? getHeaderHeight() : 0;
-
-	let scrollDuration = 0;
+	const scrollDuration = scrollDifference === 0 ? 10 : Math.min(Math.max(300, scrollMultiplier), 600);
 	let scrollTop = dataTop - headerHeight - offset;
 
 	if(scrollTop + $win.height() > $doc.height()) {
@@ -114,16 +100,6 @@ export function scrollToPosition(dataTop, offset = -1) {
 
 	if(scrollTop < 0) {
 		scrollTop = 0;
-	}
-
-	if(scrollDifference === 0) {
-		scrollDuration = 10;
-	}
-	else if(scrollDifference <= 200) {
-		scrollDuration = 150;
-	}
-	else {
-		scrollDuration = Math.min(Math.max(300, scrollMultiplier), 600);
 	}
 
 	$('html, body').stop().animate({
