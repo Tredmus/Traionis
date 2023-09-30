@@ -17,12 +17,24 @@ body {
 	font-size: 50px;
 	line-height: 1.2;
 
-	@include breakpoint-down(tablet) {
+	@include breakpoint-down(small-desktop) {
 		font-size: 45px;
 	}
 
-	@include breakpoint-down(mobile) {
+	@include breakpoint-down(tablet) {
 		font-size: 40px;
+	}
+
+	@include breakpoint-down(mobile) {
+		font-size: 36px;
+	}
+
+	@include breakpoint-down(mobile-medium) {
+		font-size: 32px;
+	}
+
+	@include breakpoint-down(mobile-small) {
+		font-size: 28px;
 	}
 }
 
@@ -37,6 +49,14 @@ body {
 	@include breakpoint-down(mobile) {
 		font-size: 32px;
 	}
+
+	@include breakpoint-down(mobile-medium) {
+		font-size: 30px;
+	}
+
+	@include breakpoint-down(mobile-small) {
+		font-size: 27px;
+	}
 }
 
 .h3 {
@@ -48,6 +68,14 @@ body {
 
 	@include breakpoint-down(mobile) {
 		font-size: 28px;
+	}
+
+	@include breakpoint-down(mobile-medium) {
+		font-size: 26px;
+	}
+
+	@include breakpoint-down(mobile-small) {
+		font-size: 24px;
 	}
 }
 
@@ -61,14 +89,22 @@ body {
 	@include breakpoint-down(mobile) {
 		font-size: 24px;
 	}
+
+	@include breakpoint-down(mobile-medium) {
+		font-size: 22px;
+	}
 }
 
 .h5 {
 	font-size: 24px;
 	font-weight: 600;
 
-	@include breakpoint-down(mobile) {
+	@include breakpoint-down(tablet) {
 		font-size: 22px;
+	}
+
+	@include breakpoint-down(mobile) {
+		font-size: 20px;
 	}
 }
 
@@ -76,8 +112,12 @@ body {
 	font-size: 22px;
 	font-weight: 600;
 
-	@include breakpoint-down(mobile) {
+	@include breakpoint-down(tablet) {
 		font-size: 20px;
+	}
+
+	@include breakpoint-down(mobile) {
+		font-size: 18px;
 	}
 }
 

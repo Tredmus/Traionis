@@ -8,6 +8,15 @@
 	background: linear-gradient(to bottom, var(--c-blue), var(--c-lightblue));
 	padding: 40px 32px;
 
+	@include breakpoint-down(tablet) {
+		border-radius: 20px;
+		padding: 24px;
+	}
+
+	@include breakpoint-down(mobile) {
+		border-radius: 14px;
+	}
+
 	.plan__head {
 		&:after {
 			content: '';
@@ -16,12 +25,24 @@
 			background-color: currentColor;
 			opacity: .33;
 			margin-block: 24px;
+
+			@include breakpoint-down(tablet) {
+				margin-block: 16px;
+			}
 		}
 	}
 
 	.plan__title {
 		height: calc(var(--title-height));
 		margin-bottom: 32px;
+
+		@include breakpoint-down(tablet) {
+			margin-bottom: 16px;
+		}
+
+		@include breakpoint-down(mobile) {
+			height: auto;
+		}
 
 		&:last-child {
 			margin-bottom: 0;
@@ -33,19 +54,45 @@
 		font-size: 48px;
 		font-weight: 700;
 
+		@include breakpoint-down(small-desktop) {
+			font-size: 40px;
+		}
+
+		@include breakpoint-down(tablet) {
+			font-size: 32px;
+		}
+
+		@include breakpoint-down(mobile) {
+			height: auto;
+		}
+
 		span {
 			display: block;
 			font-size: 16px;
 			font-weight: 400;
+
+			@include breakpoint-down(mobile) {
+				font-size: 14px;
+			}
 		}
 	}
 
 	.plan__entry {
 		height: calc(var(--entry-height));
+		text-wrap: balance;
 		font-size: 16px;
 		font-weight: 500;
 		line-height: var(--lh-entry);
 		margin-bottom: 48px;
+
+		@include breakpoint-down(tablet) {
+			font-size: 15px;
+			margin-bottom: 24px;
+		}
+
+		@include breakpoint-down(mobile) {
+			height: auto;
+		}
 
 		&:last-child {
 			margin-bottom: 0;
@@ -54,7 +101,13 @@
 
 	.plan__features {
 		font-size: 16px;
+		text-wrap: balance;
 		margin-bottom: 64px;
+
+		@include breakpoint-down(tablet) {
+			font-size: 15px;
+			margin-bottom: 48px;
+		}
 
 		&:last-child {
 			margin-bottom: 0;

@@ -33,15 +33,20 @@
 	--container-width: 1296px;
 	--container-gutter: 72px;
 
-	@include breakpoint-down(tablet) {
-		--section-spacing: 90px;
+	@include breakpoint-down(small-desktop) {
+		--fsz-base: 18px;
+
 		--container-gutter: 40px;
 	}
 
+	@include breakpoint-down(tablet) {
+		--section-spacing: 90px;
+	}
+
 	@include breakpoint-down(mobile) {
-		--fsz-base: 18px;
+		--fsz-base: 16px;
 
 		--section-spacing: 60px;
-		--container-gutter: 24px;
+		--container-gutter: 20px;
 	}
 }

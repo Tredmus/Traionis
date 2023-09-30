@@ -2,4 +2,13 @@
 	display: inline-flex;
 	flex-wrap: wrap;
 	gap: 10px 24px;
+
+	@include breakpoint-down(tablet) {
+		gap: 10px 16px;
+	}
+
+	@include breakpoint-down(mobile-medium) {
+		display: flex;
+		flex-direction: column;
+	}
 }

@@ -14,14 +14,22 @@
 	height: 55px;
 	padding: 0 20px;
 	background-color: var(--c-white-2);
+
+	@include breakpoint-down(mobile) {
+		font-size: 14px;
+		height: 43px;
+		border-radius: 8px;
+		padding-inline: 16px;
+	}
 }
 
-.field--textarea {
+.field:is(textarea) {
 	line-height: 1.2;
-	border-radius: 12px;
-	border: 1px solid currentColor;
 	resize: none;
-	min-height: initial;
-	height: 160px;
-	padding: 18px 24px;
+	height: 120px;
+	padding: 16px 20px;
+
+	@include breakpoint-down(mobile) {
+		padding: 14px 16px;
+	}
 }

@@ -14,6 +14,10 @@
 	transition-duration: var(--t-dur);
 	transition-timing-function: var(--t-easing);
 
+	@include breakpoint-down(tablet) {
+		width: 54px;
+	}
+
 	&:hover {
 		color: var(--c-lightblue);
 		background-color: var(--c-white);

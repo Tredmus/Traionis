@@ -3,6 +3,21 @@
 	--col-gap: 32px;
 	--items: 4;
 
+	@include breakpoint-down(small-desktop) {
+		--row-gap: 24px;
+		--col-gap: 24px;
+	}
+
+	@include breakpoint-down(tablet) {
+		--items: 2;
+	}
+
+	@include breakpoint-down(mobile-medium) {
+		--items: 1;
+		--row-gap: 24px;
+		--col-gap: 0px;
+	}
+
 	.services__items {
 		display: flex;
 		justify-content: center;

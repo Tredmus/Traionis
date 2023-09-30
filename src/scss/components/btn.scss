@@ -18,6 +18,21 @@
 	transition-duration: var(--t-dur);
 	transition-timing-function: var(--t-easing);
 
+	@include breakpoint-down(tablet) {
+		font-size: 16px;
+		border-radius: 10px;
+		padding: 15px 24px;
+	}
+
+	@include breakpoint-down(mobile) {
+		border-radius: 8px;
+		padding: 12px 20px;
+	}
+
+	@include breakpoint-down(mobile-medium) {
+		width: 100%;
+	}
+
 	> * {
 		flex-shrink: 0;
 	}

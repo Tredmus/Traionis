@@ -1,12 +1,24 @@
 .nav {
 	font-size: 18px;
 
+	@include breakpoint-down(small-desktop) {
+		font-size: 16px;
+	}
+
 	ul {
 		list-style: none;
 		display: flex;
 		justify-content: flex-end;
 		flex-wrap: wrap;
 		gap: 15px 51px;
+
+		@include breakpoint-down(large-desktop) {
+			gap: 15px 40px;
+		}
+
+		@include breakpoint-down(small-desktop) {
+			gap: 15px 32px;
+		}
 	}
 
 	a {

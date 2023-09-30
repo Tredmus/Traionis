@@ -8,6 +8,10 @@
 	transition-timing-function: var(--t-easing);
 	will-change: box-shadow;
 
+	@include breakpoint-down(tablet) {
+		padding-block: 12px;
+	}
+
 	.header__inner {
 		display: flex;
 		align-items: center;
@@ -15,10 +19,34 @@
 		gap: 15px;
 	}
 
+	.header__logo {
+		max-width: 160px;
+
+		@include breakpoint-down(tablet) {
+			max-width: 140px;
+		}
+
+		@include breakpoint-down(mobile) {
+			max-width: 120px;
+		}
+
+		@include breakpoint-down(mobile-medium) {
+			max-width: 100px;
+		}
+	}
+
 	.header__content {
 		display: flex;
 		align-items: center;
 		gap: 16px 66px;
+
+		@include breakpoint-down(large-desktop) {
+			gap: 16px 48px;
+		}
+
+		@include breakpoint-down(small-desktop) {
+			gap: 16px 32px;
+		}
 
 		@include breakpoint-down(tablet) {
 			display: none;
@@ -27,10 +55,6 @@
 		> * {
 			flex-shrink: 0;
 		}
-	}
-
-	.header__logo {
-		max-width: 160px;
 	}
 }
 
