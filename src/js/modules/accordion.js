@@ -1,4 +1,6 @@
 import { $, $doc, classes } from '../includes/globals';
+import { debounce } from '../includes/debounce';
+import { scrollToElement } from './scroll-to';
 
 $doc.on('click', '.js-accordion .js-accordion-toggle', event => {
 	event.preventDefault();
@@ -6,9 +8,20 @@ $doc.on('click', '.js-accordion .js-accordion-toggle', event => {
 	const $target = $(event.currentTarget);
 	const { single: isSingle = false } = $target.closest('.js-accordion').data();
 
-	$target.closest('.accordion__section').toggleClass(classes.current);
+	$target.closest('.js-accordion-section').toggleClass(classes.current);
 
 	if(!isSingle) {
-		$target.closest('.accordion__section').siblings().removeClass(classes.current);
+		$target.closest('.js-accordion-section').siblings().removeClass(classes.current);
+	}
+});
+
+$doc.on('transitionend', '.js-accordion', event => {
+	const $target = $(event.originalEvent.target);
+	const $accordionSection = $target.closest('.js-accordion-section');
+	const isCurrentSection = $accordionSection.hasClass(classes.current);
+	const isAnimation = event.originalEvent.propertyName === 'grid-template-rows';
+
+	if(isCurrentSection && isAnimation) {
+		scrollToElement($accordionSection);
 	}
 });
