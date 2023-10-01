@@ -1,10 +1,11 @@
 import { $, $doc, $body, $win, getHeaderHeight, hasFixedHeader, classes } from '../includes/globals';
 import { toggleMenu } from './menu';
 import { isTabbable, isKeyboardUser } from './accessibility';
+import { debounce } from '../includes/debounce';
 import '../includes/easing';
 import { lenisObject } from './smooth-scrolling';
 
-$win.on('load popstate hashchange', () => {
+$win.on('load popstate hashchange', debounce(() => {
 	const hash = window.location.hash;
 	const href = window.location.href;
 	const url = cleanURL(href, hash);
@@ -19,7 +20,7 @@ $win.on('load popstate hashchange', () => {
 
 	scrollByDataID(hash);
 	toggleMenu(false);
-});
+}, 100));
 
 $doc.on('click', '.js-top', event => {
 	event.preventDefault();
