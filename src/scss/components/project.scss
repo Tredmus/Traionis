@@ -23,6 +23,7 @@
 			position: absolute;
 			inset: 0;
 			border-radius: inherit;
+			pointer-events: none;
 			background: linear-gradient(white, white);
 			filter: blur(35px);
 			transform: translate3d(0, 0, 0) scale(0.95);
