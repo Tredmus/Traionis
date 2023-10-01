@@ -1,4 +1,4 @@
-import { $, $doc, classes } from '../includes/globals';
+import { $, $doc, classes, breakpoints } from '../includes/globals';
 import { debounce } from '../includes/debounce';
 import { scrollToElement } from './scroll-to';
 
@@ -16,6 +16,10 @@ $doc.on('click', '.js-accordion .js-accordion-toggle', event => {
 });
 
 $doc.on('transitionend', '.js-accordion', event => {
+	if(!breakpoints.mobile.matches) {
+		return;
+	}
+
 	const $target = $(event.originalEvent.target);
 	const $accordionSection = $target.closest('.js-accordion-section');
 	const isCurrentSection = $accordionSection.hasClass(classes.current);
