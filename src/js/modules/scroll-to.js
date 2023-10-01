@@ -94,7 +94,7 @@ export function scrollToPosition(dataTop, offset = -1, $focusElement = '') {
 	const scrollDifference = Math.abs(Math.round($win.scrollTop() - dataTop));
 	const scrollMultiplier = scrollDifference * .75;
 	const headerHeight = hasFixedHeader ? getHeaderHeight() : 0;
-	const scrollDuration = Math.min(Math.max(300, scrollMultiplier), 600);
+	const scrollDuration = Math.min(Math.max(400, scrollMultiplier), 800);
 	let scrollTop = dataTop - headerHeight - offset;
 
 	if(scrollTop + $win.height() > $doc.height()) {
@@ -129,5 +129,5 @@ export function scrollToPosition(dataTop, offset = -1, $focusElement = '') {
 }
 
 export function scrollToTop() {
-	scrollToPosition(0);
+	scrollToPosition(0, 0, $body);
 }
