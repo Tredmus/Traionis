@@ -332,10 +332,12 @@
 
 .section--projects {
 	--container-width: 1000px;
+	--wave-height: clamp(80px, 10vw, 200px);
+	--padding-bottom: var(--section-spacing);
 
 	text-align: center;
 	color: var(--c-white);
-	padding-bottom: clamp(150px, 25vw, 500px);
+	padding-bottom: calc(var(--wave-height) + var(--padding-bottom));
 	background: linear-gradient(to bottom, var(--c-blue), var(--c-lightblue));
 	margin-top: -1px;
 
@@ -348,7 +350,7 @@
 		z-index: -1;
 		position: absolute;
 		inset: auto 0 0;
-		height: clamp(80px, 17.5vw, 300px);
+		height: var(--wave-height);
 		background-color: var(--c-white);
 		mask-repeat: no-repeat;
 		mask-size: 100% 100%;
