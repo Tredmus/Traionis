@@ -22,16 +22,19 @@ export const classes = {
 	current: 'is-current',
 	active: 'is-active',
 	opened: 'is-opened',
+	hovered: 'is-hovered',
 	animated: 'is-animated',
 	disabled: 'is-disabled',
 	expanded: 'is-expanded',
 	hidden: 'is-hidden',
 	visible: 'is-visible',
+	initialized: 'is-initialized',
 	single: 'is-single',
 	scrollLock: 'scroll-lock',
 	menuOpen: 'menu-opened',
 	swiperButtonDisabled: 'swiper-button-disabled',
 	scrolled: 'has-scrolled',
+	isScrolling: 'is-scrolling',
 	keyboardUser: 'is-keyboard-user'
 };
 

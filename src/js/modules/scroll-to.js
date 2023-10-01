@@ -1,5 +1,5 @@
-import { $, $doc, $win, getHeaderHeight, hasFixedHeader } from '../includes/globals';
-import { toggleMenu } from './navigation';
+import { $, $doc, $body, $win, getHeaderHeight, hasFixedHeader, classes } from '../includes/globals';
+import { toggleMenu } from './menu';
 import { isTabbable, isKeyboardUser } from './accessibility';
 import '../includes/easing';
 
@@ -106,6 +106,9 @@ export function scrollToPosition(dataTop, offset = -1, $focusElement = '') {
 	$('html, body').stop().animate({
 		scrollTop,
 	}, scrollDuration, 'easeInOutExpo', () => {
+		$body.removeClass(classes.isScrolling);
+		$win.trigger('updatePageNavigation');
+
 		if(!$focusElement.length) {
 			return;
 		}

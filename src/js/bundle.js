@@ -2,13 +2,15 @@
  * Modules
  */
 
-import './modules/scroll-to';
 import './modules/accessibility';
-import './modules/navigation';
+import './modules/scroll-to';
 import './modules/header';
+import './modules/menu';
+import './modules/page-navigation';
 import './modules/accordion';
-import './modules/tabs';
 import './modules/plans';
+import './modules/magic-line';
+// import './modules/tabs';
 
 /**
  * Styles
