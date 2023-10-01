@@ -1,11 +1,5 @@
 .project {
-	@include image-fit(true);
-
-	aspect-ratio: 1;
-	width: 100%;
-	display: block;
 	border-radius: 20px;
-	text-decoration: none;
 
 	@include breakpoint-down(tablet) {
 		border-radius: 16px;
@@ -13,5 +7,49 @@
 
 	@include breakpoint-down(mobile) {
 		border-radius: 12px;
+	}
+
+	.project__link {
+		position: relative;
+		isolation: isolate;
+		display: block;
+		text-decoration: none;
+		border-radius: inherit;
+		outline: none;
+
+		&:before {
+			content: '';
+			z-index: -1;
+			position: absolute;
+			inset: 0;
+			border-radius: inherit;
+			background: linear-gradient(white, white);
+			filter: blur(35px);
+			transform: translate3d(0, 0, 0) scale(0.95);
+			transition: opacity var(--t-dur) var(--t-easing);
+			opacity: 0;
+		}
+
+		&:hover,
+		&:focus-visible {
+			&:before {
+				opacity: 1;
+			}
+		}
+	}
+
+	.project__image {
+		@include image-fit;
+
+		aspect-ratio: 1;
+		border-radius: inherit;
+
+		img {
+			transition: transform var(--t-dur) var(--t-easing);
+		}
+	}
+
+	.project__link:is(:hover, :focus-visible) .project__image img {
+		transform: scale(1.1);
 	}
 }

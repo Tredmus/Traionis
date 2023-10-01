@@ -3,6 +3,7 @@
 
 	flex-shrink: 0;
 	position: relative;
+	isolation: isolate;
 	display: inline-flex;
 	justify-content: center;
 	align-items: center;
@@ -11,7 +12,7 @@
 	font-weight: 600;
 	color: var(--c-white);
 	border-radius: 12px;
-	background-color: var(--c-blue);
+	background: none;
 	min-width: 185px;
 	padding: 20px 30px;
 	transition-property: color, background-color;
@@ -37,9 +38,64 @@
 		flex-shrink: 0;
 	}
 
+	&:before,
+	span:before,
+	span:after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+		pointer-events: none;
+		transition-property: opacity;
+		transition-duration: var(--t-dur);
+		transition-timing-function: var(--t-easing);
+	}
+
+	// Shadow
+	&:before {
+		z-index: -2;
+		background: linear-gradient(to right, var(--c-blue), var(--c-lightblue));
+		filter: blur(25px);
+		transform: translate3d(0, 10%, 0);
+		opacity: var(--shadow-opacity);
+	}
+
+	// Background
+	span:before {
+		z-index: -1;
+		background: linear-gradient(to right, var(--c-blue), var(--c-lightblue));
+		opacity: var(--background-opacity);
+	}
+
+	// Border
+	span:after {
+		--border-width: 2px;
+
+		z-index: -1;
+		opacity: var(--border-opacity);
+		border: var(--border-width) solid transparent;
+		background: linear-gradient(to right, var(--c-blue), var(--c-lightblue));
+		background-size: calc(100% + calc(var(--border-width) * 2)) calc(100% + calc(var(--border-width) * 2));
+		background-position: calc(var(--border-width) * -1) calc(var(--border-width) * -1);
+		mask: linear-gradient(black, black) padding-box, linear-gradient(black, black) border-box;
+		mask-composite: exclude;
+
+		@include breakpoint-down(mobile) {
+			--border-width: 2px;
+		}
+	}
+
+	--background-opacity: 1;
+	--shadow-opacity: 0;
+	--border-opacity: 0;
+
 	&:hover,
 	&:focus-visible {
-		background-color: var(--c-lightblue);
+		--shadow-opacity: 1;
+	}
+
+	span {
+		border-radius: inherit;
 	}
 }
 
@@ -51,41 +107,28 @@
 
 .button--white {
 	color: var(--c-lightblue);
-	background-color: var(--c-white);
 
-	&:hover,
-	&:focus-visible {
-		color: var(--c-lightblue);
-		background-color: var(--c-white-3);
+	&:before,
+	span:before,
+	span:after {
+		background: linear-gradient(white, white);
 	}
 }
 
 .button--border {
-	color: var(--c-lightblue);
-	background-color: transparent;
+	--background-opacity: 0;
+	--border-opacity: 1;
 
-	&:after {
-		content: '';
-		position: absolute;
-		inset: 0;
-		pointer-events: none;
-		border-radius: inherit;
-		border: 2px solid var(--c-lightblue);
-		transition: border-color var(--t-dur) ease;
-
-		@include breakpoint-down(mobile) {
-			border-width: 1px;
-		}
-	}
+	color: transparent;
+	background-image: linear-gradient(to right, var(--c-blue), var(--c-lightblue));
+	background-clip: text;
 
 	&:hover,
 	&:focus-visible {
 		color: var(--c-white);
-		background-color: var(--c-lightblue);
 
-		&:after {
-			border-color: var(--c-lightblue);
-		}
+		--background-opacity: 1;
+		--border-opacity: 0;
 	}
 }
 
@@ -93,19 +136,17 @@
 	@extend .button--border;
 
 	color: var(--c-white);
+	background: none;
 
-	&:after {
-		border-color: var(--c-white);
+	&:before,
+	span:before,
+	span:after {
+		background: linear-gradient(white, white);
 	}
 
 	&:hover,
 	&:focus-visible {
 		color: var(--c-lightblue);
-		background-color: var(--c-white);
-
-		&:after {
-			border-color: var(--c-white);
-		}
 	}
 }
 
