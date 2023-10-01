@@ -9,3 +9,13 @@ function raf(time) {
 
 	requestAnimationFrame(raf);
 }
+
+export function toggleScroll(state) {
+	if(state) {
+		lenisObject.start();
+
+		return;
+	}
+
+	lenisObject.stop();
+}
