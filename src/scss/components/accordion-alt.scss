@@ -39,7 +39,8 @@
 	.accordion__section {
 		border-radius: 20px;
 		margin-bottom: 12px;
-		transition: background-color var(--t-dur) var(--t-easing);
+		transition: background-color var(--t-dur), transform 1s, opacity 1s !important;
+		transition-timing-function: var(--t-easing);
 
 		@include breakpoint-down(mobile) {
 			border-radius: 14px;

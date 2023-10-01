@@ -26,6 +26,8 @@
   },
   "dependencies": {
     "@studio-freight/lenis": "^1.0.25",
+    "aos": "^2.3.4",
+    "imagesloaded": "^5.0.0",
     "jquery": "^3.7.1"
   }
 }
