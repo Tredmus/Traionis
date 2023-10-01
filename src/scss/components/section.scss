@@ -470,21 +470,21 @@
 		color: var(--c-white);
 		border-radius: 20px;
 		background: linear-gradient(to bottom, var(--c-lightblue), var(--c-blue));
-		padding-left: 7.5%;
+		padding-inline: 7.5%;
 
 		@include breakpoint-down(small-desktop) {
-			grid-template-columns: 45% 1fr;
+			grid-template-columns: 50% 1fr;
 			grid-gap: 24px;
-			padding-left: 5%;
 		}
 
 		@include breakpoint-down(tablet) {
-			padding-left: var(--container-gutter);
+			padding-inline: var(--container-gutter);
 		}
 
 		@include breakpoint-down(mobile) {
 			grid-template-columns: 100%;
-			padding-left: 0;
+			grid-gap: 32px;
+			padding-inline: 0;
 		}
 	}
 
@@ -517,9 +517,21 @@
 		justify-content: flex-end;
 		margin-top: calc(var(--image-offset) * -1);
 
+		@include breakpoint-down(small-desktop) {
+			padding-top: 40px;
+		}
+
 		@include breakpoint-down(mobile) {
 			max-width: 450px;
 			margin-inline: auto;
+			padding-top: 0;
+			padding-inline: calc(var(--container-gutter) * 2);
+		}
+
+		img {
+			@include breakpoint-down(mobile) {
+				transform: translateX(2%);
+			}
 		}
 	}
 
