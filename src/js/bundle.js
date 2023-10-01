@@ -10,6 +10,7 @@ import './modules/page-navigation';
 import './modules/accordion';
 import './modules/plans';
 import './modules/magic-line';
+import './modules/smooth-scrolling';
 // import './modules/tabs';
 
 /**

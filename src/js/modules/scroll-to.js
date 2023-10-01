@@ -2,6 +2,7 @@ import { $, $doc, $body, $win, getHeaderHeight, hasFixedHeader, classes } from '
 import { toggleMenu } from './menu';
 import { isTabbable, isKeyboardUser } from './accessibility';
 import '../includes/easing';
+import { lenisObject } from './smooth-scrolling';
 
 $win.on('load popstate hashchange', () => {
 	const hash = window.location.hash;
@@ -92,7 +93,7 @@ export function scrollToPosition(dataTop, offset = -1, $focusElement = '') {
 	const scrollDifference = Math.abs(Math.round($win.scrollTop() - dataTop));
 	const scrollMultiplier = scrollDifference * .75;
 	const headerHeight = hasFixedHeader ? getHeaderHeight() : 0;
-	const scrollDuration = scrollDifference === 0 ? 10 : Math.min(Math.max(300, scrollMultiplier), 600);
+	const scrollDuration = Math.min(Math.max(300, scrollMultiplier), 600);
 	let scrollTop = dataTop - headerHeight - offset;
 
 	if(scrollTop + $win.height() > $doc.height()) {
@@ -103,21 +104,25 @@ export function scrollToPosition(dataTop, offset = -1, $focusElement = '') {
 		scrollTop = 0;
 	}
 
-	$('html, body').stop().animate({
-		scrollTop,
-	}, scrollDuration, 'easeInOutExpo', () => {
-		$body.removeClass(classes.isScrolling);
-		$win.trigger('updatePageNavigation');
+	lenisObject.scrollTo(scrollTop, {
+		immediate: scrollDifference === 0,
+		duration: scrollDuration / 1000,
+		easing: $.easing.easeInOutExpo,
+		lock: true,
+		onComplete: () => {
+			$body.removeClass(classes.isScrolling);
+			$win.trigger('updatePageNavigation');
 
-		if(!$focusElement.length) {
-			return;
-		}
+			if(!$focusElement.length) {
+				return;
+			}
 
-		if(!isTabbable($focusElement) && isKeyboardUser()) {
-			$focusElement.attr('tabindex', '-1');
-			$focusElement.addClass('skipped-element');
+			if(!isTabbable($focusElement) && isKeyboardUser()) {
+				$focusElement.attr('tabindex', '-1');
+				$focusElement.addClass('skipped-element');
 
-			$focusElement[0].focus({ preventScroll: true });
+				$focusElement[0].focus({ preventScroll: true });
+			}
 		}
 	});
 }

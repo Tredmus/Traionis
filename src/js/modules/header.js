@@ -21,5 +21,7 @@ function initHeader() {
 
 	const headerIntersectionObserver = new IntersectionObserver(([entry]) => {
 		$body.toggleClass(classes.scrolled, !entry.isIntersecting);
+	}, {
+		rootMargin: `50px 0px 0px 0px`,
 	}).observe(intercept);
 }
