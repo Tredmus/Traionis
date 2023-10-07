@@ -12,5 +12,3 @@ import './modules/sliders';
 import './modules/services';
 import './modules/responsive-images';
 import './modules/form';
-
-// import './modules/tabs';
