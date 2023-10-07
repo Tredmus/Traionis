@@ -1,0 +1,35 @@
+.input {
+	display: block;
+	background: none;
+	box-shadow: none;
+	outline: none;
+	border: none;
+	min-height: initial;
+	color: var( --c-gray);
+	border-radius: 12px;
+	width: 100%;
+	text-transform: none;
+	font-size: 16px;
+	line-height: 1;
+	height: 55px;
+	padding: 0 20px;
+	background-color: var(--c-white-2);
+
+	@include breakpoint-down(mobile) {
+		font-size: 14px;
+		height: 43px;
+		border-radius: 8px;
+		padding-inline: 16px;
+	}
+}
+
+.input:is(textarea) {
+	line-height: 1.2;
+	resize: none;
+	height: 120px;
+	padding: 16px 20px;
+
+	@include breakpoint-down(mobile) {
+		padding: 14px 16px;
+	}
+}

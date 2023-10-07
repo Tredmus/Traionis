@@ -1,0 +1,134 @@
+:root {
+	--header-height: 90px;
+
+	@include breakpoint-down(tablet) {
+		--header-height: 68px;
+	}
+
+	@include breakpoint-down(mobile) {
+		--header-height: 62px;
+	}
+
+	@include breakpoint-down(mobile-medium) {
+		--header-height: 56px;
+	}
+}
+
+.header {
+	z-index: 100;
+	position: sticky;
+	isolation: isolate;
+	top: 0;
+	padding-block: 20px;
+	transition-property: background-color;
+	transition-duration: var(--t-dur);
+	transition-timing-function: var(--t-easing);
+
+	@include breakpoint-down(tablet) {
+		padding-block: 12px;
+	}
+
+	&:before {
+		content: '';
+		z-index: -1;
+		position: absolute;
+		inset: 0;
+		box-shadow: 0px 2px 8px 2px rgba(var(--c-black-rgb), .1);
+		pointer-events: none;
+		transition-property: opacity;
+		transition-duration: var(--t-dur);
+		transition-timing-function: var(--t-easing);
+		opacity: 0;
+	}
+
+	.header__grid {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 15px;
+	}
+
+	.header__logo {
+		color: var(--c-lightblue);
+		border-radius: 4px;
+		max-width: 160px;
+
+		@include breakpoint-down(tablet) {
+			max-width: 140px;
+		}
+
+		@include breakpoint-down(mobile) {
+			max-width: 120px;
+		}
+
+		@include breakpoint-down(mobile-medium) {
+			max-width: 100px;
+		}
+	}
+
+	.header__content {
+		display: flex;
+		align-items: center;
+		gap: 16px 66px;
+
+		@include breakpoint-down(large-desktop) {
+			gap: 16px 48px;
+		}
+
+		@include breakpoint-down(small-desktop) {
+			gap: 16px 32px;
+		}
+
+		@include breakpoint-down(tablet) {
+			position: absolute;
+			inset: calc(100% - 1px) 0 auto;
+			height: calc(var(--window-height) - 100% + 1px);
+			flex-direction: column;
+			gap: 32px;
+			background-color: var(--c-white);
+			overflow: auto;
+			padding: var(--container-gutter);
+			transition-property: opacity, visibility;
+			transition-duration: var(--t-dur);
+			transition-timing-function: var(--t-easing);
+			opacity: 0;
+			visibility: hidden;
+		}
+
+		> * {
+			flex-shrink: 0;
+		}
+	}
+
+	.header__buttons {
+		@include breakpoint-down(mobile) {
+			flex-direction: column;
+			width: 100%;
+		}
+
+		.button {
+			@include breakpoint-down(mobile) {
+				width: 100%;
+			}
+		}
+	}
+}
+
+body.has-scrolled .header {
+	background-color: var(--c-white);
+
+	&:before {
+		opacity: 1;
+	}
+}
+
+body.menu-opened .header {
+	@include breakpoint-down(tablet) {
+		background-color: var(--c-white);
+
+		.header__content {
+			opacity: 1;
+			visibility: visible;
+		}
+	}
+}

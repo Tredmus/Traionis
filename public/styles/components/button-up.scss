@@ -1,0 +1,61 @@
+.button-up {
+	@include button-reset;
+
+	position: relative;
+	isolation: isolate;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	width: 66px;
+	aspect-ratio: 1;
+	color: var(--c-white);
+	background-color: var(--c-lightblue);
+	border-radius: 50%;
+	transition-property: color, background-color;
+	transition-duration: var(--t-dur);
+	transition-timing-function: var(--t-easing);
+
+	@include breakpoint-down(tablet) {
+		width: 54px;
+	}
+
+	&:hover,
+	&:focus-visible {
+		color: var(--c-lightblue);
+		background-color: var(--c-white);
+
+		&:after {
+			opacity: 1;
+		}
+	}
+
+	&:before {
+		content: '';
+		z-index: 1;
+		position: relative;
+		width: 34.85%;
+		aspect-ratio: 0.96;
+		background-color: currentColor;
+		mask-repeat: no-repeat;
+		mask-size: cover;
+		mask-position: center center;
+		mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='25' fill='none' viewBox='0 0 24 25'%3E%3Cpath fill='%23fff' d='M13.06.94a1.5 1.5 0 0 0-2.12 0l-9.547 9.545a1.5 1.5 0 1 0 2.122 2.122L12 4.12l8.485 8.486a1.5 1.5 0 1 0 2.122-2.122L13.06.94ZM13.5 25V2h-3v23h3Z'/%3E%3C/svg%3E");
+	}
+
+	&:after {
+		content: '';
+		z-index: -1;
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+		background: linear-gradient(white, white);
+		filter: blur(20px);
+		transform: translate3d(0, 0, 0);
+		transition: opacity var(--t-dur) var(--t-easing);
+		opacity: 0;
+	}
+
+	span {
+		@include sr-only;
+	}
+}

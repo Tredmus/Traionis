@@ -1,0 +1,19 @@
+.projects {
+	.projects__grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(min(230px, 100%), 1fr));
+		grid-gap: 32px;
+
+		@include breakpoint-down(tablet) {
+			grid-gap: 16px;
+		}
+
+		@include breakpoint-down(mobile) {
+			grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr));
+		}
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+}

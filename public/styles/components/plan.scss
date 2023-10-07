@@ -1,0 +1,155 @@
+.plan {
+	position: relative;
+	isolation: isolate;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	color: var(--c-white);
+	text-align: left;
+	border-radius: 30px;
+	padding: 40px 32px;
+
+	@include breakpoint-down(tablet) {
+		border-radius: 20px;
+		padding: 24px;
+	}
+
+	@include breakpoint-down(mobile) {
+		border-radius: 14px;
+	}
+
+	&:before,
+	&:after {
+		content: '';
+		z-index: -1;
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		border-radius: inherit;
+	}
+
+	&:before {
+		background: linear-gradient(to right, var(--c-blue), var(--c-lightblue));
+		filter: blur(25px);
+		transform: translate3d(0, 0, 0);
+		transition: opacity var(--t-dur) var(--t-easing);
+		opacity: 0;
+
+		@include breakpoint-down(mobile) {
+			display: none;
+		}
+	}
+
+	&:after {
+		background: linear-gradient(to bottom, var(--c-blue), var(--c-lightblue));
+	}
+
+	&:hover,
+	&:focus-visible {
+		&:before {
+			opacity: 1;
+		}
+	}
+
+	.plan__header {
+		&:after {
+			content: '';
+			display: block;
+			height: 1px;
+			background-color: currentColor;
+			opacity: .33;
+			margin-block: 24px;
+
+			@include breakpoint-down(tablet) {
+				margin-block: 16px;
+			}
+		}
+	}
+
+	.plan__title {
+		height: calc(var(--title-height));
+		margin-bottom: 32px;
+
+		@include breakpoint-down(tablet) {
+			margin-bottom: 16px;
+		}
+
+		@include breakpoint-down(mobile) {
+			height: auto;
+		}
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	.plan__pricing {
+		height: calc(var(--pricing-height));
+		font-size: 48px;
+		font-weight: 700;
+
+		@include breakpoint-down(small-desktop) {
+			font-size: 40px;
+		}
+
+		@include breakpoint-down(tablet) {
+			font-size: 32px;
+		}
+
+		@include breakpoint-down(mobile) {
+			height: auto;
+		}
+
+		span {
+			display: block;
+			font-size: 16px;
+			font-weight: 400;
+
+			@include breakpoint-down(mobile) {
+				font-size: 14px;
+			}
+		}
+	}
+
+	.plan__text {
+		height: calc(var(--entry-height));
+		text-wrap: balance;
+		font-size: 16px;
+		font-weight: 500;
+		line-height: var(--lh-entry);
+		margin-bottom: 48px;
+
+		@include breakpoint-down(tablet) {
+			font-size: 15px;
+			margin-bottom: 24px;
+		}
+
+		@include breakpoint-down(mobile) {
+			height: auto;
+		}
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	.plan__features {
+		font-size: 16px;
+		text-wrap: balance;
+		margin-bottom: 64px;
+
+		@include breakpoint-down(tablet) {
+			font-size: 15px;
+			margin-bottom: 48px;
+		}
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	.plan__buttons {
+		text-align: center;
+		margin-top: auto;
+	}
+}

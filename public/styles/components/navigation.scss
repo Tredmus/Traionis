@@ -1,0 +1,80 @@
+.navigation {
+	position: relative;
+	font-size: 18px;
+
+	@include breakpoint-down(small-desktop) {
+		font-size: 16px;
+	}
+
+	@include breakpoint-down(tablet) {
+		font-size: 20px;
+		text-align: center;
+		margin-block: auto;
+	}
+
+	ul {
+		list-style: none;
+		display: flex;
+		justify-content: flex-end;
+		flex-wrap: wrap;
+		gap: 15px 51px;
+		margin-bottom: 0;
+
+		@include breakpoint-down(large-desktop) {
+			gap: 15px 40px;
+		}
+
+		@include breakpoint-down(small-desktop) {
+			gap: 15px 32px;
+		}
+
+		@include breakpoint-down(tablet) {
+			flex-direction: column;
+			gap: 24px;
+		}
+	}
+
+	a {
+		position: relative;
+		display: block;
+		text-decoration: none;
+		transition-property: color;
+		transition-duration: var(--t-dur);
+		transition-timing-function: var(--t-easing);
+		outline: none;
+
+		&:before {
+			content: '';
+			position: absolute;
+			inset: -8px;
+			border-radius: 8px;
+		}
+
+		&:focus-visible:before {
+			@include focus-outline;
+		}
+	}
+
+	.navigation__line {
+		--magic-line-width: 0px;
+		--magic-line-offset: 0px;
+
+		position: absolute;
+		top: 100%;
+		left: 0;
+		height: 2px;
+		background-color: var(--c-blue);
+		margin-top: 3px;
+		transition-property: transform, width;
+		transition-duration: var(--t-dur);
+		transition-timing-function: var(--t-easing);
+		will-change: transform, width;
+		width: var(--magic-line-width);
+		transform: translate3d(var(--magic-line-offset), 0, 0);
+		pointer-events: none;
+
+		@include breakpoint-down(tablet) {
+			display: none;
+		}
+	}
+}

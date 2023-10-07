@@ -1,0 +1,26 @@
+---
+const { title, current: isCurrent = false, dataService, icon } = Astro.props;
+const { default: iconMarkup } = await import(`../icons/${icon}?raw`/* @vite-ignore */);
+---
+
+<div class="service" data-service="{dataService}" data-aos="fade-up">
+	<a href="#" class="service__link js-service-toggle">
+		<div class="service__content">
+			<div class="service__icon js-responsive-images">
+				<Fragment set:html={iconMarkup} />
+			</div><!-- /.service__icon -->
+
+			<div class="service__title">
+				<h3 class="h6">
+					{title}
+				</h3>
+			</div><!-- /.service__title -->
+
+			<div class="service__view">
+				<p>
+					View all
+				</p>
+			</div><!-- /.service__view -->
+		</div><!-- /.service__content -->
+	</a>
+</div><!-- /.service -->

@@ -1,0 +1,31 @@
+.plans {
+	--row-gap: 32px;
+	--col-gap: 32px;
+	--items: 3;
+
+	@include breakpoint-down(small-desktop) {
+		--col-gap: 16px;
+	}
+
+	@include breakpoint-down(tablet) {
+		--items: 2;
+	}
+
+	@include breakpoint-down(mobile) {
+		--items: 1;
+		--col-gap: 0px;
+	}
+
+	.plans__grid {
+		display: flex;
+		justify-content: center;
+		flex-wrap: wrap;
+		row-gap: var(--row-gap);
+		margin-inline: calc(var(--col-gap) / -2);
+	}
+
+	.plans__grid-item {
+		flex: 0 0 calc(100% / var(--items));
+		padding-inline: calc(var(--col-gap) / 2);
+	}
+}

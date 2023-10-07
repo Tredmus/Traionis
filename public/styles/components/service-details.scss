@@ -1,0 +1,54 @@
+.service-details {
+	text-align: left;
+	color: var(--c-white);
+	border-radius: 20px;
+	background: linear-gradient(to right, var(--c-blue), var(--c-lightblue));
+	height: 100%;
+	padding: 32px;
+
+	@include breakpoint-down(small-desktop) {
+		border-radius: 14px;
+		padding: 24px;
+	}
+
+	.service__icon {
+		margin-bottom: 24px;
+
+		@include breakpoint-down(tablet) {
+			margin-bottom: 16px;
+		}
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+
+		svg {
+			--_scale: 1;
+			--_width: calc(var(--width) * var(--_scale));
+			--_height: calc(var(--height) * var(--_scale));
+
+			width: var(--_width);
+			height: var(--_height);
+
+			@include breakpoint-down(tablet) {
+				--_scale: 0.8;
+			}
+		}
+	}
+
+	.service__title {
+		margin-bottom: 16px;
+
+		@include breakpoint-down(tablet) {
+			margin-bottom: 12px;
+		}
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	.service__text {
+		font-size: .9em;
+	}
+}

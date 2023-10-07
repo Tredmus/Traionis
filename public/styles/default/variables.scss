@@ -1,0 +1,58 @@
+:root {
+	--vh: 1vh; // Fallback
+	--vh: 1dvh;
+	--window-height: calc(100 * var(--vh));
+
+	--fsz-base: 20px;
+	--fw-base: 400;
+	--lh-base: 1.22;
+	--lh-entry: 1.6;
+	--ff-sans-serif: Helvetica, Arial, sans-serif;
+	--ff-serif: 'Times New Roman', Times, Georgia, serif;
+	--ff-montserrat: 'Montserrat', var(--ff-sans-serif);
+	--ff-base: var(--ff-montserrat);
+
+	--t-dur: .3s;
+	--t-easing: ease;
+
+	--c-white-rgb: 250, 252, 255;
+	--c-white-2-rgb: 243, 245, 248;
+	--c-white-3-rgb: 235, 237, 240;
+	--c-black-rgb: 5, 10, 15;
+	 --c-gray-rgb: 114, 116, 121;
+	--c-blue-rgb: 0, 132, 255;
+	--c-lightblue-rgb: 0, 187, 255;
+	--c-error-rgb: 224, 69, 98;
+	--c-error-light-rgb: 249, 228, 232;
+
+	--c-white: rgb(var(--c-white-rgb));
+	--c-white-2: rgb(var(--c-white-2-rgb));
+	--c-white-3: rgb(var(--c-white-3-rgb));
+	--c-black: rgb(var(--c-black-rgb));
+	 --c-gray: rgb(var( --c-gray-rgb));
+	--c-blue: rgb(var(--c-blue-rgb));
+	--c-lightblue: rgb(var(--c-lightblue-rgb));
+	--c-error: rgb(var(--c-error-rgb));
+	--c-error-light: rgb(var(--c-error-light-rgb));
+
+	--section-spacing: 120px;
+	--container-width: 1296px;
+	--container-gutter: 72px;
+
+	@include breakpoint-down(small-desktop) {
+		--fsz-base: 18px;
+
+		--container-gutter: 40px;
+	}
+
+	@include breakpoint-down(tablet) {
+		--section-spacing: 90px;
+	}
+
+	@include breakpoint-down(mobile) {
+		--fsz-base: 16px;
+
+		--section-spacing: 60px;
+		--container-gutter: 20px;
+	}
+}
