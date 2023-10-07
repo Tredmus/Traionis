@@ -10,6 +10,8 @@ $doc.on('submit', '.js-form', event => {
 	const $form = $(event.currentTarget);
 	const formData = new FormData(form);
 
+	$form.addClass(classes.loading);
+
 	fetch('/', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -19,7 +21,7 @@ $doc.on('submit', '.js-form', event => {
 		const isSuccess = response.ok;
 
 		if(isSuccess) {
-			$form.find('.js-form-parent').html(`<p>${successMessage}</p>`)
+			$form.closest('.js-form-parent').html(`<p>${successMessage}</p>`)
 
 			return;
 		}
@@ -28,6 +30,9 @@ $doc.on('submit', '.js-form', event => {
 	})
 	.catch(() => {
 		addFormMessage($form, 'error', errorMessage);
+	})
+	.finally(() => {
+		$form.removeClass(classes.loading);
 	});
 });
 

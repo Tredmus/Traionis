@@ -19,6 +19,7 @@
 			padding: 8px 14px;
 		}
 	}
+
 	.form__label {
 		@include sr-only;
 	}
@@ -45,6 +46,7 @@
 	.form__buttons {
 		display: flex;
 		justify-content: flex-end;
+		margin-left: auto;
 		margin-top: 24px;
 
 		@include breakpoint-down(tablet) {
@@ -53,10 +55,30 @@
 
 		@include breakpoint-down(mobile) {
 			margin-top: 12px;
+			width: 100%;
 		}
 
 		&:first-child {
 			margin-top: 0;
+		}
+	}
+
+	&.is-loading .form__button {
+		position: relative;
+		color: transparent;
+
+		&:after {
+			content: '';
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			height: 66.67%;
+			transform: translate(-50%, -50%);
+			aspect-ratio: 1;
+			background-image: url('/media/spinner.svg');
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-position: center center;
 		}
 	}
 }
