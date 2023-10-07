@@ -1,0 +1,34 @@
+$font-size-base: 1.2rem;
+$font-weight-base: 400;
+$line-height-base: 1.2;
+
+$ff-head: 'Dosis', sans-serif;
+$ff-main: 'PT Sans', sans-serif;;
+
+$t-duration: 0.4s;
+
+$c-black: #000;
+$c-black-blue: #0C0C21;
+$c-grey: #00000029;
+$-grey-blue: #00347026;
+$c-grey-green: #00347026;
+$c-white-dark: #F8F8F8;
+$c-white: #fff;
+$c-white-purple: #C9C9E3;
+
+$c-main: #0077ff;
+$c-main2: #00bbff;
+$c-teal: #007777;
+$c-green: #00bb77;
+
+$responsive-ios: 812px;
+
+$breakpoints: (
+  mobile-small: 374px,
+  mobile-medium: 575px,
+  mobile: 767px,
+  admin-bar: 782px,
+  tablet: 1023px,
+  desktop-small: 1200px,
+  desktop-medium: 1399px
+);

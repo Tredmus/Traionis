@@ -1,0 +1,44 @@
+.aboutUs {
+    display: flex;
+    padding: 4rem 0;
+    max-width: 1170px;
+    margin: 0 auto;
+    text-align: left;
+    position: relative;
+    align-items: center;
+
+    .background {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-80%, -50%) rotate(180deg);
+        z-index: 0;
+        pointer-events: none;
+    }
+    .left {
+        
+        min-width: 340px;
+        margin-right: 2rem;
+
+        h2 {
+            margin-bottom: 1.5rem;
+        }
+        z-index: 1;
+    }
+    .right {
+        padding-top: .6rem;
+        // width: 70%;
+        h3 {
+            margin-bottom: 3rem;
+            // background-color: ;
+        }
+        span {
+            background: linear-gradient(to right, #0077ff, #00bbff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1;
+            font-weight: 700;
+        }
+        z-index: 1;
+    }
+}
