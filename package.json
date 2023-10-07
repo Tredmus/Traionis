@@ -1,16 +1,22 @@
 {
-  "name": "astro",
-  "type": "module",
-  "version": "0.0.1",
-  "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
-  },
-  "dependencies": {
-    "astro": "^3.2.3",
-    "sass": "^1.69.0"
-  }
+	"name": "astro",
+	"type": "module",
+	"version": "1.0.0",
+	"scripts": {
+		"dev": "astro dev",
+		"prod": "astro build"
+	},
+	"devDependencies": {
+		"astro": "^3.2.3",
+		"sass": "^1.69.0"
+	},
+	"dependencies": {
+		"@studio-freight/lenis": "^1.0.25",
+		"aos": "^2.3.4",
+		"imagesloaded": "^5.0.0",
+		"jquery": "^3.7.1",
+		"lodash": "^4.17.21",
+		"swiper": "8.4.7",
+		"typeit": "^8.7.1"
+	}
 }

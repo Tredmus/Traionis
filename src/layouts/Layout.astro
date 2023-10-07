@@ -12,7 +12,6 @@ import Footer from '../components/Footer.astro';
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="generator" content={Astro.generator} />
 		<link rel="stylesheet" href="/main.css" />
-		<script src="/main.js" type="module"></script>
 		<!-- <link rel="stylesheet" lang="scss" href="/styles/bundle.scss" /> -->
 		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
 		<title>{title}</title>
@@ -31,5 +30,6 @@ import Footer from '../components/Footer.astro';
 
 			<Footer />
 		</div><!-- /.page-container -->
+		<script src="../js/bundle.js"></script>
 	</body>
 </html>

@@ -1,7 +1,3 @@
-/**
- * Modules
- */
-
 import './modules/accessibility';
 import './modules/scroll-to';
 import './modules/header';
@@ -16,9 +12,5 @@ import './modules/sliders';
 import './modules/services';
 import './modules/responsive-images';
 import './modules/form';
-// import './modules/tabs';
 
-/**
- * Styles
- */
-import '/scss/bundle.scss';
+// import './modules/tabs';
