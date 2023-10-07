@@ -1,103 +1,54 @@
-## Requirements
+# Astro Starter Kit: Basics
 
-[NodeJS](http://nodejs.org/) 16+
-
-## Installation
-Run the following command in the project root directory:
-
-```
-npm install
+```sh
+npm create astro@latest -- --template basics
 ```
 
-or
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
+[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
 
-```
-yarn install
-```
+> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
 
-## Development
+![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
 
-To start the development server run:
+## 🚀 Project Structure
 
-```
-npm run dev
-```
+Inside of your Astro project, you'll see the following folders and files:
 
-## Build
-
-To build the project assets for production run:
-
-```
-npm run prod
-```
-
-The built assets can be found in the `./build/` folder.
-The source assets can be found in the `./src/` folder.
-
-## Walkthrough
-
-Media files such as images and videos are stored in `./src/assets/media/`
-
-Local font files are stored in `./src/assets/fonts/`
-
-SCSS source files are stored in `./src/scss/`
-
-JavaScript source files are stored in `./src/js/`
-
-HTML snippets are stored in `./src/html/`
-
-## Importing Assets
-
-Load an HTML snippet:
-```
-<load ="html/components/test.html"/>
+```text
+/
+├── public/
+│   └── favicon.svg
+├── src/
+│   ├── components/
+│   │   └── Card.astro
+│   ├── layouts/
+│   │   └── Layout.astro
+│   └── pages/
+│       └── index.astro
+└── package.json
 ```
 
-The URL is always based from the page's directory (even if including snippet inside snippet).
-To include other assets inside the snippet URLs start from the page's directory.
+Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
 
-Linking a page:
-```
-<a href="home.html">Home</a>
-```
+There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
 
-**For the following the URLs should always start like mentioned. Dev and Build asset URLs are handled differently. These are tested and work with both.**
+Any static assets, like images, can be placed in the `public/` directory.
 
-Load image inside HTML:
-```
-<img src="/media/temp/image.jpg" alt="">
-```
+## 🧞 Commands
 
-Load a local font file:
-```
-url('/fonts/Roboto-Regular.woff2')
-```
+All commands are run from the root of the project, from a terminal:
 
-Load image inside SCSS:
-```
-url('/media/icons/ico-arrow.svg')
-```
+| Command                   | Action                                           |
+| :------------------------ | :----------------------------------------------- |
+| `npm install`             | Installs dependencies                            |
+| `npm run dev`             | Starts local dev server at `localhost:4321`      |
+| `npm run build`           | Build your production site to `./dist/`          |
+| `npm run preview`         | Preview your build locally, before deploying     |
+| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
+| `npm run astro -- --help` | Get help using the Astro CLI                     |
 
-## Importing Dependencies
+## 👀 Want to learn more?
 
-Custom exports of packages can be found in:
-`node_modules/<package-name>/package.json` -> `"exports"`
-
-Example imports of JS files from `node_modules` in `./assets/js/bundle.js`:
-
-```
-import Swiper from 'swiper/bundle'; // custom export
-import Choices from 'choices.js';
-```
-
-Example imports of CSS files from `node_modules` in `./assets/scss/bundle.scss`:
-
-```
-@import 'swiper/swiper-bundle.css'; // custom export
-@import 'choices.js/public/assets/styles/choices.min.css';
-```
-
-## Configuration
-
-The built assets are processed through vite.
-The config file `vite.config.js` can be found in the project root directory.
+Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).

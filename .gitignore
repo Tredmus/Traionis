@@ -10,6 +10,7 @@ lerna-debug.log*
 
 # User Config
 .env
+.env.production
 
 # Dependency directory
 node_modules/
@@ -17,6 +18,9 @@ node_modules/
 # Build
 build/
 *.local
+
+# generated types
+.astro/
 
 # Lock files
 package-lock.json
