@@ -76,17 +76,17 @@ export function scrollByDataID(data, offset = -1) {
 	scrollToElement($data, offset);
 }
 
-export function scrollToElement($elem, offset = -1) {
+export function scrollToElement($elem, offset = -1, callback = () => {}) {
 	if(!$elem.length) {
 		return;
 	}
 
 	const dataTop = $elem.first().offset().top;
 
-	scrollToPosition(dataTop, offset, $elem);
+	scrollToPosition(dataTop, offset, $elem, callback);
 }
 
-export function scrollToPosition(dataTop, offset = -1, $focusElement = '') {
+export function scrollToPosition(dataTop, offset = -1, $focusElement = '', callback = () => {}) {
 	if(offset === -1) {
 		offset = $win.height() * 0.03;
 	}
@@ -113,6 +113,8 @@ export function scrollToPosition(dataTop, offset = -1, $focusElement = '') {
 		onComplete: () => {
 			$body.removeClass(classes.isScrolling);
 			$win.trigger('updatePageNavigation');
+
+			callback();
 
 			if(!$focusElement.length) {
 				return;
