@@ -1,8 +1,8 @@
 import { $, $doc } from '../includes/globals';
 import { debounce } from '../includes/debounce';
-import '../includes/max-height';
 import { scrollToElement } from './scroll-to';
-import TypeIt from "typeit";
+import '../includes/max-height';
+import TypeIt from 'typeit';
 
 const plansObserver = new ResizeObserver(debounce(() => {
 	const $plans = $('.js-plan');
