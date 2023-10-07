@@ -1,31 +1,50 @@
-import { $, $doc, classes, breakpoints } from '../includes/globals';
+import { $, $doc, $win, getHeaderHeight, hasFixedHeader, classes, breakpoints } from '../includes/globals';
 import { debounce } from '../includes/debounce';
-import { scrollToElement } from './scroll-to';
+import { scrollToElement, scrollToPosition } from './scroll-to';
 
 $doc.on('click', '.js-accordion .js-accordion-toggle', event => {
 	event.preventDefault();
 
 	const $target = $(event.currentTarget);
-	const { single: isSingle = false } = $target.closest('.js-accordion').data();
+	const $accordion = $target.closest('.js-accordion');
+	const $accordionSection = $target.closest('.js-accordion-section');
+	const scrollPositionFix = fixScrollPosition($target);
+	const { single: isSingle = false } = $accordion.data();
 
-	$target.closest('.js-accordion-section').toggleClass(classes.current);
+	$accordionSection.toggleClass(classes.current);
 
 	if(!isSingle) {
-		$target.closest('.js-accordion-section').siblings().removeClass(classes.current);
+		$accordionSection.siblings().removeClass(classes.current);
+	}
+
+	if(scrollPositionFix) {
+		scrollToPosition(scrollPositionFix);
 	}
 });
 
-$doc.on('transitionend', '.js-accordion', event => {
-	if(!breakpoints.mobile.matches) {
-		return;
-	}
-
-	const $target = $(event.originalEvent.target);
+function fixScrollPosition($target) {
 	const $accordionSection = $target.closest('.js-accordion-section');
-	const isCurrentSection = $accordionSection.hasClass(classes.current);
-	const isAnimation = event.originalEvent.propertyName === 'grid-template-rows';
+	const isCurrentSection = !$accordionSection.hasClass(classes.current);
 
-	if(isCurrentSection && isAnimation) {
-		scrollToElement($accordionSection);
+	// No fixes needed
+	if(!isCurrentSection) {
+		return false;
 	}
-});
+
+	const $accordion = $target.closest('.js-accordion');
+	const $prevCurrentSection = $accordion.find(`.js-accordion-section.${classes.current}`);
+	const targetIndex = $accordionSection.index();
+	const prevCurrentSectionIndex = $prevCurrentSection.index();
+	const prevCurrentAccordionContentHeight = $prevCurrentSection.length && (prevCurrentSectionIndex < targetIndex) ? $prevCurrentSection.find('.js-accordion-content')[0].scrollHeight : 0;
+	const accordionSectionActualOffset = $accordionSection.offset().top - prevCurrentAccordionContentHeight;
+	const headerHeight = hasFixedHeader ? getHeaderHeight() : 0;
+	const viewTop = $win.scrollTop() + headerHeight;
+	const viewBottom = viewTop + $win.height();
+	const actualOffsetIsVisible = viewTop < accordionSectionActualOffset && viewBottom > accordionSectionActualOffset;
+
+	if(actualOffsetIsVisible) {
+		return false;
+	}
+
+	return accordionSectionActualOffset;
+}
