@@ -35,7 +35,8 @@ export const classes = {
 	swiperButtonDisabled: 'swiper-button-disabled',
 	scrolled: 'has-scrolled',
 	isScrolling: 'is-scrolling',
-	keyboardUser: 'is-keyboard-user'
+	keyboardUser: 'is-keyboard-user',
+	error: 'is-error'
 };
 
 export const getHeaderHeight = () => $header.length ? $header.innerHeight() : 0;

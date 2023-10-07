@@ -22,6 +22,8 @@
 	 --c-gray-rgb: 114, 116, 121;
 	--c-blue-rgb: 0, 132, 255;
 	--c-lightblue-rgb: 0, 187, 255;
+	--c-error-rgb: 224, 69, 98;
+	--c-error-light-rgb: 249, 228, 232;
 
 	--c-white: rgb(var(--c-white-rgb));
 	--c-white-2: rgb(var(--c-white-2-rgb));
@@ -30,6 +32,8 @@
 	 --c-gray: rgb(var( --c-gray-rgb));
 	--c-blue: rgb(var(--c-blue-rgb));
 	--c-lightblue: rgb(var(--c-lightblue-rgb));
+	--c-error: rgb(var(--c-error-rgb));
+	--c-error-light: rgb(var(--c-error-light-rgb));
 
 	--section-spacing: 120px;
 	--container-width: 1296px;
