@@ -13,6 +13,10 @@
 		border-radius: 20px;
 		outline: none;
 
+		@include breakpoint-down(small-desktop) {
+			border-radius: 14px;
+		}
+
 		&:before,
 		&:after {
 			content: '';
@@ -34,16 +38,16 @@
 			transform: translate3d(0, 10%, 0) scale(0.9);
 			opacity: 0;
 		}
+	}
 
-		&:hover,
-		&:focus-visible {
-			&:before {
-				opacity: 0;
-			}
+	&.is-current .service__link,
+	.service__link:is(:hover, :focus-visible) {
+		&:before {
+			opacity: 0;
+		}
 
-			&:after {
-				opacity: 1;
-			}
+		&:after {
+			opacity: 1;
 		}
 	}
 
@@ -60,12 +64,7 @@
 		transition-duration: var(--t-dur);
 		transition-timing-function: var(--t-easing);
 
-		@include breakpoint-down(tablet) {
-			color: var(--c-white);
-		}
-
 		@include breakpoint-down(small-desktop) {
-			border-radius: 14px;
 			padding: 24px;
 		}
 
@@ -80,13 +79,10 @@
 			transition-duration: var(--t-dur);
 			transition-timing-function: var(--t-easing);
 			opacity: 0;
-
-			@include breakpoint-down(tablet) {
-				opacity: 1;
-			}
 		}
 	}
 
+	&.is-current .service__content,
 	.service__link:is(:hover, :focus-visible) .service__content {
 		color: var(--c-white);
 
@@ -124,8 +120,8 @@
 			transition: background-color var(--t-dur) var(--t-easing);
 			background-color: rgba(var(--c-blue-rgb), .22);
 
-			@include breakpoint-down(tablet) {
-				background-color: var(--c-lightblue);
+			@include breakpoint-down(mobile) {
+				width: 80px;
 			}
 		}
 
@@ -134,8 +130,22 @@
 			grid-column: 1;
 			grid-row: 1;
 		}
+
+		svg {
+			--_scale: 1;
+			--_width: calc(var(--width) * var(--_scale));
+			--_height: calc(var(--height) * var(--_scale));
+
+			width: var(--_width);
+			height: var(--_height);
+
+			@include breakpoint-down(mobile) {
+				--_scale: 0.8;
+			}
+		}
 	}
 
+	&.is-current .service__icon,
 	.service__link:is(:hover, :focus-visible) .service__icon {
 		&:before {
 			background-color: var(--c-lightblue);
@@ -155,12 +165,9 @@
 		font-size: .9em;
 		transition: color var(--t-dur) var(--t-easing);
 		margin-top: auto;
-
-		@include breakpoint-down(tablet) {
-			color: var(--c-white);
-		}
 	}
 
+	&.is-current .service__view,
 	.service__link:is(:hover, :focus-visible) .service__view {
 		color: var(--c-white);
 	}

@@ -12,6 +12,9 @@ import './modules/plans';
 import './modules/magic-line';
 import './modules/smooth-scrolling';
 import './modules/aos';
+import './modules/sliders';
+import './modules/services';
+import './modules/responsive-images';
 // import './modules/tabs';
 
 /**
