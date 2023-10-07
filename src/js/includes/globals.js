@@ -36,6 +36,7 @@ export const classes = {
 	scrolled: 'has-scrolled',
 	isScrolling: 'is-scrolling',
 	keyboardUser: 'is-keyboard-user',
+	submitted: 'is-submitted',
 	error: 'is-error'
 };
 

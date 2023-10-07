@@ -21,7 +21,7 @@ $doc.on('submit', '.js-form', event => {
 		const isSuccess = response.ok;
 
 		if(isSuccess) {
-			$form.closest('.js-form-parent').html(`<p>${successMessage}</p>`)
+			$form.closest('.js-form-parent').addClass(classes.submitted).html(`<p>${successMessage}</p>`)
 
 			return;
 		}
