@@ -1,6 +1,9 @@
 import Lenis from '@studio-freight/lenis';
+import '../includes/easing';
 
-export const lenisObject = new Lenis();
+export const lenisObject = new Lenis({
+	lerp: 0.2
+});
 
 requestAnimationFrame(raf);
 
