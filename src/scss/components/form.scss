@@ -20,7 +20,8 @@
 		}
 	}
 
-	.form__label {
+	.form__label,
+	.form__input--honeypot {
 		@include sr-only;
 	}
 

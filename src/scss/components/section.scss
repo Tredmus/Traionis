@@ -622,6 +622,10 @@
 		@include breakpoint-down(mobile) {
 			padding-bottom: 0;
 		}
+
+		&.is-submitted {
+			text-align: center;
+		}
 	}
 
 	.section__form {
