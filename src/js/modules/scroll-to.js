@@ -108,7 +108,7 @@ export function scrollToPosition(dataTop, offset = -1, $focusElement = '') {
 	lenisObject.scrollTo(scrollTop, {
 		immediate: scrollDifference === 0,
 		duration: scrollDuration / 1000,
-		easing: $.easing.easeInOutExpo,
+		easing: $.easing.easeInOutCubic,
 		lock: true,
 		onComplete: () => {
 			$body.removeClass(classes.isScrolling);
