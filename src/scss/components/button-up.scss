@@ -19,6 +19,10 @@
 		width: 54px;
 	}
 
+	@include breakpoint-down(mobile) {
+		width: 48px;
+	}
+
 	&:hover,
 	&:focus-visible {
 		color: var(--c-lightblue);
