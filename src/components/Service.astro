@@ -3,7 +3,7 @@ const { title, current: isCurrent = false, dataService, icon } = Astro.props;
 const { default: iconMarkup } = await import(`../icons/${icon}?raw`/* @vite-ignore */);
 ---
 
-<div class:list={[ 'service', { 'is-current': isCurrent }, 'js-service' ]} data-service="{dataService}" data-aos="fade-up">
+<div class:list={[ 'service', { 'is-current': isCurrent }, 'js-service' ]} data-service={dataService} data-aos="fade-up">
 	<a href="#" class="service__link js-service-toggle">
 		<div class="service__content">
 			<div class="service__icon js-responsive-images">
