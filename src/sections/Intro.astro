@@ -1,37 +1,51 @@
+ ---
+import { getEntry } from 'astro:content';
+const entry = await getEntry('index', 'intro');
+const { title, description, buttons, img } = entry.data;
+---
+
 <section class="section section--intro" data-id="intro" data-aos="fade">
 	<div class="container">
 		<div class="section__grid">
 			<div class="section__content">
 				<header class="section__header" data-aos="fade-up">
-					<h1>
-						Elevate Your Online Presence With Custom <span>Web Development</span>
-					</h1>
+					<h1 set:html={title} />
 				</header><!-- /.section__header -->
 
-				<div class="section__text" data-aos="fade-up" data-aos-delay="100">
-					<p>
-						Creating beautifully functional websites tailored to your vision
-					</p>
-				</div><!-- /.section__text -->
+				{description && (
+					<div class="section__text" data-aos="fade-up" data-aos-delay="100">
+						<p>
+							{description}
+						</p>
+					</div>
+				)}
 
-				<div class="buttons">
-					<a href="#pricing" class="button" data-aos="fade-up" data-aos-delay="200">
-						<span>
-							Get Started
-						</span>
-					</a>
+				{buttons && (
+					<div class="buttons">
+						{buttons.main && (
+							<a href={buttons.main.link} class="button" data-aos="fade-up" data-aos-delay="200">
+								<span>
+									{buttons.main.title}
+								</span>
+							</a>
+						)}
 
-					<a href="#services" class="button button--border" data-aos="fade-up" data-aos-delay="300">
-						<span>
-							Our Services
-						</span>
-					</a>
-				</div><!-- /.buttons -->
+						{buttons.alt && (
+							<a href={buttons.alt.link} class="button button--border" data-aos="fade-up" data-aos-delay="300">
+								<span>
+									{buttons.alt.title}
+								</span>
+							</a>
+						)}
+					</div>
+				)}
 			</div><!-- /.section__content -->
 
-			<div class="section__image" data-aos="fade-left">
-				<img src="/temp/intro.webp" width="874" height="660" alt="Intro">
-			</div><!-- /.section__image -->
+			{img && (
+				<div class="section__image" data-aos="fade-left">
+					<img src={img.src} width={img.width} height={img.height} alt={img.alt}>
+				</div>
+			)}
 		</div><!-- /.section__grid -->
 	</div><!-- /.container -->
 </section><!-- /.section -->

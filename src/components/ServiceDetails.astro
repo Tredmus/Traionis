@@ -1,11 +1,11 @@
 ---
 const { title, text, icon } = Astro.props;
-const { default: iconMarkup } = await import(`../icons/${icon}?raw`/* @vite-ignore */);
+// const { default: iconMarkup } = await import(`../icons/${icon}?raw`/* @vite-ignore */);
 ---
 
 <div class="service-details" data-aos="fade-up">
 	<div class="service__icon js-responsive-images">
-		<Fragment set:html={iconMarkup} />
+		<!-- <Fragment set:html={/*iconMarkup*/} /> -->
 	</div><!-- /.service__icon -->
 
 	<div class="service__title">

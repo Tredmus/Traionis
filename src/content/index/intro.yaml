@@ -1,0 +1,14 @@
+title: Elevate Your Online Presence With Custom <span>Web Development</span>
+description: Creating beautifully functional websites tailored to your vision
+buttons:
+  main:
+    title: Get Started
+    link: '#pricing'
+  alt:
+    title: Our Services
+    link: '#services'
+img:
+  src: /temp/intro.webp
+  width: '874'
+  height: '660'
+  alt: Intro
