@@ -15,7 +15,8 @@
 	background: none;
 	min-width: 185px;
 	padding: 20px 30px;
-	transition: color var(--t-dur), background-color var(--t-dur), opacity 1s, transform 1s !important;
+	transition-property: color, background-color, opacity, transform !important;
+	transition-duration: var(--t-dur), var(--t-dur), 1s, 1s !important;
 	transition-timing-function: var(--t-easing) !important;
 
 	@include breakpoint-down(tablet) {
