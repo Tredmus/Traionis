@@ -14,6 +14,8 @@ import './modules/smooth-scrolling';
 import './modules/aos';
 import './modules/sliders';
 import './modules/services';
+import './modules/solutions';
+
 import './modules/responsive-images';
 import './modules/form';
 

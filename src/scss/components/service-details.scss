@@ -1,5 +1,5 @@
 .service-details {
-	text-align: left;
+	text-align: center; //changed for solutions
 	color: var(--c-white);
 	border-radius: 20px;
 	background: linear-gradient(to right, var(--c-blue), var(--c-lightblue));
@@ -38,6 +38,9 @@
 
 	.service__title {
 		margin-bottom: 16px;
+		h3 {
+			font-size: .9em;
+		}
 
 		@include breakpoint-down(tablet) {
 			margin-bottom: 12px;

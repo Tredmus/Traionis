@@ -32,3 +32,35 @@ $('.js-slider-services').each((i, container) => {
 		swiper.slideTo(currentServiceIndex);
 	}
 });
+
+$('.js-slider-solutions').each((i, container) => {
+	const $container = $(container);
+
+	const swiper = createSwiper({
+		$container,
+		options: {
+			grabCursor: true,
+			slideToClickedSlide: true,
+			on: {
+				init(swiper) {
+					updateCurrentSlide(swiper);
+				}
+			}
+		},
+		breakpoint: breakpoints.smallDesktop
+	});
+
+	updateCurrentSlide(swiper);
+	$container.on('updateSlider', () => updateCurrentSlide(swiper));
+
+	function updateCurrentSlide(swiper) {
+		if(!swiper) {
+			return;
+		}
+
+		const $currentSolution = $container.find(`.js-solution.${classes.current}`);
+		const currentSolutionIndex = $currentSolution.closest('.swiper-slide').index();
+
+		swiper.slideTo(currentSolutionIndex);
+	}
+});

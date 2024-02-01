@@ -1,0 +1,65 @@
+.solutions {
+	.solutions__slider {
+		margin-bottom: 48px;
+
+		@include breakpoint-down(small-desktop) {
+			margin-bottom: 40px;
+		}
+
+		@include breakpoint-down(mobile) {
+			margin-bottom: 32px;
+		}
+	}
+
+	.solutions__body {
+		position: relative;
+	}
+
+	.solutions__tab:not(.is-current) {
+		position: absolute;
+		inset: 0;
+		opacity: 0;
+		visibility: hidden;
+	}
+
+	.solutions__grid {
+		--row-gap: 24px;
+		--col-gap: 24px;
+		--items: 3;
+
+		@include breakpoint-down(tablet) {
+			--items: 2;
+			--row-gap: 16px;
+			--col-gap: 16px;
+		}
+
+		@include breakpoint-down(mobile-medium) {
+			--items: 1;
+			--row-gap: 16px;
+			--col-gap: 0px;
+		}
+
+		display: flex;
+		justify-content: center;
+		flex-wrap: wrap;
+		row-gap: var(--row-gap);
+		margin-inline: calc(var(--col-gap) / -2);
+	}
+
+	.solutions__grid-item {
+		flex: 0 0 calc(100% / var(--items));
+		padding-inline: calc(var(--col-gap) / 2);
+
+		&:nth-child(4n + 2) .solution {
+			--icon-transform: rotate(-195deg);
+		}
+
+		&:nth-child(4n + 3) .solution {
+			--icon-transform: rotateX(-180deg);
+		}
+
+		&:nth-child(4n + 4) .solution {
+			--icon-transform: rotateY(-180deg);
+		}
+	}
+}

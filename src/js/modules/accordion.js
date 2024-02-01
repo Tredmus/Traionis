@@ -2,6 +2,11 @@ import { $, $doc, $win, getHeaderHeight, hasFixedHeader, classes, breakpoints } 
 import { debounce } from '../includes/debounce';
 import { scrollToElement, scrollToPosition } from './scroll-to';
 
+$(document).ready(function() {
+    const $firstAccordionSection = $('.js-accordion .js-accordion-section').first();
+    $firstAccordionSection.addClass(classes.current);
+});
+
 $doc.on('click', '.js-accordion .js-accordion-toggle', event => {
 	event.preventDefault();
 
