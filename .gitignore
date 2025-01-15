@@ -6,74 +6,19 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-.history
 
-# User Config
-.env
-
-# Dependency directory
-node_modules/
-
-# Build
-build/
+node_modules
+dist
+dist-ssr
 *.local
-
-# Lock files
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
-bun.lockb
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
+.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
-
-# Sublime Project / Workspace
-*.sublime-*
-
-# Windows - https://github.com/github/gitignore/blob/master/Global/Windows.gitignore
-Thumbs.db
-ehthumbs.db
-ehthumbs_vista.db
-*.stackdump
-[Dd]esktop.ini
-$RECYCLE.BIN/
-*.cab
-*.msi
-*.msix
-*.msm
-*.msp
-*.lnk
-
-# Linux - https://github.com/github/gitignore/blob/master/Global/Linux.gitignore
-*~
-.fuse_hidden*
-.directory
-.Trash-*
-.nfs*
-
-# macOS - https://github.com/github/gitignore/blob/master/Global/Linux.gitignore
-.DS_Store
-.DS_Store?
-.AppleDouble
-.LSOverride
-Icon
-._*
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-.com.apple.timemachine.donotpresent
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
