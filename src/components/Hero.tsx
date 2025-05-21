@@ -74,7 +74,8 @@ const Hero: React.FC = () => {
             <div className="relative">
               <div className="bg-white p-6 rounded-2xl shadow-xl transform rotate-2 transition-all hover:rotate-0 duration-500">
                 <img 
-                  src="https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
+                 // src="https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                  src="https://snipboard.io/v9mU34.jpg" 
                   alt="Business Growth Illustration" 
                   className="rounded-lg w-full h-auto"
                 />
