@@ -107,13 +107,12 @@ const Hero: React.FC = () => {
               className="animate-on-load opacity-0 transition-all duration-700 delay-400"
               style={{ transform: 'translateY(20px)' }}
             >
-              <Button size="lg" variant="primary" className="mr-4 bg-gradient-to-r from-primary to-secondary">
-                Book a Free Strategy Call
-                <ChevronRight className="ml-1 h-5 w-5" />
-              </Button>
-              <Button size="lg" variant="outline" className="mt-4 md:mt-0">
-                View Our Work
-              </Button>
+              <a href="#contact">
+                <Button size="lg" variant="primary" className="mr-4 bg-gradient-to-r from-primary to-secondary">
+                  Book a Free Strategy Call
+                  <ChevronRight className="ml-1 h-5 w-5" />
+                </Button>
+              </a>
             </div>
           </div>
           

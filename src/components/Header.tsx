@@ -33,7 +33,7 @@ const Header: React.FC = () => {
         
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-8">
-          {['Services', 'Work', 'About', 'Insights', 'Contact'].map((item) => (
+          {['Services', 'Process', 'Contact'].map((item) => (
             <a 
               key={item} 
               href={`#${item.toLowerCase()}`}
@@ -43,10 +43,13 @@ const Header: React.FC = () => {
               <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
             </a>
           ))}
-          <button className="bg-gradient-to-r from-primary to-secondary hover:bg-primary-light text-white px-6 py-2 rounded-full flex items-center transition-all duration-300 hover:shadow-lg">
+          <a 
+            href="#contact"
+            className="bg-gradient-to-r from-primary to-secondary hover:bg-primary-light text-white px-6 py-2 rounded-full flex items-center transition-all duration-300 hover:shadow-lg"
+          >
             Get Started
             <ChevronRight className="ml-1 h-4 w-4" />
-          </button>
+          </a>
         </nav>
 
         {/* Mobile Menu Button */}
@@ -66,7 +69,7 @@ const Header: React.FC = () => {
         }`}
       >
         <div className="container mx-auto px-6 flex flex-col space-y-6 py-8">
-          {['Services', 'Contact'].map((item) => (
+          {['Services', 'Process', 'Contact'].map((item) => (
             <a 
               key={item} 
               href={`#${item.toLowerCase()}`}
@@ -76,13 +79,14 @@ const Header: React.FC = () => {
               {item}
             </a>
           ))}
-          <button 
+          <a 
+            href="#contact"
             className="bg-primary hover:bg-primary-light text-white px-6 py-3 rounded-full flex items-center justify-center transition-all duration-300 mt-4"
             onClick={() => setMobileMenuOpen(false)}
           >
             Get Started
             <ChevronRight className="ml-1 h-4 w-4" />
-          </button>
+          </a>
         </div>
       </div>
     </header>

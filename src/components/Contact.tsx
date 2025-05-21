@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Mail, Phone, Linkedin, Twitter, Instagram } from 'lucide-react';
 import Button from './Button';
 import FloatingDots from './FloatingDots';
+import emailjs from '@emailjs/browser';
+import toast, { Toaster } from 'react-hot-toast';
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -10,11 +12,52 @@ const Contact: React.FC = () => {
     company: '',
     message: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
+    setIsSubmitting(true);
+
+    try {
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        company: formData.company,
+        message: formData.message,
+        to_email: 'tredmus@protonmail.com'
+      };
+
+      await emailjs.send(
+        'service_xxxxxxx', // Replace with your EmailJS service ID
+        'template_xxxxxx', // Replace with your EmailJS template ID
+        templateParams,
+        'public_xxxxxxxx' // Replace with your EmailJS public key
+      );
+
+      toast.success('Message sent successfully!', {
+        duration: 4000,
+        position: 'top-center',
+        style: {
+          background: '#10B981',
+          color: '#fff'
+        }
+      });
+
+      setFormData({
+        name: '',
+        email: '',
+        company: '',
+        message: ''
+      });
+    } catch (error) {
+      toast.error('Failed to send message. Please try again.', {
+        duration: 4000,
+        position: 'top-center'
+      });
+      console.error('Error sending email:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -26,7 +69,7 @@ const Contact: React.FC = () => {
 
   return (
     <section id="contact" className="relative py-20 bg-gradient-to-br from-gray-50 to-blue-50 overflow-hidden">
-      {/* Background Elements */}
+      <Toaster />
       <FloatingDots />
       
       <div className="container mx-auto px-6 relative z-10">
@@ -40,7 +83,6 @@ const Contact: React.FC = () => {
         </div>
 
         <div className="max-w-2xl mx-auto mb-16">
-          {/* Contact Form */}
           <div className="bg-white rounded-2xl shadow-xl p-8">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
@@ -109,74 +151,15 @@ const Contact: React.FC = () => {
               <Button
                 type="submit"
                 size="lg"
-                className="w-full bg-gradient-to-r from-primary to-secondary hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300"
+                className={`w-full bg-gradient-to-r from-primary to-secondary hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 ${
+                  isSubmitting ? 'opacity-75 cursor-not-allowed' : ''
+                }`}
+                disabled={isSubmitting}
               >
-                Send Message
+                {isSubmitting ? 'Sending...' : 'Send Message'}
               </Button>
             </form>
           </div>
-        </div>
-
-        {/* Contact Information */}
-        /* <div className="max-w-3xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-8">
-            <div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
-                Contact Details
-              </h3>
-              <div className="space-y-4">
-                <a href="mailto:hello@traionis.com" className="flex items-center text-gray-600 hover:text-primary transition-colors">
-                  <Mail className="h-5 w-5 mr-3" />
-                  hello@traionis.com
-                </a>
-                <a href="tel:+35988123456" className="flex items-center text-gray-600 hover:text-primary transition-colors">
-                  <Phone className="h-5 w-5 mr-3" />
-                  +359 88 123 4567
-                </a>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
-                Follow Us
-              </h3>
-              <div className="flex space-x-4">
-                <a 
-                  href="#" 
-                  className="p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-primary hover:text-white transition-all duration-300"
-                  aria-label="LinkedIn"
-                >
-                  <Linkedin className="h-5 w-5" />
-                </a>
-                <a 
-                  href="#" 
-                  className="p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-primary hover:text-white transition-all duration-300"
-                  aria-label="Twitter"
-                >
-                  <Twitter className="h-5 w-5" />
-                </a>
-                <a 
-                  href="#" 
-                  className="p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-primary hover:text-white transition-all duration-300"
-                  aria-label="Instagram"
-                >
-                  <Instagram className="h-5 w-5" />
-                </a>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
-                Office Hours
-              </h3>
-              <p className="text-gray-600">
-                Monday - Friday:<br />
-                9:00 AM - 6:00 PM EET<br />
-                Saturday - Sunday:<br />
-                Closed
-              </p>
-            </div>
-          </div> */
         </div>
       </div>
     </section>
