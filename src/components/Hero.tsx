@@ -3,8 +3,17 @@ import Button from './Button';
 import { ChevronRight } from 'lucide-react';
 import FloatingDots from './FloatingDots';
 
+// Stats data
+const stats = [
+  { value: 42, label: 'Avg. Traffic Growth', suffix: '%', prefix: '+' },
+  { value: 13, label: 'Client Revenue Generated', suffix: 'k+', prefix: '$' },
+  { value: 1200, label: 'Hours Automated', suffix: '+', prefix: '' },
+  { value: 96, label: 'Client Satisfaction', suffix: '%', prefix: '' },
+];
+
 const Hero: React.FC = () => {
   const heroRef = useRef<HTMLDivElement>(null);
+  const isCounterAnimated = useRef(false);
 
   useEffect(() => {
     const animateHero = () => {
@@ -19,7 +28,49 @@ const Hero: React.FC = () => {
     };
 
     animateHero();
+
+    // Setup counter animation
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && !isCounterAnimated.current) {
+        animateCounters();
+        isCounterAnimated.current = true;
+      }
+    }, { threshold: 0.1 });
+
+    const statsSection = heroRef.current?.querySelector('.stats-section');
+    if (statsSection) {
+      observer.observe(statsSection);
+    }
+
+    return () => {
+      if (statsSection) {
+        observer.unobserve(statsSection);
+      }
+    };
   }, []);
+
+  const animateCounters = () => {
+    const counters = document.querySelectorAll('.counter-value');
+    
+    counters.forEach((counter) => {
+      const target = parseInt(counter.getAttribute('data-target') || '0', 10);
+      let count = 0;
+      
+      const updateCounter = () => {
+        const increment = target / 50; // Speed of counting
+        
+        if (count < target) {
+          count += increment;
+          counter.textContent = Math.floor(count).toString();
+          setTimeout(updateCounter, 20);
+        } else {
+          counter.textContent = target.toString();
+        }
+      };
+      
+      updateCounter();
+    });
+  };
 
   return (
     <section 
@@ -48,9 +99,8 @@ const Hero: React.FC = () => {
               className="text-xl md:text-2xl text-gray-700 mb-8 animate-on-load opacity-0 transition-all duration-700 delay-200"
               style={{ transform: 'translateY(20px)' }}
             >
-             Drive up your revenue and dominate  <br className="hidden md:block" />
+              Drive up your revenue and dominate  <br className="hidden md:block" />
               the online space. <br className="hidden md:block" />
-              P.S. The website isnt really ready yet, I submited in hopes it would be.
             </p>
             
             <div 
@@ -74,7 +124,6 @@ const Hero: React.FC = () => {
             <div className="relative">
               <div className="bg-white p-6 rounded-2xl shadow-xl transform rotate-2 transition-all hover:rotate-0 duration-500">
                 <img 
-                 // src="https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
                   src="https://snipboard.io/v9mU34.jpg" 
                   alt="Business Growth Illustration" 
                   className="rounded-lg w-full h-auto"
@@ -89,6 +138,22 @@ const Hero: React.FC = () => {
                 <p className="text-sm">Client Revenue Generated</p>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Stats Section */}
+        <div className="stats-section mt-16 py-8 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {stats.map((stat, index) => (
+              <div key={index} className="text-center transform hover:scale-105 transition-transform duration-300">
+                <p className="flex items-center justify-center text-3xl md:text-4xl font-bold text-primary">
+                  <span>{stat.prefix}</span>
+                  <span className="counter-value" data-target={stat.value}>0</span>
+                  <span>{stat.suffix}</span>
+                </p>
+                <p className="text-gray-600 mt-2">{stat.label}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>

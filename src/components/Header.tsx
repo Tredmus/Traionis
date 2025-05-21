@@ -66,7 +66,7 @@ const Header: React.FC = () => {
         }`}
       >
         <div className="container mx-auto px-6 flex flex-col space-y-6 py-8">
-          {['Services', 'Work', 'About', 'Insights', 'Contact'].map((item) => (
+          {['Services', 'Contact'].map((item) => (
             <a 
               key={item} 
               href={`#${item.toLowerCase()}`}

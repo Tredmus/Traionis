@@ -2,11 +2,10 @@ import React, { useEffect } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import PainPoints from './components/PainPoints';
-import TrustedBy from './components/TrustedBy';
 import Services from './components/Services';
 import ValueProps from './components/ValueProps';
 import ProcessTimeline from './components/ProcessTimeline';
-import Testimonials from './components/Testimonials';
+import FAQ from './components/FAQ';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import './styles/animations.css';
@@ -29,11 +28,8 @@ function App() {
       <main>
         <Hero />
         <PainPoints />
-        <TrustedBy />
         <Services />
-        <ValueProps />
         <ProcessTimeline />
-        <Testimonials />
         <Contact />
       </main>
       <Footer />
