@@ -40,15 +40,17 @@ const Hero: React.FC = () => {
               className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6 animate-on-load opacity-0 transition-all duration-700"
               style={{ transform: 'translateY(20px)' }}
             >
-              Online Business <span className="text-primary">Crush</span> <br />
-              The Competition.
+              Don't Fall Behind<br />
+               <span className="text-primary">Crush</span> <br />
+              The Competition
             </h1>
             <p 
               className="text-xl md:text-2xl text-gray-700 mb-8 animate-on-load opacity-0 transition-all duration-700 delay-200"
               style={{ transform: 'translateY(20px)' }}
             >
-              Websites, AI automations & strategic support <br className="hidden md:block" />
-              to scale your company.
+             Drive up your revenue and dominate  <br className="hidden md:block" />
+              the online space. <br className="hidden md:block" />
+              P.S. The website isnt really ready yet, I submited in hopes it would be.
             </p>
             
             <div 
