@@ -18,22 +18,6 @@ const projects = [
     image: 'https://snipboard.io/ueD6gF.jpg',
     liveUrl: 'https://marvelous-malabi-482445.netlify.app/',
   },
-  {
-    id: 3,
-    title: 'Cavitation System',
-    result: 'Clean landing page for innovative water tech',
-    services: ['Website', 'Landing Page'],
-    image: 'https://i.snipboard.io/XWcL40.jpg',
-    liveUrl: 'https://velvety-faun-415f97.netlify.app/',
-  },
-  {
-    id: 4,
-    title: 'Morion',
-    result: 'Stone catalog with CMS-ready layout',
-    services: ['Website', 'Product Catalog', 'CRM UI'],
-    image: 'https://snipboard.io/ueD6gF.jpg',
-    liveUrl: 'https://marvelous-malabi-482445.netlify.app/',
-  },
 ];
 
 const Work: React.FC = () => {
