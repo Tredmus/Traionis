@@ -18,7 +18,7 @@ function App() {
     // Optional: Add favicon
     const favicon = document.querySelector('link[rel="icon"]');
     if (favicon) {
-      favicon.setAttribute('href', '/public/favicon.ico');
+      favicon.setAttribute('href', '/favicon.ico');
     }
   }, []);
 
