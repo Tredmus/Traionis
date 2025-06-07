@@ -79,14 +79,14 @@ const ProcessTimeline: React.FC = () => {
               >
                 <div className={`w-5/12 ${index % 2 === 0 ? 'text-right pr-8' : 'pl-8'}`}>
                   <div className="mb-4">
-                    <span className="inline-block text-2xl font-bold text-secondary">0{index + 1}</span>
+                    <span className="inline-block text-2xl font-bold text-primary">0{index + 1}</span>
                     <h3 className="text-2xl font-bold text-gray-900">{step.title}</h3>
                   </div>
                   <p className="text-gray-600">{step.description}</p>
                 </div>
                 
                 <div className="absolute left-1/2 bottom-0 transform -translate-x-1/2 z-10">
-                  <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-primary to-secondary shadow-lg">
+                  <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary shadow-lg">
                     {step.icon}
                   </div>
                 </div>

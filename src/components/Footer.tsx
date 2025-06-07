@@ -139,7 +139,7 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div className="pt-8 border-t border-gray-800 text-gray-500 text-sm flex flex-col md:flex-row justify-between items-center">
+        <div className="pt-8 border-t  text-sm flex flex-col md:flex-row justify-between items-center">
           <div className="mb-4 md:mb-0">
             &copy; {new Date().getFullYear()} Traionis. All rights reserved.
           </div>
