@@ -13,12 +13,12 @@ import './styles/animations.css';
 function App() {
   useEffect(() => {
     // Update document title
-    document.title = 'Traionis | Online Business Growth, Delivered';
+    document.title = 'Traionis | Websites, AI & Automation for Business Growth';
     
     // Optional: Add favicon
     const favicon = document.querySelector('link[rel="icon"]');
     if (favicon) {
-      favicon.setAttribute('href', '/favicon.ico');
+      favicon.setAttribute('href', '/public/favicon.ico');
     }
   }, []);
 
