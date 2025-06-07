@@ -1,5 +1,6 @@
 import React from 'react';
 import { XCircle, Clock, TrendingDown, Users } from 'lucide-react';
+import CtaBanner from './CtaBanner';
 
 const PainPoints: React.FC = () => {
   return (
@@ -7,12 +8,14 @@ const PainPoints: React.FC = () => {
       <div className="container mx-auto px-6">
         <div className="max-w-4xl mx-auto text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Still struggling to grow online?
+            Running a business is already a full-time job.
           </h2>
           <p className="text-xl md:text-2xl text-gray-600">
-            You're working harder than ever, but the results aren't matching your effort.
+            While juggling the day-to-day operations, there's only so much you can do alone — and do it right.
           </p>
         </div>
+
+        <CtaBanner/>
 
         <div className="max-w-3xl mx-auto">
           <div className="grid md:grid-cols-2 gap-8">
@@ -22,7 +25,7 @@ const PainPoints: React.FC = () => {
                   <XCircle className="h-6 w-6 text-red-600" />
                 </div>
                 <p className="text-white text-lg font-semibold">
-                  Spending on ads but barely seeing any conversions or real leads
+                  Your website feels outdated or unfinished — but there's no time to fix it.
                 </p>
               </div>
             </div>

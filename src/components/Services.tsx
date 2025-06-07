@@ -20,7 +20,7 @@ const services: ServiceTab[] = [
     offerings: [
       'Market & Competitor Research',
       'Full-Funnel Campaign Strategy',
-      'Paid Ads Management (Meta, Google & more)',
+      'Paid Ads Management',
       'Analytics, Reporting & Optimization'
     ]
   },
@@ -55,21 +55,21 @@ Automate the boring stuff and reclaim your focus. From repetitive admin tasks to
 ];
 
 const Services: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('growth');
+  const [activeTab, setActiveTab] = useState('web');
 
   const activeService = services.find(service => service.id === activeTab);
 
   return (
-    <section id="services" className="py-20 bg-gray-50">
+    <section id="services\" className="py-20 bg-gray-50">
       <div className="container mx-auto px-6">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-8">
-            Grow your business with:
+            We can help you with:
           </h2>
           
           {/* Tabs */}
           <div className="flex justify-center mb-4">
-            <div className="inline-flex bg-white rounded-xl p-2 shadow-lg">
+            <div className="inline-flex bg-white rounded-xl p-2 shadow-[0_0_15px_rgba(0,0,0,0.2)]">
               {services.map((service) => (
                 <button
                   key={service.id}
@@ -94,7 +94,7 @@ const Services: React.FC = () => {
           </div>
 
           {/* Content Area */}
-          <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12">
+          <div className="bg-white rounded-2xl shadow-[0_0_15px_rgba(0,0,0,0.2)] p-8 md:p-12">
             {activeService && (
               <div
                 key={activeService.id}
@@ -110,10 +110,10 @@ const Services: React.FC = () => {
                   {activeService.offerings.map((offering, index) => (
                     <li
                       key={index}
-                      className="flex items-center bg-gray-50 rounded-lg p-4 transition-all duration-300 hover:shadow-md"
+                      className="flex items-center bg-gradient-to-r from-primary to-secondary text-white rounded-lg p-4 transition-all duration-300 hover:shadow-md"
                     >
-                      <span className="h-2 w-2 bg-primary rounded-full mr-3"></span>
-                      <span className="text-gray-800">{offering}</span>
+                      <span className="h-2 w-2 bg-white rounded-full mr-3"></span>
+                      <span>{offering}</span>
                     </li>
                   ))}
                 </ul>

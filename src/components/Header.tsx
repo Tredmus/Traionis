@@ -33,7 +33,7 @@ const Header: React.FC = () => {
         
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-8">
-          {['Services', 'Process', 'Contact'].map((item) => (
+          {['Services', 'Work' ,'Process', 'Contact'].map((item) => (
             <a 
               key={item} 
               href={`#${item.toLowerCase()}`}
@@ -69,7 +69,7 @@ const Header: React.FC = () => {
         }`}
       >
         <div className="container mx-auto px-6 flex flex-col space-y-6 py-8">
-          {['Services', 'Process', 'Contact'].map((item) => (
+          {['Services', 'Work' ,'Process', 'Contact'].map((item) => (
             <a 
               key={item} 
               href={`#${item.toLowerCase()}`}

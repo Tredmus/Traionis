@@ -91,16 +91,15 @@ const Hero: React.FC = () => {
               className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6 animate-on-load opacity-0 transition-all duration-700"
               style={{ transform: 'translateY(20px)' }}
             >
-              Don't Fall Behind<br />
-               <span className="text-primary">Crush</span> <br />
-              The Competition
+              Scale Your Business<br />
+               <span className="text-secondary">Drive More</span> <br />
+              Leads & Sales
             </h1>
             <p 
               className="text-xl md:text-2xl text-gray-700 mb-8 animate-on-load opacity-0 transition-all duration-700 delay-200"
               style={{ transform: 'translateY(20px)' }}
             >
-              Drive up your revenue and dominate  <br className="hidden md:block" />
-              the online space. <br className="hidden md:block" />
+            Use the power of a clean website, smart marketing and automated workflows to grow your business.<br className="hidden md:block" />
             </p>
             
             <div 
@@ -145,7 +144,7 @@ const Hero: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
               <div key={index} className="text-center transform hover:scale-105 transition-transform duration-300">
-                <p className="flex items-center justify-center text-3xl md:text-4xl font-bold text-primary">
+                <p className="flex items-center justify-center text-3xl md:text-4xl font-bold text-secondary">
                   <span>{stat.prefix}</span>
                   <span className="counter-value" data-target={stat.value}>0</span>
                   <span>{stat.suffix}</span>

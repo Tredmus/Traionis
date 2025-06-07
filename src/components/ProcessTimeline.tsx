@@ -4,23 +4,23 @@ import { Search, Map, Code, Rocket } from 'lucide-react';
 const steps = [
   {
     icon: <Search className="h-8 w-8 text-white" />,
-    title: 'Discovery',
-    description: 'We dive into your business goals and challenges to understand what success looks like for you.',
+    title: 'Quick Call or Chat',
+    description: 'We start with a brief call or chat – whichever works best for you. We’ll discuss your goals, ideas, and your vision for the project.',
   },
   {
     icon: <Map className="h-8 w-8 text-white" />,
-    title: 'Strategy',
-    description: 'Blueprint a comprehensive growth plan that leverages technology to achieve your objectives.',
+    title: 'Map it out',
+    description: 'Our team discusses the project and comes back to you with a clear plan and pricing. Once you give the green light, we collect a 10% deposit to confirm the project and we get straight to work.',
   },
   {
     icon: <Code className="h-8 w-8 text-white" />,
     title: 'Design & Build',
-    description: 'Website & automation development with regular feedback loops to ensure we are on the right track.',
+    description: 'We build the project with regular feedback from you to ensure the best deliverable possible.',
   },
   {
     icon: <Rocket className="h-8 w-8 text-white" />,
-    title: 'Launch & Optimize',
-    description: 'Go live, analyze performance data, and improve continuously to maximize ROI.',
+    title: 'Launch',
+    description: 'Once the project is complete, we collect the remaining payment and launch. After that, we’re happy to assist with future updates or improvements, whenever you need us.',
   },
 ];
 
@@ -53,10 +53,10 @@ const ProcessTimeline: React.FC = () => {
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Our Process
+            How it Works
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            A structured approach to deliver consistent results for your business.
+            We make it easy to get online and start converting. Here's how:
           </p>
         </div>
         
@@ -79,13 +79,13 @@ const ProcessTimeline: React.FC = () => {
               >
                 <div className={`w-5/12 ${index % 2 === 0 ? 'text-right pr-8' : 'pl-8'}`}>
                   <div className="mb-4">
-                    <span className="inline-block text-2xl font-bold text-primary">0{index + 1}</span>
+                    <span className="inline-block text-2xl font-bold text-secondary">0{index + 1}</span>
                     <h3 className="text-2xl font-bold text-gray-900">{step.title}</h3>
                   </div>
                   <p className="text-gray-600">{step.description}</p>
                 </div>
                 
-                <div className="absolute left-1/2 top-0 transform -translate-x-1/2 -translate-y-1/3 z-10">
+                <div className="absolute left-1/2 bottom-0 transform -translate-x-1/2 z-10">
                   <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-primary to-secondary shadow-lg">
                     {step.icon}
                   </div>

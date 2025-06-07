@@ -8,15 +8,15 @@ export default {
       },
       colors: {
         primary: {
-          DEFAULT: '#B91C1C',
-          light: '#0C6EAB',
+          DEFAULT: '#1A6986',
+          light: '#227998',
         },
         secondary: {
-          DEFAULT: '#F97316',
-          light: '#4BC6B9',
+          DEFAULT: '#40E0D0',
+          light: '#2FD0C0',
         },
         accent: {
-          DEFAULT: '#FACC15'
+          DEFAULT: '#14B8A6'
         },
         blue: {
           50: '#EFF6FF',

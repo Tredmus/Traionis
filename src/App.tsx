@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
-import PainPoints from './components/PainPoints';
 import Services from './components/Services';
-import ValueProps from './components/ValueProps';
+import Work from './components/Work';
 import ProcessTimeline from './components/ProcessTimeline';
 import FAQ from './components/FAQ';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import CtaBanner from './components/CtaBanner';
 import './styles/animations.css';
 
 function App() {
@@ -27,9 +27,11 @@ function App() {
       <Header />
       <main>
         <Hero />
-        <PainPoints />
+        <CtaBanner />
         <Services />
+        <Work />
         <ProcessTimeline />
+        <FAQ />
         <Contact />
       </main>
       <Footer />
