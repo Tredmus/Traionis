@@ -1,105 +1,107 @@
-import React, { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+'use client';
 
-interface FAQItem {
+import { useState } from 'react';
+import { ChevronDown } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FadeIn } from './motion/FadeIn';
+
+type FAQItem = {
   question: string;
   answer: string;
-}
+};
 
 const faqs: FAQItem[] = [
   {
-    question: "What services do you actually offer?",
+    question: 'С колко започва един фирмен сайт?',
     answer:
-      "We design clean, high-converting websites. We help businesses get more clients through smart marketing. And we automate repetitive tasks using modern tools and AI — so you can save time and scale faster.",
+      'Зависи от обема: брой езици, страници, интеграции, админ панел и т.н. След кратък разговор ви изпращаме оферта с разбивка — без „започва от 500 лв“ и после десет приложения.',
   },
   {
-    question: "How much does a project usually cost?",
+    question: 'Работите ли само в София?',
     answer:
-      "It depends on what you need. A landing page starts lower, while full websites or complex marketing funnels cost more. After a quick chat, we’ll send you a custom quote — no surprises.",
+      'Не. Работим с фирми от цяла България. Срещи онлайн или на място, когато има смисъл за проекта.',
   },
   {
-    question: "How long does it take to deliver?",
+    question: 'Получавам ли кода и достъпите?',
     answer:
-      "Most projects are ready in 1–3 weeks. For larger or more advanced setups, we’ll give you a clear timeline upfront so you always know what to expect.",
+      'Да — това е част от стандарта ни. Вие държите хранилището, хостинг акаунта и ключовете, освен ако изрично не сме уговорили друго за поддръжка.',
   },
   {
-    question: "Do you offer ongoing support or marketing after launch?",
+    question: 'Колко време отнема изработката?',
     answer:
-      "Yes. We offer support, updates, and marketing services after launch — either as one-offs or monthly retainers. We’re here for the long run, not just to build and disappear.",
+      'Малък сайт често е 2–6 седмици при готови текстове и снимки. По-големи системи — по етапи, с дати в офертата.',
   },
   {
-    question: "Can you help me bring more clients in?",
+    question: 'Помагате ли с текстове и снимки?',
     answer:
-      "Absolutely. We don’t just build websites — we help you get more traffic, leads, and conversions through ads, landing pages, and automation.",
+      'Можем да оформим структура и да редактираме ваши текстове. За специализиран копирайтинг и фотография препоръчваме партньори — или вие доставяте материалите.',
   },
   {
-    question: "How do we get started?",
+    question: 'Какви са условията за плащане?',
     answer:
-      "It begins with a quick call or chat to understand your goals. Then we send you a clear plan, pricing, and — once you're in — we get to work.",
+      'Обикновено аванс при старт и междинни плащания по етапи, финал при приемане. Точният график е в договора.',
   },
 ];
 
-const FAQ: React.FC = () => {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-
-  const toggleFAQ = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
-
-  const questionColors = ['bg-primary text-white', 'bg-secondary text-white'];
-  const answerColors = ['bg-primary-light', 'bg-secondary-light'];
+export default function FAQ() {
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="py-20 bg-white">
+    <section id="faq" className="py-20 md:py-28 bg-white border-t border-slate-200/80">
       <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Got Questions?
-          </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Here are some quick answers about our services, process, and how we help you grow.
+        <FadeIn className="text-center mb-14 max-w-2xl mx-auto">
+          <h2 className="font-display font-extrabold text-3xl md:text-5xl text-slate-900 mb-4">Въпроси</h2>
+          <p className="text-lg text-slate-600 leading-relaxed">
+            Директни отговори. Ако нещо липсва — питайте в формата за контакт.
           </p>
-        </div>
+        </FadeIn>
 
-        <div className="max-w-3xl mx-auto space-y-4">
+        <div className="max-w-3xl mx-auto space-y-3">
           {faqs.map((faq, index) => {
+            const isOpen = openIndex === index;
             const isPrimary = index % 2 === 0;
-            const questionColor = questionColors[isPrimary ? 0 : 1];
-            const answerColor = answerColors[isPrimary ? 0 : 1];
-            const textColor = 'text-white';
-
             return (
-              <div
-                key={index}
-                className="rounded-xl overflow-hidden shadow-md transition-all duration-300"
-              >
-                <button
-                  className={`w-full px-6 py-5 flex items-center justify-between focus:outline-none ${questionColor}`}
-                  onClick={() => toggleFAQ(index)}
-                >
-                  <span className="text-lg font-semibold">{faq.question}</span>
-                  <ChevronDown
-                    className={`h-5 w-5 transition-transform ${
-                      openIndex === index ? 'rotate-180' : ''
-                    }`}
-                  />
-                </button>
+              <FadeIn key={faq.question} delay={index * 0.03}>
                 <div
-                  className={`px-6 transition-all duration-300 ease-in-out ${answerColor} ${textColor} ${
-                    openIndex === index
-                      ? 'max-h-96 opacity-100 pb-6 pt-4'
-                      : 'max-h-0 opacity-0 pointer-events-none'
-                  }`}
+                  className={`rounded-2xl overflow-hidden border ${
+                    isPrimary ? 'border-primary/25' : 'border-secondary/30'
+                  } shadow-sm`}
                 >
-                  <p>{faq.answer}</p>
+                  <button
+                    type="button"
+                    className={`w-full px-6 py-5 flex items-center justify-between gap-4 text-left transition-colors ${
+                      isPrimary ? 'bg-primary text-white' : 'bg-secondary text-slate-900'
+                    }`}
+                    onClick={() => setOpenIndex(isOpen ? null : index)}
+                    aria-expanded={isOpen}
+                  >
+                    <span className="font-display font-semibold text-base md:text-lg leading-snug">{faq.question}</span>
+                    <ChevronDown
+                      className={`h-5 w-5 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                      aria-hidden
+                    />
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.28 }}
+                        className="overflow-hidden bg-slate-50"
+                      >
+                        <p className="px-6 py-5 text-slate-700 leading-relaxed border-t border-slate-200/80">
+                          {faq.answer}
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
-              </div>
+              </FadeIn>
             );
           })}
         </div>
       </div>
     </section>
   );
-};
-
-export default FAQ;
+}

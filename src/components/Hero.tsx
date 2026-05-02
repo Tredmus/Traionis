@@ -1,161 +1,113 @@
-import React, { useEffect, useRef } from 'react';
-import Button from './Button';
+'use client';
+
+import Image from 'next/image';
+import { useRef } from 'react';
+import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
+import Button from './Button';
 import FloatingDots from './FloatingDots';
 
-const stats = [
-  { value: 42, label: 'Avg. Traffic Growth', suffix: '%', prefix: '+' },
-  { value: 13, label: 'Client Revenue Generated', suffix: 'k+', prefix: '$' },
-  { value: 1200, label: 'Hours Automated', suffix: '+', prefix: '' },
-  { value: 96, label: 'Client Satisfaction', suffix: '%', prefix: '' },
+const PILLARS = [
+  { title: 'Ясна оферта', desc: 'Цена и обем преди да платите нещо сериозно.' },
+  { title: 'Собственост върху кода', desc: 'Вие държите репото и достъпа — не някой „затворен“ конструктор.' },
+  { title: 'Срокове, не обещания', desc: 'План с етапи. Ако закъснеем, говорим открито защо.' },
+  { title: 'След пускане', desc: 'Поддръжка и развитие, когато бизнесът ви поиска следваща стъпка.' },
 ];
 
-const Hero: React.FC = () => {
-  const heroRef = useRef<HTMLDivElement>(null);
-  const isCounterAnimated = useRef(false);
-
-  useEffect(() => {
-    const animateHero = () => {
-      const elements = heroRef.current?.querySelectorAll('.animate-on-load');
-      elements?.forEach((el, index) => {
-        setTimeout(() => {
-          (el as HTMLElement).style.opacity = '1';
-          (el as HTMLElement).style.transform = 'translateY(0)';
-        }, 200 * (index + 1));
-      });
-    };
-
-    animateHero();
-
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && !isCounterAnimated.current) {
-        animateCounters();
-        isCounterAnimated.current = true;
-      }
-    }, { threshold: 0.1 });
-
-    const statsSection = heroRef.current?.querySelector('.stats-section');
-    if (statsSection) observer.observe(statsSection);
-
-    return () => {
-      if (statsSection) observer.unobserve(statsSection);
-    };
-  }, []);
-
-  const animateCounters = () => {
-    const counters = document.querySelectorAll('.counter-value');
-    counters.forEach((counter) => {
-      const target = parseInt(counter.getAttribute('data-target') || '0', 10);
-      let count = 0;
-      const updateCounter = () => {
-        const increment = target / 50;
-        if (count < target) {
-          count += increment;
-          counter.textContent = Math.floor(count).toString();
-          setTimeout(updateCounter, 20);
-        } else {
-          counter.textContent = target.toString();
-        }
-      };
-      updateCounter();
-    });
-  };
+export default function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  });
+  const yVisual = useTransform(scrollYProgress, [0, 1], reduce ? [0, 0] : [0, 80]);
+  const yText = useTransform(scrollYProgress, [0, 1], reduce ? [0, 0] : [0, 36]);
+  const opacityBg = useTransform(scrollYProgress, [0, 0.5], [1, 0.85]);
 
   return (
     <section
-      ref={heroRef}
-      className="relative pt-32 pb-20 md:pt-40 md:pb-28 bg-gradient-to-br from-gray-50 to-blue-50 overflow-hidden"
+      ref={sectionRef}
+      className="relative pt-28 pb-16 md:pt-36 md:pb-24 bg-gradient-to-b from-slate-50 via-white to-white overflow-hidden"
     >
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute w-full h-full bg-grid-pattern opacity-10"></div>
-      </div>
-
+      <motion.div className="absolute inset-0 bg-grid-pattern opacity-[0.35]" style={{ opacity: opacityBg }} />
       <FloatingDots />
 
       <div className="container mx-auto px-6 relative z-10">
-        <div className="flex flex-col lg:flex-row items-center justify-between">
-          <div className="w-full lg:w-1/2 mb-12 lg:mb-0">
-            <h1
-              className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6 animate-on-load opacity-0 transition-all duration-700"
-              style={{ transform: 'translateY(20px)' }}
-            >
-              Scale Your Business<br />
-              <span className="text-secondary">Drive More</span> <br />
-              Leads & Sales
-            </h1>
-            <p
-              className="text-lg md:text-2xl text-gray-700 mb-8 animate-on-load opacity-0 transition-all duration-700 delay-200"
-              style={{ transform: 'translateY(20px)' }}
-            >
-              Use the power of a clean website, smart marketing and automated workflows to grow your business.<br className="hidden md:block" />
+        <div className="flex flex-col lg:flex-row items-center gap-14 lg:gap-10 lg:items-stretch">
+          <motion.div className="w-full lg:w-[52%] lg:pr-4" style={{ y: yText }}>
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary mb-4">
+              За български фирми
             </p>
-
-            <div
-              className="animate-on-load opacity-0 transition-all duration-700 delay-400"
-              style={{ transform: 'translateY(20px)' }}
-            >
+            <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl xl:text-[3.5rem] leading-[1.05] text-slate-900 mb-6">
+              Уебсайт и софтуер,
+              <span className="block text-primary">които вършат работа.</span>
+            </h1>
+            <p className="text-lg md:text-xl text-slate-600 max-w-xl leading-relaxed mb-8">
+              Правим сайтове и уеб приложения за местен бизнес — без празни фрази и без „магически“ пакети.
+              Код, който държите вие. Комуникация на български. Изпълнение като при строител: план, изпълнение,
+              приемане.
+            </p>
+            <div className="flex flex-wrap gap-4">
               <a href="#contact">
-                <Button size="lg" variant="primary" className="mr-4 bg-gradient-to-r from-primary to-secondary">
-                  Book a Free Strategy Call
-                  <ChevronRight className="ml-1 h-5 w-5" />
+                <Button size="lg" className="bg-gradient-to-r from-primary to-secondary border-0 shadow-lg">
+                  Опишете проекта си
+                  <ChevronRight className="ml-1 h-5 w-5" aria-hidden />
+                </Button>
+              </a>
+              <a href="#work">
+                <Button size="lg" variant="outline" className="border-slate-300 text-slate-800">
+                  Вижте реализациите
                 </Button>
               </a>
             </div>
-          </div>
+          </motion.div>
 
-          <div
-            className="w-full lg:w-1/2 animate-on-load opacity-0 transition-all duration-700 delay-500"
-            style={{ transform: 'translateY(20px)' }}
-          >
-            <div className="relative">
-              <div className="bg-white p-3 md:p-6 rounded-2xl shadow-xl transform rotate-2 transition-all hover:rotate-0 duration-500 border border-gray-200">
-                <img
+          <motion.div className="w-full lg:w-[48%] relative" style={{ y: yVisual }}>
+            <div className="relative mx-auto max-w-xl">
+              <div className="absolute -inset-4 bg-gradient-to-br from-primary/20 to-secondary/10 rounded-3xl blur-2xl" />
+              <div className="relative bg-white p-3 md:p-5 rounded-2xl shadow-section border border-slate-200/80 rotate-1 hover:rotate-0 transition-transform duration-500">
+                <Image
                   src="https://snipboard.io/v9mU34.jpg"
-                  alt="Business Growth Illustration"
-                  className="rounded-lg w-full h-auto"
+                  alt=""
+                  width={900}
+                  height={700}
+                  className="rounded-xl w-full h-auto"
+                  priority
                 />
               </div>
-
-              <div className="absolute -bottom-6 -left-6 md:-bottom-10 md:-left-10 bg-primary text-white p-2 md:p-4 rounded-lg shadow-lg transform rotate-6 transition-all hover:rotate-0 duration-500 text-xs md:text-sm">
-                <p className="font-bold text-base md:text-xl">+42%</p>
-                <p>Avg. Traffic Growth</p>
+              <div className="absolute -bottom-5 -left-2 md:-left-4 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl text-xs md:text-sm max-w-[200px]">
+                <p className="font-display font-bold text-secondary text-base md:text-lg">Стек</p>
+                <p className="text-slate-200 mt-0.5">Next.js · TypeScript · стабилен хостинг</p>
               </div>
-
-              <div className="absolute -top-6 -right-6 md:-top-8 md:-right-8 bg-secondary text-white p-2 md:p-4 rounded-lg shadow-lg transform -rotate-3 transition-all hover:rotate-0 duration-500 text-xs md:text-sm">
-                <p className="font-bold text-base md:text-xl">$13k+</p>
-                <p>Revenue Generated</p>
+              <div className="absolute -top-4 -right-2 md:-right-4 bg-white border border-slate-200 px-4 py-3 rounded-xl shadow-lg text-xs md:text-sm max-w-[220px]">
+                <p className="font-display font-bold text-primary">База в България</p>
+                <p className="text-slate-600 mt-0.5">Договор, фактура, ясни отговорници.</p>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
 
-        <div className="stats-section mt-14 md:mt-16 py-6 md:py-8 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center transform hover:scale-105 transition-transform duration-300">
-                <p className="flex items-center justify-center text-2xl md:text-4xl font-bold text-secondary">
-                  <span>{stat.prefix}</span>
-                  <span className="counter-value" data-target={stat.value}>0</span>
-                  <span>{stat.suffix}</span>
-                </p>
-                <p className="text-gray-600 mt-1 text-xs md:text-base">{stat.label}</p>
+        <div className="mt-16 md:mt-20 border border-slate-200/80 rounded-2xl bg-white/90 backdrop-blur-sm shadow-sm overflow-hidden">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-200">
+            {PILLARS.map((p) => (
+              <div key={p.title} className="p-6 md:p-8 hover:bg-slate-50/80 transition-colors">
+                <p className="font-display font-bold text-slate-900 text-lg">{p.title}</p>
+                <p className="text-slate-600 text-sm mt-2 leading-relaxed">{p.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" className="w-full">
+      <div className="absolute bottom-0 left-0 right-0 pointer-events-none">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 80" className="w-full text-white" aria-hidden>
           <path
-            fill="#ffffff"
-            fillOpacity="1"
-            d="M0,32L60,37.3C120,43,240,53,360,58.7C480,64,600,64,720,53.3C840,43,960,21,1080,16C1200,11,1320,21,1380,26.7L1440,32L1440,100L1380,100C1320,100,1200,100,1080,100C960,100,840,100,720,100C600,100,480,100,360,100C240,100,120,100,60,100L0,100Z"
-          ></path>
+            fill="currentColor"
+            d="M0,32L60,37.3C120,43,240,53,360,58.7C480,64,600,64,720,53.3C840,43,960,21,1080,16C1200,11,1320,21,1380,26.7L1440,32L1440,80L1380,80C1320,80,1200,80,1080,80C960,80,840,80,720,80C600,80,480,80,360,80C240,80,120,80,60,80L0,80Z"
+          />
         </svg>
       </div>
     </section>
   );
-};
-
-export default Hero;
+}

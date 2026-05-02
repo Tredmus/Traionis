@@ -1,23 +1,25 @@
-import React from 'react';
+import Image from 'next/image';
 
-interface LogoProps {
+type LogoProps = {
   variant?: 'default' | 'alt';
-}
+};
 
-const Logo: React.FC<LogoProps> = ({ variant = 'default' }) => {
-  const logoSrc = variant === 'alt' 
-    ? 'https://snipboard.io/1Mzou2.jpg'
-    : 'https://snipboard.io/XD46ZL.jpg';
+const SRC = {
+  default: 'https://snipboard.io/XD46ZL.jpg',
+  alt: 'https://snipboard.io/1Mzou2.jpg',
+} as const;
 
+export default function Logo({ variant = 'default' }: LogoProps) {
   return (
     <div className="flex items-center">
-      <img 
-        src={logoSrc}
-        alt="Traionis Logo" 
-        className="h-12 w-auto"
+      <Image
+        src={SRC[variant]}
+        alt="Traionis"
+        width={200}
+        height={48}
+        className="h-10 md:h-12 w-auto"
+        priority={variant === 'default'}
       />
     </div>
   );
-};
-
-export default Logo;
+}
