@@ -1,133 +1,190 @@
 'use client';
 
-import { useState } from 'react';
-import { LineChart, Monitor, Bot } from 'lucide-react';
-import { AnimatePresence, motion } from 'framer-motion';
-import { FadeIn } from './motion/FadeIn';
+import { motion, useInView } from 'framer-motion';
+import { useRef, useState } from 'react';
 
-type ServiceTab = {
-  id: string;
-  icon: React.ReactNode;
-  label: string;
-  title: string;
-  description: string;
-  offerings: string[];
-};
-
-const services: ServiceTab[] = [
+const SERVICES = [
   {
-    id: 'growth',
-    icon: <LineChart className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden />,
-    label: 'Позициониране',
-    title: 'Намират ви. Разбират ви. Свързват се.',
+    number: '01',
+    title: 'Websites',
     description:
-      'Лендинг страници, структура на съдържанието и основи на видимостта — без да ви продаваме „10x растеж за седмица“. Първо стабилна основа, после мащабиране.',
+      'Your online presence built to convert. Fast, responsive, and optimized — not just pretty. Visitors understand what you do in seconds and know how to reach you.',
     offerings: [
-      'Ясно послание и структура на страниците',
-      'Скорост и мобилно изживяване (реални метрики)',
-      'Връзка с аналитика и конверсии',
-      'Подготовка за реклами, когато продуктът е готов',
+      'Business sites & landing pages',
+      'Mobile-first, fast by default',
+      'Built to convert visitors to contacts',
+      'You own the code and the domain',
     ],
   },
   {
-    id: 'web',
-    icon: <Monitor className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden />,
-    label: 'Уеб и приложения',
-    title: 'Сайт или приложение — изградено да издържа.',
+    number: '02',
+    title: 'Web Applications',
     description:
-      'От фирмен сайт до вътрешни панели и клиентски портали. TypeScript, модерен стек, код под ваш контрол. Не ви заключваме в платформа, която после не можете да напуснете.',
+      "If you can describe it, we can build it. Custom platforms, admin dashboards, client portals, booking systems — built on a modern stack you won't outgrow.",
     offerings: [
-      'Фирмени сайтове и многостранични проекти',
-      'Уеб приложения и администрации',
-      'Интеграции с CRM, плащания, склад и др.',
-      'Хостинг и пускане в продукция с мониторинг',
+      'Custom platforms & dashboards',
+      'Client portals & booking systems',
+      'CRM, payment & API integrations',
+      'Scalable architecture from day one',
     ],
   },
   {
-    id: 'automation',
-    icon: <Bot className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden />,
-    label: 'Автоматизации',
-    title: 'По-малко ръчна работа. Повече време за клиенти.',
+    number: '03',
+    title: 'Automations & AI',
     description:
-      'Връзваме форми, имейли, таблици, уведомления и вътрешни процеси. Без да „слагаме ИИ“ навсякъде само за да звучи модерно — автоматизацията следва реалния ви поток.',
+      "Chatbots, voice agents, workflow automation. We connect your tools and add intelligence where it makes sense — not as a buzzword, but as a real time-saver.",
     offerings: [
-      'Автоматични нотификации и маршрутизиране на запитвания',
-      'Синхронизация между системи (където има API)',
-      'Шаблони и проверки преди изпращане към клиент',
-      'Документация как работи — не магия в главата на един човек',
+      'AI chatbots & voice agents',
+      'Workflow & notification automation',
+      'Tool integrations where APIs exist',
+      "Scoped per project — ask us what's possible",
     ],
   },
 ];
 
-export default function Services() {
-  const [activeTab, setActiveTab] = useState('web');
-  const activeService = services.find((s) => s.id === activeTab);
+function ServiceCard({ service, index }: { service: typeof SERVICES[0]; index: number }) {
+  const [hovered, setHovered] = useState(false);
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-5% 0px' });
 
   return (
-    <section id="services" className="py-20 md:py-28 bg-slate-50 border-t border-slate-200/80">
-      <div className="container mx-auto px-4 sm:px-6">
-        <FadeIn className="max-w-3xl mb-12 md:mb-16">
-          <h2 className="font-display font-extrabold text-3xl sm:text-4xl md:text-5xl text-slate-900 leading-tight">
-            Какво правим — накратко
-          </h2>
-          <p className="mt-4 text-lg text-slate-600 leading-relaxed">
-            Три направления. Един начин на работа: измеримо, предвидимо, без излишни усложнения.
-          </p>
-        </FadeIn>
+    <motion.div
+      ref={ref}
+      className="relative bg-[#0a1628] border border-white/10 p-8 md:p-10 flex flex-col gap-5 cursor-default overflow-hidden"
+      initial={{ opacity: 0, y: 40 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.55, delay: 0.12 * index, ease: [0.22, 1, 0.36, 1] }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      {/* Teal gradient sweep on hover */}
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: 'linear-gradient(135deg, rgba(0,196,180,0.08) 0%, transparent 60%)',
+        }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: hovered ? 1 : 0 }}
+        transition={{ duration: 0.4 }}
+      />
 
-        <div className="max-w-5xl mx-auto">
-          <FadeIn delay={0.05}>
-            <div className="flex flex-wrap justify-center gap-2 p-2 bg-white rounded-2xl border border-slate-200 shadow-sm mb-8">
-              {services.map((service) => (
-                <button
-                  key={service.id}
-                  type="button"
-                  onClick={() => setActiveTab(service.id)}
-                  className={`flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all duration-300 text-sm sm:text-base ${
-                    activeTab === service.id
-                      ? 'bg-gradient-to-r from-primary to-secondary text-white shadow-md scale-[1.02]'
-                      : 'text-slate-700 hover:bg-slate-50'
-                  }`}
-                >
-                  <span className={activeTab === service.id ? 'text-white' : 'text-primary'}>{service.icon}</span>
-                  <span className={activeTab === service.id ? 'font-semibold' : 'font-medium'}>{service.label}</span>
-                </button>
-              ))}
-            </div>
-          </FadeIn>
+      {/* Always-on teal left border */}
+      <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#00c4b4]" />
 
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-section p-6 sm:p-10 md:p-12 min-h-[320px]">
-            <AnimatePresence mode="wait">
-              {activeService && (
-                <motion.div
-                  key={activeService.id}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.35 }}
-                >
-                  <h3 className="font-display font-bold text-2xl sm:text-3xl text-slate-900 mb-4">
-                    {activeService.title}
-                  </h3>
-                  <p className="text-base sm:text-lg text-slate-600 mb-8 leading-relaxed max-w-3xl">
-                    {activeService.description}
-                  </p>
-                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {activeService.offerings.map((offering) => (
-                      <li
-                        key={offering}
-                        className="flex items-start gap-3 rounded-xl bg-slate-900 text-white px-4 py-3.5 text-sm sm:text-base leading-snug"
-                      >
-                        <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-secondary" />
-                        <span>{offering}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+      {/* Top glow — stronger on hover */}
+      <motion.div
+        className="absolute top-0 left-0 right-0 h-px"
+        style={{
+          background: 'linear-gradient(to right, transparent, #00c4b4, transparent)',
+        }}
+        animate={{ opacity: hovered ? 1 : 0.3 }}
+        transition={{ duration: 0.3 }}
+      />
+
+      {/* Number — always full teal, scales on hover */}
+      <motion.span
+        className="text-6xl font-extrabold leading-none select-none text-[#00c4b4]"
+        animate={{ scale: hovered ? 1.08 : 1, x: hovered ? 4 : 0 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+      >
+        {service.number}
+      </motion.span>
+
+      {/* Title — shifts slightly on hover */}
+      <motion.h3
+        className="text-2xl md:text-3xl font-extrabold text-white leading-tight"
+        animate={{ x: hovered ? 4 : 0 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+      >
+        {service.title}
+      </motion.h3>
+
+      <p className="text-white/50 leading-relaxed text-base md:text-lg">
+        {service.description}
+      </p>
+
+      <div className="border-t border-white/10" />
+
+      <ul className="space-y-3 mt-auto">
+        {service.offerings.map((item) => (
+          <li key={item} className="flex items-start gap-3 text-sm md:text-base text-white/70">
+            <motion.span
+              className="shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full bg-[#00c4b4]"
+              animate={{ scale: hovered ? 1.4 : 1 }}
+              transition={{ duration: 0.2 }}
+            />
+            {item}
+          </li>
+        ))}
+      </ul>
+    </motion.div>
+  );
+}
+
+function SectionHeading({ words, tealDot }: { words: string[]; tealDot?: boolean }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-5% 0px' });
+
+  return (
+    <h2
+      ref={ref}
+      className="font-extrabold text-[#0a1628] leading-[1.05]"
+      style={{ fontSize: 'clamp(2.4rem, 5vw, 4rem)' }}
+    >
+      {words.map((word, i) => {
+        const isLast = i === words.length - 1;
+        return (
+          <motion.span
+            key={i}
+            className="inline-block mr-[0.22em] cursor-default"
+            initial={{ opacity: 0, y: 24 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{
+              type: 'spring',
+              stiffness: 280,
+              damping: 22,
+              delay: 0.07 * i,
+            }}
+          >
+            {word}
+            {isLast && tealDot && (
+              <span className="text-[#00c4b4]">.</span>
+            )}
+          </motion.span>
+        );
+      })}
+    </h2>
+  );
+}
+
+export default function Services() {
+  return (
+    <section id="services" className="bg-white py-24 md:py-32">
+      <div className="container mx-auto px-6">
+
+        {/* Heading */}
+        <div className="mb-16">
+          <SectionHeading words={['What', 'We', 'Build']} tealDot />
+          <motion.p
+            className="mt-4 text-lg text-slate-500 max-w-xl leading-relaxed"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            Three services. One way of working — clear scope, real deadlines,
+            no surprises.
+          </motion.p>
         </div>
+
+        {/* Cards */}
+        <div className="shadow-[0_0_0_1px_rgba(10,22,40,0.08)]"></div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-0 border border-white/0">
+          {SERVICES.map((service, i) => (
+            <ServiceCard key={service.number} service={service} index={i} />
+          ))}
+        </div>
+
       </div>
     </section>
   );

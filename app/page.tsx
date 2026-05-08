@@ -1,6 +1,6 @@
 import Header from '@/src/components/Header';
 import Hero from '@/src/components/Hero';
-import CtaBanner from '@/src/components/CtaBanner';
+import ProblemSection from '@/src/components/ProblemSection';
 import Services from '@/src/components/Services';
 import WhyUs from '@/src/components/WhyUs';
 import Work from '@/src/components/Work';
@@ -19,11 +19,11 @@ export default function HomePage() {
       <Header />
       <main>
         <Hero />
-        <CtaBanner />
+        <ProblemSection />
         <Services />
-        <WhyUs />
         <Work />
         <ProcessTimeline />
+        <WhyUs />
         <SecurityTrust />
         <IntegrationsMarquee />
         <Testimonials />
