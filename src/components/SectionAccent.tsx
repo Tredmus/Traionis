@@ -7,7 +7,7 @@ type SectionAccentProps = {
 };
 
 /**
- * Full-bleed ambient mesh + top wash / hairline.
+ * Full-bleed ambient mesh (no top highlight band — avoids a horizontal “rule” under stacked sections).
  * Wavy **section boundaries** are handled by `SectionWaveDivider` at the bottom of each `<section>`.
  */
 export default function SectionAccent({ variant = 'teal' }: SectionAccentProps) {
@@ -16,7 +16,6 @@ export default function SectionAccent({ variant = 'teal' }: SectionAccentProps) 
       case 'soft':
         return (
           <>
-            <div className="absolute inset-0 bg-gradient-to-b from-white/[0.04] via-transparent to-transparent" />
             <div
               className="absolute inset-0 opacity-90"
               style={{
@@ -30,13 +29,6 @@ export default function SectionAccent({ variant = 'teal' }: SectionAccentProps) 
         return (
           <>
             <div className="absolute inset-0 bg-gradient-to-b from-[#0e2244] via-navy to-[#0a162c]" />
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  'radial-gradient(ellipse 95% 65% at 50% -5%, rgb(from var(--color-main) r g b / 0.14), transparent 58%)',
-              }}
-            />
             <div
               className="absolute inset-0"
               style={{
@@ -97,13 +89,6 @@ export default function SectionAccent({ variant = 'teal' }: SectionAccentProps) 
               className="absolute inset-0"
               style={{
                 background:
-                  'radial-gradient(ellipse 100% 70% at 50% -15%, rgb(from var(--color-main) r g b / 0.13), transparent 60%)',
-              }}
-            />
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
                   'radial-gradient(ellipse 65% 55% at 15% 55%, rgb(from var(--color-accent) r g b / 0.12), transparent 58%)',
               }}
             />
@@ -114,20 +99,12 @@ export default function SectionAccent({ variant = 'teal' }: SectionAccentProps) 
                   'radial-gradient(ellipse 50% 45% at 92% 75%, rgb(from var(--color-main) r g b / 0.08), transparent 55%)',
               }}
             />
-            <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent opacity-80" />
           </>
         );
       case 'teal':
       default:
         return (
           <>
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  'radial-gradient(ellipse 100% 75% at 50% 0%, rgb(from var(--color-main) r g b / 0.11), transparent 58%)',
-              }}
-            />
             <div
               className="absolute inset-0 opacity-90"
               style={{
@@ -143,20 +120,6 @@ export default function SectionAccent({ variant = 'teal' }: SectionAccentProps) 
   return (
     <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden>
       {mesh}
-
-      {/* Top band + hairline */}
-      <div className="absolute inset-x-0 top-0 h-40 overflow-visible md:h-44">
-        <div
-          className={`absolute inset-x-0 top-0 mx-auto h-full max-w-5xl opacity-95 ${
-            variant === 'soft'
-              ? 'bg-[radial-gradient(ellipse_85%_90%_at_50%_-30%,rgba(255,255,255,0.07),transparent_72%)]'
-              : variant === 'deep'
-                ? 'bg-[radial-gradient(ellipse_85%_90%_at_50%_-35%,rgb(from_var(--color-main)_r_g_b_/_0.08),transparent_75%)]'
-                : 'bg-[radial-gradient(ellipse_85%_90%_at_50%_-30%,rgb(from_var(--color-main)_r_g_b_/_0.12),transparent_72%)]'
-          }`}
-        />
-        <div className="absolute inset-x-6 top-0 mx-auto h-px max-w-4xl bg-gradient-to-r from-transparent via-white/22 to-transparent" />
-      </div>
     </div>
   );
 }

@@ -119,10 +119,6 @@ export default function Contact() {
       id="contact"
       className="relative overflow-hidden bg-gradient-to-b from-[#081a2e] via-navy to-navy py-28 md:py-36"
     >
-      <div
-        className="pointer-events-none absolute inset-x-6 top-0 z-[2] mx-auto h-px max-w-4xl bg-gradient-to-r from-transparent via-white/25 to-transparent md:inset-x-12"
-        aria-hidden
-      />
       {/* Floating teal particles */}
       <ParticleCanvas />
 
