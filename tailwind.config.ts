@@ -38,11 +38,18 @@ const config: Config = {
       animation: {
         marquee: 'marquee 40s linear infinite',
         'marquee-slow': 'marquee 55s linear infinite',
+        /** Soft vertical drift for “sea bubble” decor (Process section) */
+        'sea-float': 'seaFloat 12s ease-in-out infinite',
+        'sea-float-slow': 'seaFloat 18s ease-in-out infinite',
       },
       keyframes: {
         marquee: {
           '0%': { transform: 'translateX(0)' },
           '100%': { transform: 'translateX(-50%)' },
+        },
+        seaFloat: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-14px)' },
         },
       },
     },

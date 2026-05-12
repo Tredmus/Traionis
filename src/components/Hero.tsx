@@ -3,6 +3,7 @@
 import { useEffect, useCallback, useState, type CSSProperties } from 'react';
 import { motion, useAnimationControls } from 'framer-motion';
 import SectionEyebrow from './SectionEyebrow';
+import SectionWaveDivider from './SectionWaveDivider';
 
 const BUILD_START_YEAR = 2023;
 const BUILD_START_MONTH = 2; // March (0-based)
@@ -214,7 +215,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative isolate flex min-h-screen flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-[#1a3358] via-navy to-[#0a1628]">
+    <section className="relative isolate flex min-h-screen flex-col items-center overflow-hidden bg-gradient-to-b from-[#1a3358] via-navy to-[#0a1628]">
 
       {/* CSS for card float — injected once */}
       <style>{`
@@ -323,8 +324,9 @@ export default function Hero() {
         </div>
       )}
 
-      {/* Main content */}
-      <div className="relative z-10 flex flex-col items-center text-center px-6 pt-32 pb-24 w-full max-w-4xl mx-auto">
+      {/* Main content — flex-1 keeps the wave strip pinned to the viewport bottom on tall screens */}
+      <div className="relative z-10 flex w-full flex-1 flex-col items-center justify-center px-6 pb-16 pt-32 text-center md:pb-20">
+        <div className="mx-auto flex w-full max-w-4xl flex-col items-center">
 
         <SectionEyebrow centered className="mb-6">
           Web & app development
@@ -390,7 +392,10 @@ export default function Hero() {
             </div>
           ))}
         </motion.div>
+        </div>
       </div>
+
+      <SectionWaveDivider to="services" />
     </section>
   );
 }

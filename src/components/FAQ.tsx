@@ -7,6 +7,7 @@ import { useRef } from 'react';
 import SectionHeading from './SectionHeading';
 import SectionAccent from './SectionAccent';
 import SectionEyebrow from './SectionEyebrow';
+import SectionWaveDivider from './SectionWaveDivider';
 
 const FAQS = [
   {
@@ -148,9 +149,9 @@ export default function FAQ() {
   };
 
   return (
-    <section id="faq" className="relative py-28 md:py-36">
-      <SectionAccent variant="soft" />
-      <div className="container relative z-10 mx-auto px-6">
+    <section id="faq" className="relative overflow-hidden pb-0 pt-28 md:pt-36">
+      <SectionAccent variant="deep" />
+      <div className="container relative z-10 mx-auto px-6 pb-8 md:pb-10">
 
         {/* Heading */}
         <div className="mb-14">
@@ -184,6 +185,8 @@ export default function FAQ() {
         </div>
 
       </div>
+
+      <SectionWaveDivider to="contact" />
     </section>
   );
 }

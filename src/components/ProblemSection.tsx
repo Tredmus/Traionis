@@ -3,6 +3,7 @@
 import { motion, useReducedMotion, useInView } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
 import SectionAccent from './SectionAccent';
+import SectionWaveDivider from './SectionWaveDivider';
 import SectionEyebrow from './SectionEyebrow';
 import SectionHeading from './SectionHeading';
 
@@ -88,9 +89,9 @@ export default function ProblemSection() {
   const inView = useInView(sectionRef, { once: false, margin: '-10% 0px' });
 
   return (
-    <section ref={sectionRef} className="relative py-28 md:py-36 overflow-hidden">
+    <section ref={sectionRef} className="relative overflow-hidden pb-0 pt-28 md:pt-36">
       <SectionAccent variant="teal" />
-      <div className="container relative z-10 mx-auto px-6">
+      <div className="container relative z-10 mx-auto px-6 pb-8 md:pb-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
 
           {/* Left — copy */}
@@ -144,6 +145,8 @@ export default function ProblemSection() {
 
         </div>
       </div>
+
+      <SectionWaveDivider to="process" />
     </section>
   );
 }

@@ -7,6 +7,7 @@ import { ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
 import SectionHeading from './SectionHeading';
 import SectionAccent from './SectionAccent';
 import SectionEyebrow from './SectionEyebrow';
+import SectionWaveDivider from './SectionWaveDivider';
 
 const PROJECTS = [
   {
@@ -56,9 +57,9 @@ export default function Work() {
   const project = PROJECTS[index];
 
   return (
-    <section id="work" className="relative py-28 md:py-36">
-      <SectionAccent variant="teal" />
-      <div className="container relative z-10 mx-auto px-6">
+    <section id="work" className="relative overflow-hidden pb-0 pt-28 md:pt-36">
+      <SectionAccent variant="lagoon" />
+      <div className="container relative z-10 mx-auto px-6 pb-8 md:pb-10">
 
         <div className="mb-16">
           <SectionEyebrow>Selected work</SectionEyebrow>
@@ -216,6 +217,8 @@ export default function Work() {
         </motion.div>
 
       </div>
+
+      <SectionWaveDivider to="problem" />
     </section>
   );
 }

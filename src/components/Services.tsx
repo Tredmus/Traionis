@@ -5,6 +5,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { Globe, LayoutDashboard, Sparkles, type LucideIcon } from 'lucide-react';
 import SectionHeading from './SectionHeading';
 import SectionAccent from './SectionAccent';
+import SectionWaveDivider from './SectionWaveDivider';
 import SectionEyebrow from './SectionEyebrow';
 
 type ServiceAccent = 'teal' | 'sky';
@@ -305,19 +306,10 @@ export default function Services() {
   const compact = SERVICES.filter((s) => s.id !== activeId);
 
   return (
-    <section id="services" className="relative py-28 md:py-36">
-      <SectionAccent variant="soft" />
+    <section id="services" className="relative overflow-hidden pb-0 pt-28 md:pt-36">
+      <SectionAccent variant="coast" />
 
-      <div
-        className="pointer-events-none absolute inset-0 opacity-70"
-        style={{
-          background:
-            'radial-gradient(ellipse 80% 55% at 50% 30%, rgb(from var(--color-main) r g b / 0.08) 0%, transparent 55%), radial-gradient(ellipse 60% 40% at 80% 70%, rgb(from var(--color-accent) r g b / 0.07) 0%, transparent 50%)',
-        }}
-        aria-hidden
-      />
-
-      <div className="container relative z-10 mx-auto px-6">
+      <div className="container relative z-10 mx-auto px-6 pb-8 md:pb-10">
         <div className="mb-12 md:mb-16">
           <SectionEyebrow>Our services</SectionEyebrow>
           <SectionHeading words={['What', 'We', 'Build']} tealDot />
@@ -366,6 +358,8 @@ export default function Services() {
           </a>
         </motion.div>
       </div>
+
+      <SectionWaveDivider to="work" />
     </section>
   );
 }
