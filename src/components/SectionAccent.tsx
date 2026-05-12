@@ -53,7 +53,7 @@ export default function SectionAccent({ variant = 'teal' }: SectionAccentProps) 
               className="absolute inset-0"
               style={{
                 background:
-                  'radial-gradient(ellipse 85% 60% at 100% 15%, rgb(from var(--color-accent) r g b / 0.16), transparent 58%)',
+                  'radial-gradient(ellipse 85% 60% at 100% 40%, rgb(from var(--color-accent) r g b / 0.16), transparent 58%)',
               }}
             />
             <div

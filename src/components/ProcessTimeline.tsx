@@ -49,7 +49,7 @@ function TimelineStep({ step, index }: { step: typeof STEPS[0]; index: number })
         }}
         initial={{ rotateY: isLeft ? -90 : 90, opacity: 0 }}
         animate={inView ? { rotateY: 0, opacity: 1 } : {}}
-        transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.15, delay: 0.1, ease: 'easeOut'}}
       >
         <span className="mb-3 block select-none bg-gradient-to-r from-main to-accent bg-clip-text text-4xl font-extrabold leading-none text-transparent">
           {step.number}
