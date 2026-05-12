@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useCallback, useState, type CSSProperties } from 'react';
+import { useEffect, useCallback, useState, useRef, type CSSProperties } from 'react';
 import { motion, useAnimationControls } from 'framer-motion';
 import SectionEyebrow from './SectionEyebrow';
 import SectionWaveDivider from './SectionWaveDivider';
@@ -22,40 +22,125 @@ const HEADLINE_LINES = [
   { text: 'Built to grow.', teal: false },
 ];
 
-// Fixed dots — no Math.random() to avoid hydration mismatch (sizes in px, visibly readable)
-const DOTS = [
-  { id: 0, size: 5, left: 8, top: 15, duration: 12, delay: 0 },
-  { id: 1, size: 4, left: 23, top: 72, duration: 9, delay: 1.5 },
-  { id: 2, size: 6, left: 41, top: 33, duration: 14, delay: 0.8 },
-  { id: 3, size: 4, left: 67, top: 58, duration: 11, delay: 2.1 },
-  { id: 4, size: 5, left: 85, top: 22, duration: 10, delay: 0.3 },
-  { id: 5, size: 4, left: 92, top: 78, duration: 13, delay: 1.8 },
-  { id: 6, size: 5, left: 15, top: 88, duration: 8, delay: 0.6 },
-  { id: 7, size: 4, left: 55, top: 12, duration: 15, delay: 3.0 },
-  { id: 8, size: 6, left: 73, top: 90, duration: 11, delay: 1.2 },
-  { id: 9, size: 4, left: 32, top: 50, duration: 9, delay: 2.5 },
-  { id: 10, size: 5, left: 48, top: 80, duration: 12, delay: 0.4 },
-  { id: 11, size: 4, left: 79, top: 40, duration: 10, delay: 1.9 },
-  { id: 12, size: 6, left: 5, top: 55, duration: 14, delay: 0.7 },
-  { id: 13, size: 4, left: 62, top: 28, duration: 8, delay: 2.8 },
-  { id: 14, size: 5, left: 88, top: 62, duration: 13, delay: 1.1 },
-  { id: 15, size: 4, left: 19, top: 38, duration: 11, delay: 3.5 },
-  { id: 16, size: 6, left: 95, top: 10, duration: 9, delay: 0.9 },
-  { id: 17, size: 4, left: 38, top: 95, duration: 12, delay: 2.2 },
-  { id: 18, size: 5, left: 71, top: 5, duration: 10, delay: 1.6 },
-  { id: 19, size: 4, left: 50, top: 65, duration: 15, delay: 0.2 },
-];
-
-/** Tiny “star” specks — deterministic layout, Easyweb-style texture (SSR-safe). */
-const STARS = Array.from({ length: 42 }, (_, i) => ({
-  id: `star-${i}`,
-  left: ((i * 41 + 13) % 94) + 3,
-  top: ((i * 67 + 7) % 92) + 4,
-  size: i % 6 === 0 ? 2 : 1,
-  opacity: 0.14 + (i % 7) * 0.05,
-  duration: 4 + (i % 5),
-  delay: (i % 8) * 0.35,
+/** Branded glow dots — deterministic layout (SSR-safe), more count + varied timing. */
+const DOTS = Array.from({ length: 52 }, (_, i) => ({
+  id: i,
+  size: 4 + (i % 4),
+  left: ((i * 23 + 7) % 88) + 5,
+  top: ((i * 31 + 13) % 86) + 6,
+  duration: 6 + (i % 8),
+  delay: (i % 12) * 0.24,
 }));
+
+/** Tiny “star” specks — deterministic layout (SSR-safe). */
+const STARS = Array.from({ length: 120 }, (_, i) => ({
+  id: `star-${i}`,
+  left: ((i * 37 + 11) % 94) + 3,
+  top: ((i * 59 + 5) % 92) + 4,
+  size: i % 7 === 0 ? 2 : 1,
+  opacity: 0.12 + (i % 9) * 0.045,
+  duration: 3.2 + (i % 6) * 0.55,
+  delay: (i % 11) * 0.22,
+}));
+
+/** Canvas drift layer — velocity + edge bounce (client-only, respects reduced motion). */
+function HeroDriftCanvas() {
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const wrap = wrapRef.current;
+    if (!canvas || !wrap) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const reduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (reduced) return;
+
+    type P = {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      size: number;
+      opacity: number;
+    };
+    let particles: P[] = [];
+    const COUNT = 100;
+
+    const initParticles = (width: number, height: number) => {
+      particles = [];
+      for (let i = 0; i < COUNT; i++) {
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.55,
+          vy: (Math.random() - 0.5) * 0.55,
+          size: Math.random() * 2.1 + 0.75,
+          opacity: Math.random() * 0.38 + 0.14,
+        });
+      }
+    };
+
+    let raf = 0;
+    let w = 0;
+    let h = 0;
+    let dpr = 1;
+
+    const resize = () => {
+      w = wrap.clientWidth;
+      h = wrap.clientHeight;
+      if (w < 1 || h < 1) return;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.floor(w * dpr);
+      canvas.height = Math.floor(h * dpr);
+      canvas.style.width = `${w}px`;
+      canvas.style.height = `${h}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      initParticles(w, h);
+    };
+
+    resize();
+    const ro = new ResizeObserver(resize);
+    ro.observe(wrap);
+
+    const tick = () => {
+      if (particles.length && w > 0 && h > 0) {
+        ctx.clearRect(0, 0, w, h);
+        for (const p of particles) {
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 0 || p.x > w) p.vx *= -1;
+          if (p.y < 0 || p.y > h) p.vy *= -1;
+          p.x = Math.min(Math.max(p.x, 0), w);
+          p.y = Math.min(Math.max(p.y, 0), h);
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(160, 220, 255, ${p.opacity})`;
+          ctx.fill();
+        }
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+    };
+  }, []);
+
+  return (
+    <div ref={wrapRef} className="pointer-events-none absolute inset-0 z-0">
+      <canvas ref={canvasRef} className="absolute inset-0 block h-full w-full" aria-hidden />
+    </div>
+  );
+}
 
 const FLOATING_CARDS = [
   {
@@ -251,8 +336,10 @@ export default function Hero() {
         }}
       />
 
+      <HeroDriftCanvas />
+
       {/* Star specks */}
-      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 z-0 overflow-visible">
         {STARS.map((s) => (
           <motion.span
             key={s.id}
@@ -262,9 +349,12 @@ export default function Hero() {
               height: s.size,
               left: `${s.left}%`,
               top: `${s.top}%`,
-              opacity: s.opacity,
             }}
-            animate={{ opacity: [s.opacity * 0.65, s.opacity * 1.35, s.opacity * 0.65] }}
+            animate={{
+              opacity: [s.opacity * 0.58, s.opacity * 1.42, s.opacity * 0.58],
+              x: [0, 12, -8, 0],
+              y: [0, -10, 14, 0],
+            }}
             transition={{
               duration: s.duration,
               delay: s.delay,
@@ -276,7 +366,7 @@ export default function Hero() {
       </div>
 
       {/* Floating particles — above glow; fixed positions = SSR-safe */}
-      <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 z-[1] overflow-visible">
         {DOTS.map((dot) => (
           <motion.div
             key={dot.id}
@@ -287,8 +377,12 @@ export default function Hero() {
               left: `${dot.left}%`,
               top: `${dot.top}%`,
             }}
-            initial={{ opacity: 0.45, y: 0 }}
-            animate={{ y: [-12, 12], opacity: [0.35, 0.95, 0.35] }}
+            initial={{ opacity: 0.5, x: 0, y: 0 }}
+            animate={{
+              x: [-22, 22],
+              y: [-32, 32],
+              opacity: [0.3, 0.98, 0.3],
+            }}
             transition={{
               duration: dot.duration,
               delay: dot.delay,
