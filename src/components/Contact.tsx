@@ -1,9 +1,51 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { CheckCircle, Loader2 } from 'lucide-react';
 import { motion, useInView } from 'framer-motion';
 import SectionEyebrow from './SectionEyebrow';
+
+type FormData = {
+  name: string;
+  email: string;
+  company: string;
+  message: string;
+};
+
+type FieldErrors = Partial<Record<'name' | 'email' | 'message', string>>;
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function validateForm(data: FormData): FieldErrors {
+  const errors: FieldErrors = {};
+  const name = data.name.trim();
+  const email = data.email.trim();
+  const message = data.message.trim();
+
+  if (!name) {
+    errors.name = 'Please enter your name.';
+  } else if (name.length < 2) {
+    errors.name = 'Name must be at least 2 characters.';
+  } else if (name.length > 120) {
+    errors.name = 'Name is too long.';
+  }
+
+  if (!email) {
+    errors.email = 'Please enter your email.';
+  } else if (!EMAIL_RE.test(email)) {
+    errors.email = 'Please enter a valid email address.';
+  }
+
+  if (!message) {
+    errors.message = 'Please describe your project.';
+  } else if (message.length < 20) {
+    errors.message = 'Please add a bit more detail (at least 20 characters).';
+  } else if (message.length > 8000) {
+    errors.message = 'Message is too long (max 8,000 characters).';
+  }
+
+  return errors;
+}
 
 function ParticleCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -21,7 +63,7 @@ function ParticleCanvas() {
     resize();
     window.addEventListener('resize', resize);
 
-    const particles = Array.from({ length: 60 }, () => ({
+    const particles = Array.from({ length: 82 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
       size: Math.random() * 3 + 1,
@@ -71,58 +113,93 @@ function ParticleCanvas() {
 }
 
 export default function Contact() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
     company: '',
     message: '',
   });
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-5% 0px' });
 
+  const clearFieldError = useCallback((name: keyof FormData) => {
+    if (name === 'company') return;
+    setFieldErrors((prev) => {
+      if (!prev[name as keyof FieldErrors]) return prev;
+      const next = { ...prev };
+      delete next[name as keyof FieldErrors];
+      return next;
+    });
+  }, []);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    setError(null);
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    clearFieldError(name as keyof FormData);
+    setSubmitError(null);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isSubmitting || isSubmitted) return;
+
+    const errors = validateForm(formData);
+    setFieldErrors(errors);
+    if (Object.keys(errors).length > 0) return;
+
     setIsSubmitting(true);
-    setError(null);
+    setSubmitError(null);
     try {
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          company: formData.company.trim(),
+          message: formData.message.trim(),
+        }),
       });
       const data = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(typeof data.error === 'string' ? data.error : 'Failed to send.');
+      if (!response.ok) {
+        const msg = typeof data.error === 'string' ? data.error : 'Failed to send.';
+        if (response.status === 400 && /email|имейл|Email/i.test(msg)) {
+          setFieldErrors({ email: 'Please check your email address.' });
+        }
+        throw new Error(msg);
+      }
       setIsSubmitted(true);
       setFormData({ name: '', email: '', company: '', message: '' });
+      setFieldErrors({});
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong.');
+      setSubmitError(err instanceof Error ? err.message : 'Something went wrong.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const inputClass =
-    'w-full px-4 py-3.5 rounded-2xl border border-white/10 bg-white/5 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-main/40 focus:border-main/60 transition-all disabled:opacity-50';
+  const inputBase =
+    'w-full px-4 py-3.5 rounded-2xl border bg-white/5 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 transition-all disabled:opacity-50';
+  const inputOk =
+    'border-white/10 focus:ring-main/40 focus:border-main/60';
+  const inputErr =
+    'border-red-500/55 focus:ring-red-500/35 focus:border-red-400/70';
+
+  const fieldClass = (name: keyof FieldErrors) =>
+    `${inputBase} ${fieldErrors[name] ? inputErr : inputOk}`;
 
   return (
     <section
       id="contact"
       className="relative overflow-hidden bg-gradient-to-b from-[#081a2e] via-navy to-navy py-28 md:py-36"
     >
-      {/* Floating teal particles */}
       <ParticleCanvas />
 
-      {/* Radial teal glow center */}
       <div className="pointer-events-none absolute inset-0 z-0">
         <div
           className="absolute left-1/2 top-1/2 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full"
@@ -134,7 +211,6 @@ export default function Contact() {
       </div>
 
       <div className="container relative z-10 mx-auto px-6">
-        {/* Heading */}
         <motion.div
           ref={ref}
           className="text-center mb-14"
@@ -157,14 +233,24 @@ export default function Contact() {
           </p>
         </motion.div>
 
-        {/* Form card */}
         <motion.div
           className="max-w-2xl mx-auto"
           initial={{ opacity: 0, y: 32 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div className="rounded-[2rem] border border-white/10 bg-white/[0.06] p-8 shadow-2xl shadow-black/35 ring-1 ring-inset ring-white/10 backdrop-blur-md md:p-12">
+          <div
+            className="relative rounded-[2rem] border border-main/15 bg-[#0b1624]/85 p-8 backdrop-blur-md md:p-12"
+            style={{
+              boxShadow: [
+                '0 0 48px 6px rgb(from var(--color-main) r g b / 0.2)',
+                '0 0 96px 28px rgb(from var(--color-accent) r g b / 0.14)',
+                '0 0 140px 48px rgb(from var(--color-main) r g b / 0.08)',
+                '0 28px 56px -22px rgba(0,0,0,0.58)',
+                'inset 0 1px 0 rgb(from var(--color-main) r g b / 0.08)',
+              ].join(', '),
+            }}
+          >
             {isSubmitted ? (
               <div className="text-center py-8">
                 <CheckCircle className="h-14 w-14 text-main mx-auto mb-4" />
@@ -173,65 +259,120 @@ export default function Contact() {
                   We&apos;ll review it and get back to you by email within one business day.
                 </p>
                 <button
-                  onClick={() => { setIsSubmitted(false); setFormData({ name: '', email: '', company: '', message: '' }); }}
+                  type="button"
+                  onClick={() => {
+                    setIsSubmitted(false);
+                    setFormData({ name: '', email: '', company: '', message: '' });
+                    setFieldErrors({});
+                    setSubmitError(null);
+                  }}
                   className="rounded-full border border-white/20 px-6 py-3 font-semibold text-white transition-colors hover:border-main/60 hover:bg-white/5"
                 >
                   Send another
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-5">
-                {error && (
-                  <p className="rounded-2xl border border-red-500/20 bg-red-900/30 px-4 py-3 text-sm text-red-300">
-                    {error}
+              <form noValidate onSubmit={handleSubmit} className="space-y-5">
+                {submitError && (
+                  <p
+                    role="alert"
+                    className="rounded-2xl border border-red-500/25 bg-red-950/40 px-4 py-3 text-sm text-red-200"
+                  >
+                    {submitError}
                   </p>
                 )}
 
                 <div>
-                  <label htmlFor="name" className="block text-sm font-semibold text-white/70 mb-1.5">
-                    Name
-                  </label>
+                  <div className="mb-1.5 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                    <label htmlFor="name" className="text-sm font-semibold text-white/70">
+                      Name
+                    </label>
+                    {fieldErrors.name ? (
+                      <span id="name-error" className="text-xs font-medium text-red-400">
+                        {fieldErrors.name}
+                      </span>
+                    ) : null}
+                  </div>
                   <input
-                    type="text" id="name" name="name"
-                    value={formData.name} onChange={handleChange}
-                    required disabled={isSubmitting}
-                    className={inputClass} placeholder="Your name"
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    disabled={isSubmitting}
+                    autoComplete="name"
+                    aria-invalid={Boolean(fieldErrors.name)}
+                    aria-describedby={fieldErrors.name ? 'name-error' : undefined}
+                    className={fieldClass('name')}
+                    placeholder="Your name"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="block text-sm font-semibold text-white/70 mb-1.5">
-                    Email
-                  </label>
+                  <div className="mb-1.5 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                    <label htmlFor="email" className="text-sm font-semibold text-white/70">
+                      Email
+                    </label>
+                    {fieldErrors.email ? (
+                      <span id="email-error" className="text-xs font-medium text-red-400">
+                        {fieldErrors.email}
+                      </span>
+                    ) : null}
+                  </div>
                   <input
-                    type="email" id="email" name="email"
-                    value={formData.email} onChange={handleChange}
-                    required disabled={isSubmitting}
-                    className={inputClass} placeholder="you@company.com"
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    disabled={isSubmitting}
+                    autoComplete="email"
+                    inputMode="email"
+                    aria-invalid={Boolean(fieldErrors.email)}
+                    aria-describedby={fieldErrors.email ? 'email-error' : undefined}
+                    className={fieldClass('email')}
+                    placeholder="you@company.com"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="company" className="block text-sm font-semibold text-white/70 mb-1.5">
+                  <label htmlFor="company" className="mb-1.5 block text-sm font-semibold text-white/70">
                     Company <span className="text-white/30 font-normal">(optional)</span>
                   </label>
                   <input
-                    type="text" id="company" name="company"
-                    value={formData.company} onChange={handleChange}
+                    type="text"
+                    id="company"
+                    name="company"
+                    value={formData.company}
+                    onChange={handleChange}
                     disabled={isSubmitting}
-                    className={inputClass} placeholder="Your company or brand"
+                    autoComplete="organization"
+                    className={`${inputBase} ${inputOk}`}
+                    placeholder="Your company or brand"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-sm font-semibold text-white/70 mb-1.5">
-                    Tell us about your project
-                  </label>
+                  <div className="mb-1.5 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                    <label htmlFor="message" className="text-sm font-semibold text-white/70">
+                      Tell us about your project
+                    </label>
+                    {fieldErrors.message ? (
+                      <span id="message-error" className="max-w-[min(100%,18rem)] text-right text-xs font-medium leading-snug text-red-400 sm:max-w-[55%]">
+                        {fieldErrors.message}
+                      </span>
+                    ) : null}
+                  </div>
                   <textarea
-                    id="message" name="message"
-                    value={formData.message} onChange={handleChange}
-                    required rows={5} disabled={isSubmitting}
-                    className={`${inputClass} resize-y min-h-[120px]`}
+                    id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    rows={5}
+                    disabled={isSubmitting}
+                    aria-invalid={Boolean(fieldErrors.message)}
+                    aria-describedby={fieldErrors.message ? 'message-error' : undefined}
+                    className={`${fieldClass('message')} resize-y min-h-[120px]`}
                     placeholder="What should we build? Timeline? Budget range?"
                   />
                 </div>
@@ -242,7 +383,9 @@ export default function Contact() {
                   className="btn-cta-gradient flex w-full items-center justify-center gap-2 rounded-full py-4 text-base font-bold text-navy disabled:opacity-60"
                 >
                   {isSubmitting ? (
-                    <><Loader2 className="h-5 w-5 animate-spin" /> Sending…</>
+                    <>
+                      <Loader2 className="h-5 w-5 animate-spin" /> Sending…
+                    </>
                   ) : (
                     'Send Message →'
                   )}
