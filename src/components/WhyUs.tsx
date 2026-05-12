@@ -1,20 +1,24 @@
 import { Check, X } from 'lucide-react';
 import { FadeIn } from './motion/FadeIn';
+import SectionHeading from './SectionHeading';
+import SectionAccent from './SectionAccent';
 
 const ROWS: { label: string; us: boolean; them: boolean }[] = [
-  { label: 'Писмен обхват и цена преди старт', us: true, them: false },
-  { label: 'Код и достъпи — ваши, не „на агенцията“', us: true, them: false },
-  { label: 'Комуникация на български, без посредник', us: true, them: false },
-  { label: 'Срокове с етапи и приемане', us: true, them: false },
-  { label: 'Готови шаблони + „уникален“ сайт за 48 часа', us: false, them: true },
-  { label: 'Скрити такси след подписване', us: false, them: true },
+  { label: 'Written scope and price before you pay', us: true, them: false },
+  { label: 'You own all code and access — always', us: true, them: false },
+  { label: 'Direct communication, no middlemen', us: true, them: false },
+  { label: 'Milestones with real deadlines', us: true, them: false },
+  { label: 'Built on modern, maintained stack', us: true, them: false },
+  { label: 'No recurring fees unless you want support', us: true, them: false },
+  { label: 'Generic templates sold as custom', us: false, them: true },
+  { label: 'Surprise costs after contract', us: false, them: true },
 ];
 
 function Cell({ ok, highlight }: { ok: boolean; highlight?: boolean }) {
   return (
     <div
       className={`flex justify-center py-4 px-3 ${
-        highlight ? 'bg-primary/[0.06]' : 'bg-white'
+        highlight ? 'bg-main/10' : 'bg-white/[0.03]'
       }`}
     >
       {ok ? (
@@ -22,7 +26,7 @@ function Cell({ ok, highlight }: { ok: boolean; highlight?: boolean }) {
           <Check className="h-5 w-5" strokeWidth={2.5} aria-label="Да" />
         </span>
       ) : (
-        <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+        <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white/45">
           <X className="h-5 w-5" strokeWidth={2.5} aria-label="Не" />
         </span>
       )}
@@ -32,44 +36,42 @@ function Cell({ ok, highlight }: { ok: boolean; highlight?: boolean }) {
 
 export default function WhyUs() {
   return (
-    <section id="why-us" className="py-20 md:py-28 bg-white">
-      <div className="container mx-auto px-6">
+    <section id="why-us" className="relative py-28 md:py-36">
+      <SectionAccent variant="teal" />
+      <div className="container relative z-10 mx-auto px-6">
         <FadeIn className="max-w-3xl mb-12 md:mb-16">
-          <h2 className="font-display font-extrabold text-3xl md:text-5xl text-slate-900 leading-tight">
-            Защо не сме „още една агенция“
-          </h2>
-          <p className="mt-4 text-lg text-slate-600 leading-relaxed">
-            Не се сравняваме с всеки на пазара — но ако сте виждали договор без ясни граници и сметка, която расте,
-            тази таблица е за вас.
+          <SectionHeading words={['Us', 'vs.', 'The', 'Alternative']} tealDot />
+          <p className="mt-4 text-lg text-white/60 leading-relaxed">
+            You have options. Here&apos;s how they stack up.
           </p>
         </FadeIn>
 
         <FadeIn delay={0.08}>
-          <div className="overflow-x-auto rounded-2xl border border-slate-200 shadow-sm">
+          <div className="overflow-x-auto rounded-3xl border border-white/10 shadow-2xl shadow-black/30 ring-1 ring-inset ring-white/5">
             <table className="w-full min-w-[640px] text-left border-collapse">
               <thead>
-                <tr className="bg-slate-900 text-white">
+                <tr className="bg-navy-deep text-white border-b border-white/10">
                   <th className="py-4 px-4 md:px-6 font-display font-bold text-sm md:text-base w-[40%]">
-                    Критерий
+                    Criteria
                   </th>
-                  <th className="py-4 px-4 md:px-6 font-display font-bold text-sm md:text-base text-center w-[30%] border-l border-white/15">
+                  <th className="py-4 px-4 md:px-6 font-display font-bold text-sm md:text-base text-center w-[30%] border-l border-white/10">
                     Traionis
                   </th>
-                  <th className="py-4 px-4 md:px-6 font-display font-bold text-sm md:text-base text-center w-[30%] border-l border-white/15 text-white/85">
-                    Типична „пакетна“ агенция
+                  <th className="py-4 px-4 md:px-6 font-display font-bold text-sm md:text-base text-center w-[30%] border-l border-white/10 text-white/85">
+                    Other Agencies
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {ROWS.map((row) => (
-                  <tr key={row.label} className="border-t border-slate-200">
-                    <td className="py-4 px-4 md:px-6 text-slate-800 font-medium text-sm md:text-base bg-slate-50/80">
+                  <tr key={row.label} className="border-t border-white/10">
+                    <td className="py-4 px-4 md:px-6 text-white/90 font-medium text-sm md:text-base bg-white/[0.02]">
                       {row.label}
                     </td>
-                    <td className="border-l border-slate-200 p-0">
+                    <td className="border-l border-white/10 p-0">
                       <Cell ok={row.us} highlight />
                     </td>
-                    <td className="border-l border-slate-200 p-0">
+                    <td className="border-l border-white/10 p-0">
                       <Cell ok={row.them} />
                     </td>
                   </tr>
@@ -77,9 +79,8 @@ export default function WhyUs() {
               </tbody>
             </table>
           </div>
-          <p className="mt-4 text-sm text-slate-500 max-w-2xl">
-            „Типична агенция“ е обобщение за модела „ниска входна цена — после доплащания“. Не всеки конкурент е такъв;
-            затова винаги питайте за обхват, срок и какво точно притежавате след края на проекта.
+          <p className="mt-4 text-sm text-white/45 max-w-2xl">
+            &quot;Other agencies&quot; refers to the low-entry-price, high-addon model — not every competitor operates this way. Always ask for written scope, timeline, and what you own after the project ends.
           </p>
         </FadeIn>
       </div>

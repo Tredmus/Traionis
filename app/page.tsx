@@ -5,33 +5,30 @@ import Services from '@/src/components/Services';
 import WhyUs from '@/src/components/WhyUs';
 import Work from '@/src/components/Work';
 import ProcessTimeline from '@/src/components/ProcessTimeline';
-import SecurityTrust from '@/src/components/SecurityTrust';
-import IntegrationsMarquee from '@/src/components/IntegrationsMarquee';
-import Testimonials from '@/src/components/Testimonials';
 import FAQ from '@/src/components/FAQ';
 import Contact from '@/src/components/Contact';
 import Footer from '@/src/components/Footer';
 import BackToTop from '@/src/components/BackToTop';
+import PageAtmosphere from '@/src/components/PageAtmosphere';
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-white">
-      <Header />
-      <main>
-        <Hero />
-        <ProblemSection />
-        <Services />
-        <Work />
-        <ProcessTimeline />
-        <WhyUs />
-        <SecurityTrust />
-        <IntegrationsMarquee />
-        <Testimonials />
-        <FAQ />
-        <Contact />
-      </main>
-      <Footer />
-      <BackToTop />
+    <div className="relative min-h-screen bg-navy">
+      <PageAtmosphere />
+      <div className="relative z-10">
+        <Header />
+        <main>
+          <Hero />
+          <Services />
+          <Work />
+          <ProblemSection />
+          <ProcessTimeline />
+          <FAQ />
+          <Contact />
+        </main>
+        <Footer />
+        <BackToTop />
+      </div>
     </div>
   );
 }

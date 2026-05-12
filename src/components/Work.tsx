@@ -1,192 +1,68 @@
 'use client';
 
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
 import Image from 'next/image';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
+import SectionHeading from './SectionHeading';
+import SectionAccent from './SectionAccent';
 
 const PROJECTS = [
   {
     id: 'parkqui',
     title: 'ParkQui',
-    number: '01',
     description:
-      'Full-stack parking marketplace built for a 2,000-member Bulgarian community. Interactive maps, authentication, listing management, admin dashboard. Built and live.',
-    services: ['Next.js', 'Supabase', 'TypeScript', 'Maps'],
-    image: 'https://i.snipboard.io/v9mU34.jpg',
+      'Full-stack parking marketplace built for a 2,000-member Bulgarian community. Interactive maps, authentication, listing management, and admin dashboard. Built and live.',
+    image: 'https://snipboard.io/Okgrty.jpg',
     liveUrl: 'https://park-qui.vercel.app/',
-    imageLeft: true,
+    url: 'park-qui.vercel.app',
   },
   {
     id: 'cavitation',
     title: 'Cavitation BG',
-    number: '02',
     description:
-      'Landing page for a water filtration technology business. Clean messaging, fast load, conversion-focused structure.',
-    services: ['Landing Page', 'Web Design'],
+      'Landing page for a water filtration technology business. Clean messaging, fast load times, and a conversion-focused structure that guides visitors to act.',
     image: 'https://i.snipboard.io/XWcL40.jpg',
     liveUrl: 'https://velvety-faun-415f97.netlify.app/',
-    imageLeft: false,
+    url: 'cavitationbg.netlify.app',
   },
   {
     id: 'morion',
     title: 'Morion',
-    number: '03',
     description:
-      'Natural stone retailer. Luxury aesthetic, full product catalogue, content management ready for the client to update independently.',
-    services: ['Website', 'Catalogue', 'Admin UI'],
+      'Natural stone retailer with a luxury aesthetic, full product catalogue, and a content management setup so the client can update it independently.',
     image: 'https://i.snipboard.io/ueD6gF.jpg',
     liveUrl: 'https://marvelous-malabi-482445.netlify.app/',
-    imageLeft: true,
+    url: 'morion.netlify.app',
   },
 ];
 
-function SectionHeading({ words, tealDot }: { words: string[]; tealDot?: boolean }) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-5% 0px' });
-
-  return (
-    <h2
-      ref={ref}
-      className="font-extrabold text-[#0a1628] leading-[1.05]"
-      style={{ fontSize: 'clamp(2.4rem, 5vw, 4rem)' }}
-    >
-      {words.map((word, i) => {
-        const isLast = i === words.length - 1;
-        return (
-          <motion.span
-            key={i}
-            className="inline-block mr-[0.22em] cursor-default"
-            initial={{ opacity: 0, y: 24 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{
-              type: 'spring',
-              stiffness: 280,
-              damping: 22,
-              delay: 0.07 * i,
-            }}
-          >
-            {word}
-            {isLast && tealDot && <span className="text-[#00c4b4]">.</span>}
-          </motion.span>
-        );
-      })}
-    </h2>
-  );
-}
-
-function ProjectRow({ project, index }: { project: typeof PROJECTS[0]; index: number }) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-8% 0px' });
-
-  const imageVariant = {
-    hidden: { opacity: 0, x: project.imageLeft ? -60 : 60 },
-    visible: { opacity: 1, x: 0 },
-  };
-
-  const infoVariant = {
-    hidden: { opacity: 0, x: project.imageLeft ? 60 : -60 },
-    visible: { opacity: 1, x: 0 },
-  };
-
-  const ImageBlock = (
-    <motion.div
-      className="relative w-full lg:w-[55%] h-[280px] md:h-[360px] overflow-hidden bg-[#0a1628] flex-shrink-0"
-      variants={imageVariant}
-      initial="hidden"
-      animate={inView ? 'visible' : 'hidden'}
-      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      whileHover={{ scale: 1.01 }}
-    >
-      <Image
-        src={project.image}
-        alt={project.title}
-        fill
-        className="object-cover object-top transition-transform duration-700 hover:scale-105"
-        sizes="(max-width: 768px) 100vw, 55vw"
-      />
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-[#0a1628]/30 hover:bg-[#0a1628]/10 transition-colors duration-300" />
-
-      {/* Teal corner accent */}
-      <div className={`absolute top-0 ${project.imageLeft ? 'right-0' : 'left-0'} w-[3px] h-full bg-[#00c4b4]`} />
-    </motion.div>
-  );
-
-  const InfoBlock = (
-    <motion.div
-      className="w-full lg:w-[45%] flex flex-col justify-center py-8 lg:py-0 lg:px-12"
-      variants={infoVariant}
-      initial="hidden"
-      animate={inView ? 'visible' : 'hidden'}
-      transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-    >
-      {/* Number */}
-      <span className="text-6xl font-extrabold text-[#00c4b4] leading-none mb-4 select-none">
-        {project.number}
-      </span>
-
-      {/* Title */}
-      <h3
-        className="font-extrabold text-[#0a1628] leading-tight mb-4"
-        style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)' }}
-      >
-        {project.title}
-      </h3>
-
-      {/* Description */}
-      <p className="text-slate-500 leading-relaxed mb-6 text-base md:text-lg">
-        {project.description}
-      </p>
-
-      {/* Tags */}
-      <div className="flex flex-wrap gap-2 mb-8">
-        {project.services.map((s) => (
-          <span
-            key={s}
-            className="text-xs bg-[#0a1628] text-[#00c4b4] border border-[#0a1628]/20 px-3 py-1 font-semibold tracking-wide uppercase"
-          >
-            {s}
-          </span>
-        ))}
-      </div>
-
-      {/* Link */}
-      <a
-        href={project.liveUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 text-[#0a1628] font-bold text-sm border-b-2 border-[#00c4b4] pb-0.5 hover:text-[#00c4b4] transition-colors w-fit group"
-      >
-        Visit live site
-        <ExternalLink className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-      </a>
-    </motion.div>
-  );
-
-  return (
-    <div
-      ref={ref}
-      className={`flex flex-col lg:flex-row items-stretch gap-0 border-t border-slate-200 pt-12 pb-12 ${
-        !project.imageLeft ? 'lg:flex-row-reverse' : ''
-      }`}
-    >
-      {ImageBlock}
-      {InfoBlock}
-    </div>
-  );
-}
+const variants = {
+  enter: (dir: number) => ({ opacity: 0, x: dir > 0 ? 40 : -40 }),
+  center: { opacity: 1, x: 0 },
+  exit: (dir: number) => ({ opacity: 0, x: dir > 0 ? -40 : 40 }),
+};
 
 export default function Work() {
-  return (
-    <section id="work" className="bg-[#f4f5f7] py-24 md:py-32">
-      <div className="container mx-auto px-6">
+  const [index, setIndex] = useState(0);
+  const [direction, setDirection] = useState(1);
 
-        {/* Heading */}
+  const go = (dir: number) => {
+    setDirection(dir);
+    setIndex((prev) => (prev + dir + PROJECTS.length) % PROJECTS.length);
+  };
+
+  const project = PROJECTS[index];
+
+  return (
+    <section id="work" className="relative py-28 md:py-36">
+      <SectionAccent variant="teal" />
+      <div className="container relative z-10 mx-auto px-6">
+
         <div className="mb-16">
           <SectionHeading words={['Recent', 'Work']} tealDot />
           <motion.p
-            className="mt-4 text-lg text-slate-500 max-w-xl leading-relaxed"
+            className="mt-4 text-lg text-white/60 max-w-xl leading-relaxed"
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -196,12 +72,146 @@ export default function Work() {
           </motion.p>
         </div>
 
-        {/* Project rows */}
-        <div className="flex flex-col">
-          {PROJECTS.map((project, i) => (
-            <ProjectRow key={project.id} project={project} index={i} />
-          ))}
+        {/* Slideshow card */}
+        <div className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.02] shadow-2xl shadow-black/30 ring-1 ring-inset ring-white/5">
+          <div className="flex flex-col lg:flex-row lg:items-stretch">
+
+            {/* Left — browser mockup + screenshot */}
+            <div className="w-full lg:w-[58%] shrink-0 flex flex-col">
+              {/* Browser bar */}
+              <div className="flex items-center gap-3 border-b border-white/[0.07] bg-[#080f1e] px-4 py-3">
+                <div className="flex gap-1.5">
+                  <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
+                  <span className="h-3 w-3 rounded-full bg-[#febc2e]" />
+                  <span className="h-3 w-3 rounded-full bg-[#28c840]" />
+                </div>
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={project.id + '-url'}
+                    className="mx-auto flex items-center gap-2 rounded-full bg-white/[0.05] px-4 py-1 text-xs text-white/30 font-mono"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <span className="h-1.5 w-1.5 rounded-full bg-main" />
+                    {project.url}
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+
+              {/* Screenshot — 16:9 */}
+              <div className="relative w-full" style={{ aspectRatio: '16/9' }}>
+                <AnimatePresence custom={direction} mode="wait">
+                  <motion.div
+                    key={project.id}
+                    custom={direction}
+                    variants={variants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                    className="absolute inset-0"
+                  >
+                    <Image
+                      src={project.image}
+                      alt={project.title}
+                      fill
+                      className="object-cover object-top"
+                      sizes="(max-width: 1024px) 100vw, 58vw"
+                    />
+                    <div className="absolute inset-0 bg-navy/20" />
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </div>
+
+            {/* Right — info panel */}
+            <div className="flex w-full flex-col justify-between border-t border-white/10 p-8 lg:border-l lg:border-t-0 lg:p-12 lg:w-[42%]">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={project.id + '-info'}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -16 }}
+                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                  className="flex flex-col gap-6 flex-1"
+                >
+                  <h3
+                    className="font-extrabold text-white leading-tight"
+                    style={{ fontSize: 'clamp(2rem, 3.5vw, 3rem)' }}
+                  >
+                    {project.title}
+                  </h3>
+
+                  <p className="text-white/55 leading-relaxed text-base md:text-lg">
+                    {project.description}
+                  </p>
+
+                  <a
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group/link mt-auto inline-flex w-fit items-center gap-2 rounded-full border border-main/40 bg-main/10 px-5 py-2.5 text-sm font-bold text-white transition-all hover:border-main/70 hover:bg-main/20 hover:text-main"
+                  >
+                    Visit live site
+                    <ExternalLink className="h-4 w-4 transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
+                  </a>
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Navigation */}
+              <div className="mt-10 flex items-center justify-between">
+                <div className="flex gap-2">
+                  {PROJECTS.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => { setDirection(i > index ? 1 : -1); setIndex(i); }}
+                      className={`h-2 rounded-full transition-all duration-300 ${
+                        i === index ? 'w-6 bg-main' : 'w-2 bg-white/20 hover:bg-white/40'
+                      }`}
+                      aria-label={`Go to project ${i + 1}`}
+                    />
+                  ))}
+                </div>
+
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => go(-1)}
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-white/50 transition-all hover:border-main/40 hover:bg-main/10 hover:text-main"
+                    aria-label="Previous project"
+                  >
+                    <ChevronLeft className="h-5 w-5" />
+                  </button>
+                  <button
+                    onClick={() => go(1)}
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-white/50 transition-all hover:border-main/40 hover:bg-main/10 hover:text-main"
+                    aria-label="Next project"
+                  >
+                    <ChevronRight className="h-5 w-5" />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
+
+        {/* CTA */}
+        <motion.div
+          className="mt-12 flex justify-center"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          <a
+            href="#contact"
+            className="inline-flex items-center gap-2 rounded-full border border-white/20 px-8 py-4 text-base font-bold text-white/80 transition-all duration-200 hover:border-main/50 hover:text-main"
+          >
+            Like what you see? Let&apos;s talk →
+          </a>
+        </motion.div>
 
       </div>
     </section>

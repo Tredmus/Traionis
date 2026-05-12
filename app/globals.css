@@ -2,6 +2,57 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-navy: #0f2040;
+  /**
+   * Brand palette — change these hex values only (no separate RGB vars).
+   * `main`: primary brand (headlines, links, most accents). `accent`: secondary highlight.
+   */
+  --color-main: #33ccff;
+  --color-accent: #00c4b4;
+  --radius-pill: 9999px;
+  --radius-card: 1.5rem;
+  --radius-panel: 1.75rem;
+}
+
+@layer utilities {
+  /** Primary CTA — teal → cyan gradient (Easyweb-style “alive” accent, on-brand) */
+  .btn-cta-gradient {
+    background-image: linear-gradient(105deg, var(--color-main) 0%, #2ecfb9 42%, #38bdf8 100%);
+    box-shadow: 0 12px 36px -12px rgb(from var(--color-main) r g b / 0.45);
+    transition:
+      filter 0.2s ease,
+      box-shadow 0.2s ease,
+      transform 0.15s ease;
+  }
+  .btn-cta-gradient:hover:not(:disabled) {
+    filter: brightness(1.07);
+    box-shadow: 0 16px 42px -10px rgba(56, 189, 248, 0.42);
+  }
+  .btn-cta-gradient:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+  .btn-cta-gradient:disabled {
+    filter: grayscale(0.2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-cta-gradient:active:not(:disabled) {
+    transform: none;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 .bg-grid-pattern {
   background-image:
     linear-gradient(to right, rgba(26, 105, 134, 0.12) 1px, transparent 1px),

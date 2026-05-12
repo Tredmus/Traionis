@@ -3,17 +3,21 @@
 import { useEffect, useCallback, useState, type CSSProperties } from 'react';
 import { motion, useAnimationControls } from 'framer-motion';
 
-const STATS = [
-  { value: '10+', label: 'Projects Delivered' },
-  { value: '3+', label: 'Years Building' },
-  { value: '100%', label: 'Code Ownership' },
-  { value: '0', label: 'Hidden Costs' },
-];
+const BUILD_START_YEAR = 2023;
+const BUILD_START_MONTH = 2; // March (0-based)
+const BUILD_START_DAY = 1;
+
+function getYearsBuilding(date: Date) {
+  let years = date.getFullYear() - BUILD_START_YEAR;
+  const anniversaryThisYear = new Date(date.getFullYear(), BUILD_START_MONTH, BUILD_START_DAY);
+  if (date < anniversaryThisYear) years -= 1;
+  return Math.max(years, 0);
+}
 
 const HEADLINE_LINES = [
   { text: 'Built right.', teal: false },
-  { text: 'Delivered on time.', teal: true },
-  { text: 'Yours to keep.', teal: false },
+  { text: 'Built to convert.', teal: true },
+  { text: 'Built to grow.', teal: false },
 ];
 
 // Fixed dots — no Math.random() to avoid hydration mismatch (sizes in px, visibly readable)
@@ -40,6 +44,17 @@ const DOTS = [
   { id: 19, size: 4, left: 50, top: 65, duration: 15, delay: 0.2 },
 ];
 
+/** Tiny “star” specks — deterministic layout, Easyweb-style texture (SSR-safe). */
+const STARS = Array.from({ length: 42 }, (_, i) => ({
+  id: `star-${i}`,
+  left: ((i * 41 + 13) % 94) + 3,
+  top: ((i * 67 + 7) % 92) + 4,
+  size: i % 6 === 0 ? 2 : 1,
+  opacity: 0.14 + (i % 7) * 0.05,
+  duration: 4 + (i % 5),
+  delay: (i % 8) * 0.35,
+}));
+
 const FLOATING_CARDS = [
   {
     id: 'card1',
@@ -47,15 +62,15 @@ const FLOATING_CARDS = [
     animDelay: '0s',
     animDuration: '5s',
     content: (
-      <div className="bg-[#0f2236] border border-white/10 rounded-xl p-3 w-48 shadow-2xl">
+      <div className="w-48 rounded-2xl border border-white/10 bg-navy-deep p-3 shadow-2xl shadow-black/40 ring-1 ring-inset ring-white/10">
         <div className="flex items-center gap-2 mb-2">
-          <div className="w-2 h-2 rounded-full bg-[#00c4b4]" />
+          <div className="w-2 h-2 rounded-full bg-main" />
           <span className="text-white/60 text-xs">ParkQui</span>
         </div>
         <div className="text-white text-xs font-semibold mb-1">Parking Marketplace</div>
         <div className="flex gap-1 flex-wrap">
           {['Next.js', 'Supabase', 'Maps'].map(t => (
-            <span key={t} className="text-[10px] bg-white/10 text-white/60 px-1.5 py-0.5 rounded">{t}</span>
+            <span key={t} className="rounded-md bg-white/10 px-1.5 py-0.5 text-[10px] text-white/60">{t}</span>
           ))}
         </div>
       </div>
@@ -67,7 +82,7 @@ const FLOATING_CARDS = [
     animDelay: '1.5s',
     animDuration: '6s',
     content: (
-      <div className="bg-[#0f2236] border border-white/10 rounded-xl p-3 w-44 shadow-2xl">
+      <div className="w-44 rounded-2xl border border-white/10 bg-navy-deep p-3 shadow-2xl shadow-black/40 ring-1 ring-inset ring-white/10">
         <div className="flex items-center gap-2 mb-2">
           <div className="w-2 h-2 rounded-full bg-green-400" />
           <span className="text-green-400 text-xs font-semibold">Delivered ✓</span>
@@ -83,10 +98,10 @@ const FLOATING_CARDS = [
     animDelay: '0.8s',
     animDuration: '7s',
     content: (
-      <div className="bg-[#0f2236] border border-white/10 rounded-xl p-3 w-44 shadow-2xl font-mono">
+      <div className="w-44 rounded-2xl border border-white/10 bg-navy-deep p-3 font-mono shadow-2xl shadow-black/40 ring-1 ring-inset ring-white/10">
         <div className="text-[10px] text-white/40 mb-1">stack.ts</div>
         <div className="text-[11px]">
-          <span className="text-[#00c4b4]">const</span>
+          <span className="text-main">const</span>
           <span className="text-white"> stack </span>
           <span className="text-white/40">= [</span>
         </div>
@@ -102,11 +117,11 @@ const FLOATING_CARDS = [
     animDelay: '2s',
     animDuration: '5.5s',
     content: (
-      <div className="bg-[#0f2236] border border-white/10 rounded-xl p-3 w-48 shadow-2xl">
+      <div className="w-48 rounded-2xl border border-white/10 bg-navy-deep p-3 shadow-2xl shadow-black/40 ring-1 ring-inset ring-white/10">
         <div className="text-white/40 text-[10px] mb-1 uppercase tracking-wider">Code ownership</div>
         <div className="text-white text-sm font-bold mb-2">100% yours</div>
         <div className="w-full bg-white/10 rounded-full h-1.5">
-          <div className="bg-[#00c4b4] h-1.5 rounded-full w-full" />
+          <div className="bg-main h-1.5 rounded-full w-full" />
         </div>
       </div>
     ),
@@ -150,7 +165,7 @@ function AnimatedChar({
 
   return (
     <motion.span
-      className={`inline-block cursor-default select-none ${teal ? 'text-[#00c4b4]' : 'text-white'}`}
+      className={`inline-block cursor-default select-none ${teal ? 'text-main' : 'text-white'}`}
       initial={{ opacity: 0, y: 40 }}
       animate={controls}
       onMouseEnter={handleHover}
@@ -180,6 +195,13 @@ function AnimatedLine({ text, teal, charOffset, onCharHover }: {
 
 export default function Hero() {
   const [mounted, setMounted] = useState(false);
+  const yearsBuilding = getYearsBuilding(new Date());
+  const stats = [
+    { value: '24h', label: 'Response Time' },
+    { value: String(yearsBuilding)+'+', label: 'Years Building' },
+    { value: '100%', label: 'Code Ownership' },
+    { value: '0', label: 'Hidden Costs' },
+  ];
 
   useEffect(() => { setMounted(true); }, []);
 
@@ -191,7 +213,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative min-h-screen bg-[#0a1628] flex flex-col items-center justify-center overflow-hidden">
+    <section className="relative isolate flex min-h-screen flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-[#1a3358] via-navy to-[#0a1628]">
 
       {/* CSS for card float — injected once */}
       <style>{`
@@ -205,26 +227,58 @@ export default function Hero() {
         }
       `}</style>
 
-      {/* Teal glow — behind floating dots so particles stay visible */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-[#00c4b4]/8 blur-[140px]" />
+      {/* Local spotlight — lifts headline off the gradient (Easyweb-style) */}
+      <div className="pointer-events-none absolute inset-0 z-0">
+        <div className="absolute left-1/2 top-[38%] h-[min(100vw,720px)] w-[min(100vw,720px)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.07)_0%,transparent_62%)] blur-[2px]" />
+        <div className="absolute left-1/2 top-1/2 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-main/10 blur-[120px]" />
       </div>
 
-      {/* Dot grid background */}
+      {/* Dot grid + fine grain */}
       <div
-        className="absolute inset-0 z-0 opacity-[0.05]"
+        className="pointer-events-none absolute inset-0 z-0 opacity-[0.07]"
         style={{
           backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)',
           backgroundSize: '32px 32px',
         }}
       />
+      <div
+        className="pointer-events-none absolute inset-0 z-0 opacity-[0.04]"
+        style={{
+          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.9) 0.5px, transparent 0.5px)',
+          backgroundSize: '24px 24px',
+        }}
+      />
+
+      {/* Star specks */}
+      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+        {STARS.map((s) => (
+          <motion.span
+            key={s.id}
+            className="absolute rounded-full bg-white"
+            style={{
+              width: s.size,
+              height: s.size,
+              left: `${s.left}%`,
+              top: `${s.top}%`,
+              opacity: s.opacity,
+            }}
+            animate={{ opacity: [s.opacity * 0.65, s.opacity * 1.35, s.opacity * 0.65] }}
+            transition={{
+              duration: s.duration,
+              delay: s.delay,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+          />
+        ))}
+      </div>
 
       {/* Floating particles — above glow; fixed positions = SSR-safe */}
       <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden">
         {DOTS.map((dot) => (
           <motion.div
             key={dot.id}
-            className="absolute rounded-full bg-[#00c4b4] shadow-[0_0_10px_rgba(0,196,180,0.55)]"
+            className="absolute rounded-full bg-main shadow-[0_0_10px_rgb(from_var(--color-main)_r_g_b_/_0.55)]"
             style={{
               width: dot.size,
               height: dot.size,
@@ -272,7 +326,7 @@ export default function Hero() {
       <div className="relative z-10 flex flex-col items-center text-center px-6 pt-32 pb-24 w-full max-w-4xl mx-auto">
 
         <motion.p
-          className="text-[#00c4b4] text-xs font-bold uppercase tracking-[0.25em] mb-6"
+          className="text-main text-xs font-bold uppercase tracking-[0.25em] mb-6"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.05 }}
@@ -281,8 +335,11 @@ export default function Hero() {
         </motion.p>
 
         <h1
-          className="font-extrabold leading-[1.15] mb-6"
-          style={{ fontSize: 'clamp(2.6rem, 6.5vw, 5rem)' }}
+          className="mb-6 font-extrabold leading-[1.15]"
+          style={{
+            fontSize: 'clamp(2.6rem, 6.5vw, 5rem)',
+            filter: 'drop-shadow(0 4px 48px rgb(from var(--color-main) r g b / 0.2))',
+          }}
         >
           {HEADLINE_LINES.map((line, lineIndex) => (
             <AnimatedLine
@@ -301,8 +358,7 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
         >
-          Websites and web applications built on modern technology.
-          Clear scope. Real deadlines. You own everything when we&apos;re done.
+          Websites and applications designed and built to convert - and become the digital center of your business.
         </motion.p>
 
         <motion.div
@@ -313,28 +369,28 @@ export default function Hero() {
         >
           <a
             href="#contact"
-            className="bg-[#00c4b4] hover:bg-[#00b4a6] text-[#0a1628] font-bold px-8 py-4 rounded-full text-base transition-colors"
+            className="btn-cta-gradient rounded-full px-8 py-4 text-base font-bold text-navy"
           >
             Start a Project →
           </a>
           <a
             href="#work"
-            className="border border-white/20 hover:border-white/40 text-white font-semibold px-8 py-4 rounded-full text-base transition-colors"
+            className="rounded-full border border-white/25 px-8 py-4 text-base font-semibold text-white transition-all hover:border-white/45 hover:bg-white/5 active:scale-[0.98]"
           >
             See Our Work
           </a>
         </motion.div>
 
         <motion.div
-          className="mt-16 w-full border border-white/10 rounded-2xl grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-white/10"
+          className="mt-16 grid w-full grid-cols-2 divide-y divide-white/10 rounded-3xl border border-white/12 bg-white/[0.06] shadow-2xl shadow-black/40 ring-1 ring-inset ring-white/10 backdrop-blur-md md:grid-cols-4 md:divide-x md:divide-y-0"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.9 }}
         >
-          {STATS.map((s) => (
+          {stats.map((s) => (
             <div key={s.label} className="py-8 flex flex-col items-center gap-1">
               <span className="text-4xl font-extrabold text-white">{s.value}</span>
-              <span className="text-[#00c4b4] text-xs font-semibold uppercase tracking-widest">{s.label}</span>
+              <span className="text-main text-xs font-semibold uppercase tracking-widest">{s.label}</span>
             </div>
           ))}
         </motion.div>

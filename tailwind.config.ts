@@ -12,6 +12,17 @@ const config: Config = {
         display: ['var(--font-archivo)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       colors: {
+        /** Site canvas — change in one place via CSS variable in globals.css */
+        navy: {
+          DEFAULT: '#0f2040',
+          deep: '#0c1a33',
+        },
+        /**
+         * Single hex per token in globals.css (`--color-main`, `--color-accent`).
+         * Relative-color syntax keeps opacity modifiers (`text-main/50`) in sync with the hex.
+         */
+        main: 'rgb(from var(--color-main) r g b / <alpha-value>)',
+        accent: 'rgb(from var(--color-accent) r g b / <alpha-value>)',
         primary: {
           DEFAULT: '#1A6986',
           light: '#227998',
@@ -19,9 +30,6 @@ const config: Config = {
         secondary: {
           DEFAULT: '#40E0D0',
           light: '#2FD0C0',
-        },
-        accent: {
-          DEFAULT: '#14B8A6',
         },
       },
       boxShadow: {

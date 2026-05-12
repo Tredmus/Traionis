@@ -1,10 +1,73 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { CheckCircle, Loader2 } from 'lucide-react';
-import Button from './Button';
-import FloatingDots from './FloatingDots';
-import { FadeIn } from './motion/FadeIn';
+import { motion, useInView } from 'framer-motion';
+
+function ParticleCanvas() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const resize = () => {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    };
+    resize();
+    window.addEventListener('resize', resize);
+
+    const particles = Array.from({ length: 60 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      size: Math.random() * 3 + 1,
+      speedY: Math.random() * 0.5 + 0.2,
+      opacity: Math.random() * 0.5 + 0.3,
+    }));
+
+    const parseMainRgb = () => {
+      const hex = getComputedStyle(document.documentElement).getPropertyValue('--color-main').trim();
+      const m = /^#?([0-9a-f]{6})$/i.exec(hex);
+      if (!m) return { r: 0, g: 196, b: 180 };
+      const n = Number.parseInt(m[1], 16);
+      return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+    };
+    const mainRgb = parseMainRgb();
+
+    let raf: number;
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((p) => {
+        p.y -= p.speedY;
+        if (p.y < 0) {
+          p.y = canvas.height;
+          p.x = Math.random() * canvas.width;
+        }
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${mainRgb.r}, ${mainRgb.g}, ${mainRgb.b}, ${p.opacity})`;
+        ctx.fill();
+      });
+      raf = requestAnimationFrame(animate);
+    };
+    animate();
+
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('resize', resize);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="pointer-events-none absolute inset-0 z-[1] h-full w-full opacity-90"
+    />
+  );
+}
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -13,10 +76,12 @@ export default function Contact() {
     company: '',
     message: '',
   });
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-5% 0px' });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -26,163 +91,172 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isSubmitting || isSubmitted) return;
-
     setIsSubmitting(true);
     setError(null);
-
     try {
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
-
       const data = await response.json().catch(() => ({}));
-
-      if (!response.ok) {
-        throw new Error(typeof data.error === 'string' ? data.error : 'Неуспешно изпращане.');
-      }
-
+      if (!response.ok) throw new Error(typeof data.error === 'string' ? data.error : 'Failed to send.');
       setIsSubmitted(true);
       setFormData({ name: '', email: '', company: '', message: '' });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Грешка при изпращане.');
+      setError(err instanceof Error ? err.message : 'Something went wrong.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const resetForm = () => {
-    setIsSubmitted(false);
-    setError(null);
-    setFormData({ name: '', email: '', company: '', message: '' });
-  };
+  const inputClass =
+    'w-full px-4 py-3.5 rounded-2xl border border-white/10 bg-white/5 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-main/40 focus:border-main/60 transition-all disabled:opacity-50';
 
   return (
-    <section id="contact" className="relative py-20 md:py-28 bg-gradient-to-b from-slate-50 to-white overflow-hidden border-t border-slate-200/80">
-      <FloatingDots />
+    <section
+      id="contact"
+      className="relative overflow-hidden py-28 md:py-36"
+    >
+      <div
+        className="pointer-events-none absolute inset-x-6 top-0 z-[2] mx-auto h-px max-w-4xl bg-gradient-to-r from-transparent via-white/25 to-transparent md:inset-x-12"
+        aria-hidden
+      />
+      {/* Floating teal particles */}
+      <ParticleCanvas />
 
-      <div className="container mx-auto px-6 relative z-10">
-        <FadeIn className="text-center mb-14 max-w-2xl mx-auto">
-          <h2 className="font-display font-extrabold text-3xl md:text-5xl text-slate-900 mb-4">Контакт</h2>
-          <p className="text-lg text-slate-600 leading-relaxed">
-            Опишете накратко какво трябва да се случи. Отговаряме с яснота — не с автоматични „благодарим ви“ имейли без
-            смисъл.
+      {/* Radial teal glow center */}
+      <div className="pointer-events-none absolute inset-0 z-0">
+        <div
+          className="absolute left-1/2 top-1/2 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full"
+          style={{
+            background:
+              'radial-gradient(ellipse at center, rgb(from var(--color-main) r g b / 0.12) 0%, transparent 70%)',
+          }}
+        />
+      </div>
+
+      <div className="container relative z-10 mx-auto px-6">
+        {/* Heading */}
+        <motion.div
+          ref={ref}
+          className="text-center mb-14"
+          initial={{ opacity: 0, y: 24 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <h2
+            className="font-extrabold text-white leading-tight mb-4"
+            style={{ fontSize: 'clamp(2.4rem, 5vw, 4rem)' }}
+          >
+            Have a project in mind<span className="text-main">?</span>
+          </h2>
+          <p className="text-white/50 text-lg max-w-xl mx-auto leading-relaxed">
+            Tell us what you need. We&apos;ll tell you if we can build it and what it&apos;ll cost. No commitment.
           </p>
-        </FadeIn>
+          <p className="mt-3 text-main font-semibold">
+            info@traionis.com
+          </p>
+        </motion.div>
 
-        <FadeIn delay={0.06} className="max-w-2xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-section border border-slate-200/80 p-6 md:p-10">
+        {/* Form card */}
+        <motion.div
+          className="max-w-2xl mx-auto"
+          initial={{ opacity: 0, y: 32 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <div className="rounded-[2rem] border border-white/10 bg-white/[0.06] p-8 shadow-2xl shadow-black/35 ring-1 ring-inset ring-white/10 backdrop-blur-md md:p-12">
             {isSubmitted ? (
-              <div className="text-center py-6">
-                <CheckCircle className="h-14 w-14 text-secondary mx-auto mb-4" aria-hidden />
-                <h3 className="font-display font-bold text-2xl text-slate-900 mb-2">Съобщението е изпратено</h3>
-                <p className="text-slate-600 mb-8 leading-relaxed">
-                  Ще го прегледаме и ще се свържем по имейл, освен ако не сте оставили нужда от обаждане в текста.
+              <div className="text-center py-8">
+                <CheckCircle className="h-14 w-14 text-main mx-auto mb-4" />
+                <h3 className="font-extrabold text-white text-2xl mb-2">Message sent.</h3>
+                <p className="text-white/50 mb-8 leading-relaxed">
+                  We&apos;ll review it and get back to you by email within one business day.
                 </p>
-                <Button onClick={resetForm} variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white">
-                  Ново съобщение
-                </Button>
+                <button
+                  onClick={() => { setIsSubmitted(false); setFormData({ name: '', email: '', company: '', message: '' }); }}
+                  className="rounded-full border border-white/20 px-6 py-3 font-semibold text-white transition-colors hover:border-main/60 hover:bg-white/5"
+                >
+                  Send another
+                </button>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
                 {error && (
-                  <p className="rounded-xl bg-red-50 text-red-800 text-sm px-4 py-3 border border-red-100" role="alert">
+                  <p className="rounded-2xl border border-red-500/20 bg-red-900/30 px-4 py-3 text-sm text-red-300">
                     {error}
                   </p>
                 )}
 
                 <div>
-                  <label htmlFor="name" className="block text-sm font-semibold text-slate-800 mb-1.5">
-                    Име
+                  <label htmlFor="name" className="block text-sm font-semibold text-white/70 mb-1.5">
+                    Name
                   </label>
                   <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    disabled={isSubmitting}
-                    autoComplete="name"
-                    className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all disabled:bg-slate-100"
-                    placeholder="Име и фамилия"
+                    type="text" id="name" name="name"
+                    value={formData.name} onChange={handleChange}
+                    required disabled={isSubmitting}
+                    className={inputClass} placeholder="Your name"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="block text-sm font-semibold text-slate-800 mb-1.5">
-                    Имейл
+                  <label htmlFor="email" className="block text-sm font-semibold text-white/70 mb-1.5">
+                    Email
                   </label>
                   <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    disabled={isSubmitting}
-                    autoComplete="email"
-                    className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all disabled:bg-slate-100"
-                    placeholder="you@firma.bg"
+                    type="email" id="email" name="email"
+                    value={formData.email} onChange={handleChange}
+                    required disabled={isSubmitting}
+                    className={inputClass} placeholder="you@company.com"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="company" className="block text-sm font-semibold text-slate-800 mb-1.5">
-                    Фирма (по желание)
+                  <label htmlFor="company" className="block text-sm font-semibold text-white/70 mb-1.5">
+                    Company <span className="text-white/30 font-normal">(optional)</span>
                   </label>
                   <input
-                    type="text"
-                    id="company"
-                    name="company"
-                    value={formData.company}
-                    onChange={handleChange}
+                    type="text" id="company" name="company"
+                    value={formData.company} onChange={handleChange}
                     disabled={isSubmitting}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all disabled:bg-slate-100"
-                    placeholder="ЕООД / име на марката"
+                    className={inputClass} placeholder="Your company or brand"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-sm font-semibold text-slate-800 mb-1.5">
-                    Съобщение
+                  <label htmlFor="message" className="block text-sm font-semibold text-white/70 mb-1.5">
+                    Tell us about your project
                   </label>
                   <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    required
-                    rows={5}
-                    disabled={isSubmitting}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all disabled:bg-slate-100 resize-y min-h-[120px]"
-                    placeholder="Какво трябва да има сайтът/приложението? Срок? Бюджетен диапазон?"
+                    id="message" name="message"
+                    value={formData.message} onChange={handleChange}
+                    required rows={5} disabled={isSubmitting}
+                    className={`${inputClass} resize-y min-h-[120px]`}
+                    placeholder="What should we build? Timeline? Budget range?"
                   />
                 </div>
 
-                <Button
+                <button
                   type="submit"
-                  size="lg"
                   disabled={isSubmitting}
-                  className={`w-full bg-gradient-to-r from-primary to-secondary border-0 shadow-md disabled:opacity-70`}
+                  className="btn-cta-gradient flex w-full items-center justify-center gap-2 rounded-full py-4 text-base font-bold text-navy disabled:opacity-60"
                 >
                   {isSubmitting ? (
-                    <>
-                      <Loader2 className="h-5 w-5 animate-spin mr-2" aria-hidden />
-                      Изпращане…
-                    </>
+                    <><Loader2 className="h-5 w-5 animate-spin" /> Sending…</>
                   ) : (
-                    'Изпрати'
+                    'Send Message →'
                   )}
-                </Button>
-                <p className="text-xs text-slate-500 text-center">
-                  Изпращайки формата, приемате да се свържем с вас по предоставения имейл относно запитването.
+                </button>
+
+                <p className="text-xs text-white/30 text-center">
+                  By submitting you agree to be contacted regarding your inquiry.
                 </p>
               </form>
             )}
           </div>
-        </FadeIn>
+        </motion.div>
       </div>
     </section>
   );

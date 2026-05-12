@@ -31,13 +31,13 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#0f172a',
+  themeColor: '#0f2040',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="bg" className={`${dmSans.variable} ${archivo.variable}`}>
-      <body className="font-sans antialiased text-slate-900 bg-white">{children}</body>
+    <html lang="en" className={`${dmSans.variable} ${archivo.variable}`}>
+      <body className="font-sans antialiased bg-navy text-white">{children}</body>
     </html>
   );
 }

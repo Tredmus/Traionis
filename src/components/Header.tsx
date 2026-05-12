@@ -31,9 +31,9 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${
         isScrolled || mobileMenuOpen
-          ? 'bg-[#0a1628]/95 backdrop-blur-md border-b border-white/10 py-3'
+          ? 'border-b border-white/10 bg-navy/95 py-3 backdrop-blur-md md:mx-8 md:rounded-b-2xl md:border-x md:shadow-xl md:shadow-black/25'
           : 'bg-transparent py-5'
       }`}
     >
@@ -50,12 +50,12 @@ export default function Header() {
               className="font-medium text-white/80 hover:text-white transition-colors relative group text-sm tracking-wide"
             >
               {item.label}
-              <span className="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-[#00c4b4] transition-all duration-300 group-hover:w-full" />
+              <span className="absolute left-0 -bottom-0.5 w-0 h-0.5 bg-main transition-all duration-300 group-hover:w-full" />
             </a>
           ))}
           <a
             href="#contact"
-            className="bg-[#00c4b4] hover:bg-[#00b4a6] text-[#0a1628] px-6 py-2.5 rounded-full text-sm font-bold transition-colors"
+            className="btn-cta-gradient rounded-full px-6 py-2.5 text-sm font-bold text-navy"
           >
             Start a Project
           </a>
@@ -74,7 +74,7 @@ export default function Header() {
 
       {/* Mobile menu */}
       <div
-        className={`lg:hidden fixed inset-0 z-40 bg-[#0a1628] transition-transform duration-300 ease-out pt-24 px-6 ${
+        className={`lg:hidden fixed inset-0 z-40 bg-navy transition-transform duration-300 ease-out pt-24 px-6 ${
           mobileMenuOpen ? 'translate-x-0' : 'translate-x-full pointer-events-none'
         }`}
       >
@@ -91,7 +91,7 @@ export default function Header() {
           ))}
           <a
             href="#contact"
-            className="mt-8 bg-[#00c4b4] text-[#0a1628] px-6 py-4 rounded-2xl flex items-center justify-center font-bold text-lg"
+            className="btn-cta-gradient mt-8 flex items-center justify-center rounded-2xl px-6 py-4 text-lg font-bold text-navy"
             onClick={() => setMobileMenuOpen(false)}
           >
             Start a Project
