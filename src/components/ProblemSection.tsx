@@ -3,6 +3,8 @@
 import { motion, useReducedMotion, useInView } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
 import SectionAccent from './SectionAccent';
+import SectionEyebrow from './SectionEyebrow';
+import SectionHeading from './SectionHeading';
 
 const TERMINAL_LINES = [
   { text: '$ npx create-traionis-app my-project', color: 'text-white/70', delay: 0 },
@@ -93,25 +95,13 @@ export default function ProblemSection() {
 
           {/* Left — copy */}
           <div>
-            <motion.p
-              className="text-main text-sm font-semibold uppercase tracking-widest mb-5"
-              initial={reduceMotion ? false : { opacity: 0, y: 12 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5 }}
-            >
-              How we work
-            </motion.p>
+            <SectionEyebrow>How we work</SectionEyebrow>
 
-            <motion.h2
-              className="font-extrabold leading-[1.08] mb-6 text-white"
-              style={{ fontSize: 'clamp(2.4rem, 5vw, 4rem)' }}
-              initial={reduceMotion ? false : { opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.55, delay: 0.1 }}
-            >
-              Built properly.<br />
-              From day one<span className="text-main">.</span>
-            </motion.h2>
+            <SectionHeading
+              words={['Built', 'properly.']}
+              secondLine={{ words: ['From', 'day', 'one'], tealDot: true }}
+              className="mb-6"
+            />
 
             <motion.p
               className="text-white/55 text-lg leading-relaxed mb-8"

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { CheckCircle, Loader2 } from 'lucide-react';
 import { motion, useInView } from 'framer-motion';
+import SectionEyebrow from './SectionEyebrow';
 
 function ParticleCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -145,6 +146,7 @@ export default function Contact() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         >
+          <SectionEyebrow centered>Get in touch</SectionEyebrow>
           <h2
             className="font-extrabold text-white leading-tight mb-4"
             style={{ fontSize: 'clamp(2.4rem, 5vw, 4rem)' }}

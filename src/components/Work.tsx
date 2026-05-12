@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
 import SectionHeading from './SectionHeading';
 import SectionAccent from './SectionAccent';
+import SectionEyebrow from './SectionEyebrow';
 
 const PROJECTS = [
   {
@@ -60,6 +61,7 @@ export default function Work() {
       <div className="container relative z-10 mx-auto px-6">
 
         <div className="mb-16">
+          <SectionEyebrow>Selected work</SectionEyebrow>
           <SectionHeading words={['Recent', 'Work']} tealDot />
           <motion.p
             className="mt-4 text-lg text-white/60 max-w-xl leading-relaxed"

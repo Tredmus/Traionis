@@ -4,6 +4,7 @@ import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import SectionHeading from './SectionHeading';
 import SectionAccent from './SectionAccent';
+import SectionEyebrow from './SectionEyebrow';
 
 const STEPS = [
   {
@@ -53,9 +54,13 @@ function TimelineStep({ step, index }: { step: typeof STEPS[0]; index: number })
         <span className="block text-4xl font-extrabold text-main leading-none mb-3 select-none">
           {step.number}
         </span>
-        <h3 className="font-extrabold text-white text-lg md:text-xl leading-tight mb-2 group-hover:text-main transition-colors duration-300">
-          {step.title}
-        </h3>
+        <SectionHeading
+          words={step.title.split(/\s+/)}
+          size="compact"
+          as="h3"
+          className="mb-2"
+          interactiveGroup
+        />
         <p className="text-white/50 text-sm md:text-base leading-relaxed group-hover:text-white/70 transition-colors duration-300">
           {step.description}
         </p>
@@ -99,6 +104,7 @@ export default function ProcessTimeline() {
       <div className="container relative z-10 mx-auto px-6">
 
         <div className="mb-20 text-center">
+          <SectionEyebrow centered>The process</SectionEyebrow>
           <SectionHeading words={['How', 'It', 'Works']} tealDot />
           <motion.p
             className="mt-4 text-lg text-white/50 leading-relaxed"

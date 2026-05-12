@@ -1,10 +1,11 @@
 'use client';
 
-import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
-import { useState, useCallback } from 'react';
+import { motion } from 'framer-motion';
+import { useState, useCallback, useEffect } from 'react';
 import { Globe, LayoutDashboard, Sparkles, type LucideIcon } from 'lucide-react';
 import SectionHeading from './SectionHeading';
 import SectionAccent from './SectionAccent';
+import SectionEyebrow from './SectionEyebrow';
 
 type ServiceAccent = 'teal' | 'sky';
 
@@ -63,9 +64,6 @@ const SERVICES: Service[] = [
     ],
   },
 ];
-
-/** Shared shell morph — spring tuned for cross-column moves (no staggered opacity on the same node). */
-const shellLayoutTransition = { type: 'spring' as const, stiffness: 420, damping: 38, mass: 0.78 };
 
 function ServiceIconBadge({ Icon, featured }: { Icon: LucideIcon; featured?: boolean }) {
   return (
@@ -187,12 +185,13 @@ function FeaturedDetailContent({
 function FeaturedSlot({ service }: { service: Service }) {
   const [hovered, setHovered] = useState(false);
 
+  useEffect(() => {
+    setHovered(false);
+  }, [service.id]);
+
   return (
     <div className="relative flex h-full min-h-[28rem] items-stretch lg:min-h-[36rem]">
-      <motion.div
-        layoutId={`service-shell-${service.id}`}
-        layout
-        transition={{ layout: shellLayoutTransition }}
+      <div
         className="flex h-full min-h-0 w-full flex-1 flex-col rounded-3xl p-px shadow-[0_20px_50px_-28px_rgb(from_var(--color-main)_r_g_b_/_0.18)]"
         style={{
           background:
@@ -200,22 +199,11 @@ function FeaturedSlot({ service }: { service: Service }) {
         }}
       >
         <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-[1.4375rem] border border-white/[0.09] bg-[#0c1624] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
-          <AnimatePresence mode="sync" initial={false}>
-            <motion.div
-              key={service.id}
-              role="group"
-              aria-label={service.title}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.12 }}
-              className="flex min-h-0 w-full flex-1 flex-col"
-            >
-              <FeaturedDetailContent service={service} hovered={hovered} onHover={setHovered} />
-            </motion.div>
-          </AnimatePresence>
+          <div key={service.id} role="group" aria-label={service.title} className="flex min-h-0 w-full flex-1 flex-col">
+            <FeaturedDetailContent service={service} hovered={hovered} onHover={setHovered} />
+          </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }
@@ -243,11 +231,8 @@ function CompactServiceCard({
       };
 
   return (
-    <motion.button
+    <button
       type="button"
-      layoutId={`service-shell-${service.id}`}
-      layout
-      transition={{ layout: shellLayoutTransition }}
       className={`group relative w-full overflow-hidden rounded-3xl border border-white/[0.09] bg-[#0c1624] p-8 text-left shadow-[0_16px_40px_-24px_rgba(0,0,0,0.65)] transition-[border-color,box-shadow] duration-300 ${accentStyles.borderHover} hover:shadow-[0_18px_44px_-20px_rgb(from_var(--color-main)_r_g_b_/_0.12)] focus:outline-none focus-visible:ring-2 focus-visible:ring-main/50`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -304,7 +289,7 @@ function CompactServiceCard({
           </li>
         ))}
       </ul>
-    </motion.button>
+    </button>
   );
 }
 
@@ -334,9 +319,7 @@ export default function Services() {
 
       <div className="container relative z-10 mx-auto px-6">
         <div className="mb-12 md:mb-16">
-          <p className="mb-4 inline-flex rounded-full border border-white/20 bg-white/[0.04] px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-white/70">
-            Services
-          </p>
+          <SectionEyebrow>Our services</SectionEyebrow>
           <SectionHeading words={['What', 'We', 'Build']} tealDot />
           <motion.p
             className="mt-4 max-w-xl text-lg leading-relaxed text-white/65"
@@ -358,16 +341,14 @@ export default function Services() {
             }}
             aria-hidden
           />
-          <LayoutGroup id="services-layout">
-            <div className="relative grid grid-cols-1 items-stretch gap-6 overflow-visible lg:grid-cols-2 lg:gap-8">
-              <FeaturedSlot service={active} />
-              <div className="flex min-h-0 flex-col gap-6">
-                {compact.map((service) => (
-                  <CompactServiceCard key={service.id} service={service} onSelect={selectService} />
-                ))}
-              </div>
+          <div className="relative grid grid-cols-1 items-stretch gap-6 overflow-visible lg:grid-cols-2 lg:gap-8">
+            <FeaturedSlot service={active} />
+            <div className="flex min-h-0 flex-col gap-6">
+              {compact.map((service) => (
+                <CompactServiceCard key={service.id} service={service} onSelect={selectService} />
+              ))}
             </div>
-          </LayoutGroup>
+          </div>
         </div>
 
         <motion.div

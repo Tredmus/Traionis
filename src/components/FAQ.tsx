@@ -6,6 +6,7 @@ import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import SectionHeading from './SectionHeading';
 import SectionAccent from './SectionAccent';
+import SectionEyebrow from './SectionEyebrow';
 
 const FAQS = [
   {
@@ -140,7 +141,7 @@ function FAQColumn({ faqs, offset = 0, openIndex, onToggle }: {
 }
 
 export default function FAQ() {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const handleToggle = (i: number) => {
     setOpenIndex(openIndex === i ? null : i);
@@ -153,6 +154,7 @@ export default function FAQ() {
 
         {/* Heading */}
         <div className="mb-14">
+          <SectionEyebrow>Common questions</SectionEyebrow>
           <SectionHeading words={['Questions']} tealDot />
           <motion.p
             className="mt-4 text-lg text-white/60 leading-relaxed"

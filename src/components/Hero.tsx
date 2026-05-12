@@ -2,6 +2,7 @@
 
 import { useEffect, useCallback, useState, type CSSProperties } from 'react';
 import { motion, useAnimationControls } from 'framer-motion';
+import SectionEyebrow from './SectionEyebrow';
 
 const BUILD_START_YEAR = 2023;
 const BUILD_START_MONTH = 2; // March (0-based)
@@ -325,14 +326,9 @@ export default function Hero() {
       {/* Main content */}
       <div className="relative z-10 flex flex-col items-center text-center px-6 pt-32 pb-24 w-full max-w-4xl mx-auto">
 
-        <motion.p
-          className="text-main text-xs font-bold uppercase tracking-[0.25em] mb-6"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.05 }}
-        >
-          Web & App Development
-        </motion.p>
+        <SectionEyebrow centered className="mb-6">
+          Web & app development
+        </SectionEyebrow>
 
         <h1
           className="mb-6 font-extrabold leading-[1.15]"

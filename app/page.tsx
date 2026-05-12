@@ -2,7 +2,6 @@ import Header from '@/src/components/Header';
 import Hero from '@/src/components/Hero';
 import ProblemSection from '@/src/components/ProblemSection';
 import Services from '@/src/components/Services';
-import WhyUs from '@/src/components/WhyUs';
 import Work from '@/src/components/Work';
 import ProcessTimeline from '@/src/components/ProcessTimeline';
 import FAQ from '@/src/components/FAQ';
