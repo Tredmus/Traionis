@@ -105,6 +105,8 @@ export default function SectionAccent({ variant = 'teal' }: SectionAccentProps) 
       default:
         return (
           <>
+            {/* Solid base so wave fill (#0f2040) and section read as one plane under translucent radials */}
+            <div className="absolute inset-0 bg-[#0f2040]" />
             <div
               className="absolute inset-0 opacity-90"
               style={{
