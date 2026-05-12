@@ -1,4 +1,3 @@
-// Header.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -26,23 +25,31 @@ export default function Header() {
 
   useEffect(() => {
     document.body.style.overflow = mobileMenuOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [mobileMenuOpen]);
+
+  const isCompact = isScrolled || mobileMenuOpen;
 
   return (
     <header
-      className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${
-        isScrolled || mobileMenuOpen
-          ? 'border-b border-white/10 bg-navy/95 py-3 backdrop-blur-md md:mx-8 md:rounded-b-2xl md:border-x md:shadow-xl md:shadow-black/25'
-          : 'bg-transparent py-5'
+      className={`fixed left-0 right-0 top-0 z-50 w-full transition-[padding] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+        isCompact ? 'px-4 pt-3 pb-0 md:px-6 md:pt-4' : 'px-0 py-5'
       }`}
     >
-      <div className="container mx-auto px-6 flex justify-between items-center">
-        <Link href="/" className="shrink-0" onClick={() => setMobileMenuOpen(false)}>
+      {/* Wide: full-bleed row with roomier horizontal padding. Scrolled: morphs to max-w-7xl pill (CSS transitions). */}
+      <div
+        className={`mx-auto flex w-full items-center justify-between ease-[cubic-bezier(0.22,1,0.36,1)] transition-[max-width,gap,border-radius,background-color,box-shadow,backdrop-filter,padding-top,padding-bottom,padding-left,padding-right] duration-500 motion-reduce:transition-none motion-reduce:duration-0 ${
+          isCompact
+            ? 'max-w-7xl gap-5 rounded-2xl bg-navy/95 py-2.5 px-6 shadow-[0_12px_40px_-8px_rgba(0,0,0,0.45)] backdrop-blur-md md:gap-8 md:rounded-[1.25rem] md:py-3 lg:px-8'
+            : 'max-w-full gap-0 rounded-none bg-transparent py-0 px-5 shadow-none backdrop-blur-0 sm:px-6 md:px-8 lg:px-10'
+        }`}
+      >        <Link href="/" className="shrink-0" onClick={() => setMobileMenuOpen(false)}>
           <Logo />
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-8">
+        <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
           {NAV.map((item) => (
             <a
               key={item.href}
@@ -55,7 +62,7 @@ export default function Header() {
           ))}
           <a
             href="#contact"
-            className="btn-cta-gradient rounded-full px-6 py-2.5 text-sm font-bold text-navy"
+            className="btn-cta-gradient rounded-full px-6 py-2.5 text-sm font-bold text-navy whitespace-nowrap"
           >
             Start a Project
           </a>
@@ -63,7 +70,7 @@ export default function Header() {
 
         <button
           type="button"
-          className="lg:hidden text-white p-2 -mr-2"
+          className="lg:hidden text-white p-2 shrink-0"
           onClick={() => setMobileMenuOpen((o) => !o)}
           aria-expanded={mobileMenuOpen}
           aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
