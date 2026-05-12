@@ -42,7 +42,7 @@ function TimelineStep({ step, index }: { step: typeof STEPS[0]; index: number })
   const Card = (
     <div style={{ perspective: '900px', width: '100%', maxWidth: '22rem' }}>
       <motion.div
-        className="group cursor-default rounded-2xl border border-white/[0.08] bg-gradient-to-br from-white/[0.05] via-white/[0.02] to-white/[0.01] p-6 shadow-xl shadow-black/30 ring-1 ring-inset ring-white/[0.06] transition-all duration-300 hover:border-main/30 hover:shadow-[0_0_48px_-16px_rgb(from_var(--color-accent)_r_g_b_/_0.22)] md:p-8"
+        className="group cursor-default rounded-2xl border border-white/[0.08] bg-gradient-to-br from-white/[0.05] via-white/[0.02] to-white/[0.01] p-5 shadow-xl shadow-black/30 ring-1 ring-inset ring-white/[0.06] transition-all duration-300 hover:border-main/30 hover:shadow-[0_0_48px_-16px_rgb(from_var(--color-accent)_r_g_b_/_0.22)] lg:p-6 xl:p-7 2xl:p-8"
         style={{
           transformOrigin: isLeft ? '100% 50%' : '0% 50%',
           transformStyle: 'preserve-3d',
@@ -51,7 +51,7 @@ function TimelineStep({ step, index }: { step: typeof STEPS[0]; index: number })
         animate={inView ? { rotateY: 0, opacity: 1 } : {}}
         transition={{ duration: 0.15, delay: 0.1, ease: 'easeOut'}}
       >
-        <span className="mb-3 block select-none bg-gradient-to-r from-main to-accent bg-clip-text text-4xl font-extrabold leading-none text-transparent">
+        <span className="mb-3 block select-none bg-gradient-to-r from-main to-accent bg-clip-text text-3xl font-extrabold leading-none text-transparent 2xl:text-4xl">
           {step.number}
         </span>
         <SectionHeading
@@ -61,50 +61,89 @@ function TimelineStep({ step, index }: { step: typeof STEPS[0]; index: number })
           className="mb-2"
           interactiveGroup
         />
-        <p className="text-sm leading-relaxed text-white/50 transition-colors duration-300 group-hover:text-white/72 md:text-base">
+        <p className="text-sm leading-relaxed text-white/50 transition-colors duration-300 group-hover:text-white/72">
           {step.description}
         </p>
       </motion.div>
     </div>
   );
 
+  /* Single-column layout on mobile/tablet (< lg) */
   return (
-    <div ref={ref} className="relative grid grid-cols-[1fr_72px_1fr] items-start md:grid-cols-[1fr_88px_1fr]">
-
-      <div className="flex justify-end pr-5 pt-2 md:pr-8">
-        {isLeft ? Card : null}
+    <div ref={ref}>
+      {/* Mobile/tablet: left rail + card side-by-side */}
+      <div className="flex items-start gap-4 lg:hidden">
+        <div className="flex flex-col items-center pt-1">
+          <motion.div
+            className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-main bg-[#0a1528] shadow-[0_0_0_5px_rgb(from_var(--color-main)_r_g_b_/_0.12),0_0_20px_rgb(from_var(--color-accent)_r_g_b_/_0.3)] ring-2 ring-accent/35"
+            initial={{ scale: 0, opacity: 0 }}
+            animate={inView ? { scale: 1, opacity: 1 } : {}}
+            transition={{ duration: 0.35, type: 'spring', stiffness: 320, damping: 22 }}
+          >
+            <span className="h-2 w-2 rounded-full bg-gradient-to-br from-main to-accent" />
+          </motion.div>
+        </div>
+        <div className="flex-1 pb-2" style={{ perspective: '900px' }}>
+          <motion.div
+            className="group cursor-default rounded-2xl border border-white/[0.08] bg-gradient-to-br from-white/[0.05] via-white/[0.02] to-white/[0.01] p-5 shadow-xl shadow-black/30 ring-1 ring-inset ring-white/[0.06] transition-all duration-300 hover:border-main/30"
+            style={{ transformStyle: 'preserve-3d' }}
+            initial={{ opacity: 0, x: -16 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.35, delay: 0.1, ease: 'easeOut' }}
+          >
+            <span className="mb-3 block select-none bg-gradient-to-r from-main to-accent bg-clip-text text-3xl font-extrabold leading-none text-transparent">
+              {step.number}
+            </span>
+            <SectionHeading
+              words={step.title.split(/\s+/)}
+              size="compact"
+              as="h3"
+              className="mb-2"
+              interactiveGroup
+            />
+            <p className="text-sm leading-relaxed text-white/50 transition-colors duration-300 group-hover:text-white/72">
+              {step.description}
+            </p>
+          </motion.div>
+        </div>
       </div>
 
-      <div className="flex justify-center pt-2">
-        <motion.div
-          className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 border-main bg-[#0a1528] shadow-[0_0_0_6px_rgb(from_var(--color-main)_r_g_b_/_0.12),0_0_24px_rgb(from_var(--color-accent)_r_g_b_/_0.35)] ring-2 ring-accent/35"
-          initial={{ scale: 0, opacity: 0 }}
-          animate={inView ? { scale: 1, opacity: 1 } : {}}
-          transition={{ duration: 0.35, type: 'spring', stiffness: 320, damping: 22 }}
-        >
-          <span className="h-2.5 w-2.5 rounded-full bg-gradient-to-br from-main to-accent" />
-        </motion.div>
-      </div>
+      {/* Desktop: alternating two-column */}
+      <div className="relative hidden lg:grid lg:grid-cols-[1fr_88px_1fr] items-start">
+        <div className="flex justify-end pr-8 pt-2">
+          {isLeft ? Card : null}
+        </div>
 
-      <div className="flex justify-start pl-5 pt-2 md:pl-8">
-        {!isLeft ? Card : null}
-      </div>
+        <div className="flex justify-center pt-2">
+          <motion.div
+            className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 border-main bg-[#0a1528] shadow-[0_0_0_6px_rgb(from_var(--color-main)_r_g_b_/_0.12),0_0_24px_rgb(from_var(--color-accent)_r_g_b_/_0.35)] ring-2 ring-accent/35"
+            initial={{ scale: 0, opacity: 0 }}
+            animate={inView ? { scale: 1, opacity: 1 } : {}}
+            transition={{ duration: 0.35, type: 'spring', stiffness: 320, damping: 22 }}
+          >
+            <span className="h-2.5 w-2.5 rounded-full bg-gradient-to-br from-main to-accent" />
+          </motion.div>
+        </div>
 
+        <div className="flex justify-start pl-8 pt-2">
+          {!isLeft ? Card : null}
+        </div>
+      </div>
     </div>
   );
 }
 
 export default function ProcessTimeline() {
   return (
-    <section id="process" className="relative overflow-hidden pb-0 pt-28 md:pt-36">
+    <section id="process" className="relative overflow-hidden pb-0 pt-16 md:pt-20 xl:pt-24 2xl:pt-32">
       <SectionAccent variant="tidal" />
-      <div className="container relative z-10 mx-auto px-6 pb-8 md:pb-10">
+      <div className="container relative z-10 mx-auto px-5 pb-8 sm:px-6 md:pb-10">
 
-        <div className="mx-auto mb-16 max-w-2xl text-center md:mb-20">
+        <div className="mx-auto mb-8 max-w-2xl text-center md:mb-10 xl:mb-12 2xl:mb-20">
           <SectionEyebrow centered>The process</SectionEyebrow>
           <SectionHeading words={['How', 'It', 'Works']} tealDot />
           <motion.p
-            className="mt-4 text-lg leading-relaxed text-white/55"
+            className="mt-4 text-base leading-relaxed text-white/55 2xl:text-lg"
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -131,7 +170,7 @@ export default function ProcessTimeline() {
             aria-hidden
           />
 
-          <div className="relative overflow-hidden rounded-[2rem] border border-white/[0.07] bg-gradient-to-b from-white/[0.06] via-white/[0.02] to-transparent py-10 shadow-[0_32px_90px_-36px_rgb(from_var(--color-accent)_r_g_b_/_0.18)] ring-1 ring-inset ring-white/[0.05] md:py-16">
+          <div className="relative overflow-hidden rounded-[2rem] border border-white/[0.07] bg-gradient-to-b from-white/[0.06] via-white/[0.02] to-transparent py-7 shadow-[0_32px_90px_-36px_rgb(from_var(--color-accent)_r_g_b_/_0.18)] ring-1 ring-inset ring-white/[0.05] md:py-9 xl:py-11 2xl:py-16">
             {/* Shallow caustic shimmer */}
             <div
               className="pointer-events-none absolute inset-0 opacity-[0.12]"
@@ -142,9 +181,9 @@ export default function ProcessTimeline() {
               aria-hidden
             />
 
-            <div className="relative px-2 md:px-4">
+            <div className="relative px-2 sm:px-4">
               <div
-                className="absolute left-1/2 top-8 bottom-8 z-0 w-2 -translate-x-1/2 rounded-full bg-white/[0.06] pointer-events-none md:top-10 md:bottom-10"
+                className="absolute left-[22px] top-8 bottom-8 z-0 w-[2px] rounded-full bg-white/[0.06] pointer-events-none sm:left-[26px] lg:left-1/2 lg:w-2 lg:-translate-x-1/2 lg:top-10 lg:bottom-10"
                 aria-hidden
               >
                 <div
@@ -156,7 +195,7 @@ export default function ProcessTimeline() {
                 />
               </div>
 
-              <div className="relative z-[1] flex flex-col gap-16 md:gap-28">
+              <div className="relative z-[1] flex flex-col gap-6 md:gap-8 lg:gap-12 xl:gap-14 2xl:gap-28">
                 {STEPS.map((step, i) => (
                   <TimelineStep key={step.number} step={step} index={i} />
                 ))}

@@ -196,7 +196,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="relative overflow-hidden bg-gradient-to-b from-[#081a2e] via-navy to-navy py-28 md:py-36"
+      className="relative overflow-hidden bg-gradient-to-b from-[#081a2e] via-navy to-navy py-16 md:py-20 xl:py-24 2xl:py-32"
     >
       <ParticleCanvas />
 
@@ -210,10 +210,10 @@ export default function Contact() {
         />
       </div>
 
-      <div className="container relative z-10 mx-auto px-6">
+      <div className="container relative z-10 mx-auto px-5 sm:px-6">
         <motion.div
           ref={ref}
-          className="text-center mb-14"
+          className="text-center mb-8 md:mb-10 xl:mb-12 2xl:mb-14"
           initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
@@ -221,11 +221,11 @@ export default function Contact() {
           <SectionEyebrow centered>Get in touch</SectionEyebrow>
           <h2
             className="font-extrabold text-white leading-tight mb-4"
-            style={{ fontSize: 'clamp(2.4rem, 5vw, 4rem)' }}
+            style={{ fontSize: 'clamp(2rem, 4.5vw, 3.5rem)' }}
           >
             Have a project in mind<span className="text-main">?</span>
           </h2>
-          <p className="text-white/50 text-lg max-w-xl mx-auto leading-relaxed">
+          <p className="text-white/50 text-base max-w-xl mx-auto leading-relaxed 2xl:text-lg">
             Tell us what you need. We&apos;ll tell you if we can build it and what it&apos;ll cost. No commitment.
           </p>
           <p className="mt-3 text-main font-semibold">
@@ -240,7 +240,7 @@ export default function Contact() {
           transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
         >
           <div
-            className="relative rounded-[2rem] border border-main/15 bg-[#0b1624]/85 p-8 backdrop-blur-md md:p-12"
+            className="relative rounded-[2rem] border border-main/15 bg-[#0b1624]/85 p-5 backdrop-blur-md sm:p-6 md:p-7 xl:p-8 2xl:p-12"
             style={{
               boxShadow: [
                 '0 0 48px 6px rgb(from var(--color-main) r g b / 0.2)',

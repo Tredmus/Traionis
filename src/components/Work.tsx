@@ -57,15 +57,15 @@ export default function Work() {
   const project = PROJECTS[index];
 
   return (
-    <section id="work" className="relative overflow-hidden pb-0 pt-28 md:pt-36">
+    <section id="work" className="relative overflow-hidden pb-0 pt-16 md:pt-20 xl:pt-24 2xl:pt-32">
       <SectionAccent variant="lagoon" />
-      <div className="container relative z-10 mx-auto px-6 pb-8 md:pb-10">
+      <div className="container relative z-10 mx-auto px-5 pb-8 sm:px-6 md:pb-10">
 
-        <div className="mb-16">
+        <div className="mb-8 md:mb-10 xl:mb-12 2xl:mb-16">
           <SectionEyebrow>Selected work</SectionEyebrow>
           <SectionHeading words={['Recent', 'Work']} tealDot />
           <motion.p
-            className="mt-4 text-lg text-white/60 max-w-xl leading-relaxed"
+            className="mt-4 text-base text-white/60 max-w-xl leading-relaxed 2xl:text-lg"
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -130,7 +130,7 @@ export default function Work() {
             </div>
 
             {/* Right — info panel */}
-            <div className="flex w-full flex-col justify-between border-t border-white/10 p-8 lg:border-l lg:border-t-0 lg:p-12 lg:w-[42%]">
+            <div className="flex w-full flex-col justify-between border-t border-white/10 p-4 sm:p-5 lg:border-l lg:border-t-0 lg:p-6 xl:p-7 2xl:p-10 lg:w-[42%]">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={project.id + '-info'}
@@ -142,12 +142,12 @@ export default function Work() {
                 >
                   <h3
                     className="font-extrabold text-white leading-tight"
-                    style={{ fontSize: 'clamp(2rem, 3.5vw, 3rem)' }}
+                    style={{ fontSize: 'clamp(1.6rem, 2.6vw, 2.4rem)' }}
                   >
                     {project.title}
                   </h3>
 
-                  <p className="text-white/55 leading-relaxed text-base md:text-lg">
+                  <p className="text-white/55 leading-relaxed text-sm md:text-base 2xl:text-lg">
                     {project.description}
                   </p>
 
@@ -164,7 +164,7 @@ export default function Work() {
               </AnimatePresence>
 
               {/* Navigation */}
-              <div className="mt-10 flex items-center justify-between">
+              <div className="mt-7 flex items-center justify-between md:mt-8 xl:mt-10">
                 <div className="flex gap-2">
                   {PROJECTS.map((_, i) => (
                     <button
@@ -202,7 +202,7 @@ export default function Work() {
 
         {/* CTA */}
         <motion.div
-          className="mt-12 flex justify-center"
+          className="mt-9 flex justify-center md:mt-10 xl:mt-12"
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}

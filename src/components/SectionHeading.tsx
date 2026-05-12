@@ -95,7 +95,7 @@ export default function SectionHeading({
   const reduceMotion = useReducedMotion();
   const compact = size === 'compact';
   const fontSize =
-    size === 'compact' ? 'clamp(1.1rem, 2.6vw, 1.65rem)' : 'clamp(2.4rem, 5vw, 4rem)';
+    size === 'compact' ? 'clamp(1rem, 2vw, 1.45rem)' : 'clamp(1.85rem, 3.5vw, 3.2rem)';
   const leading = size === 'compact' ? 'leading-snug' : 'leading-[1.05]';
 
   const firstLineTealDot = secondLine ? false : !!tealDot;

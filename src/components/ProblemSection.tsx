@@ -60,7 +60,7 @@ function Terminal({ inView }: { inView: boolean }) {
       </div>
 
       {/* Terminal body */}
-      <div className="p-5 min-h-[320px] font-mono text-sm leading-7">
+      <div className="p-4 min-h-[200px] font-mono text-[11px] leading-5 sm:p-5 sm:min-h-[240px] sm:text-xs sm:leading-6 xl:min-h-[270px] 2xl:min-h-[320px]">
         {TERMINAL_LINES.map((line, i) => (
           <div key={i} className="flex items-center gap-1">
             <span
@@ -89,10 +89,10 @@ export default function ProblemSection() {
   const inView = useInView(sectionRef, { once: false, margin: '-10% 0px' });
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden pb-0 pt-28 md:pt-36">
+    <section ref={sectionRef} className="relative overflow-hidden pb-0 pt-16 md:pt-20 xl:pt-24 2xl:pt-32">
       <SectionAccent variant="teal" />
-      <div className="container relative z-10 mx-auto px-6 pb-8 md:pb-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+      <div className="container relative z-10 mx-auto px-5 pb-8 sm:px-6 md:pb-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 xl:gap-14 2xl:gap-24 items-center">
 
           {/* Left — copy */}
           <div>
@@ -105,7 +105,7 @@ export default function ProblemSection() {
             />
 
             <motion.p
-              className="text-white/55 text-lg leading-relaxed mb-8"
+              className="text-white/55 text-base leading-relaxed mb-6 md:mb-8 2xl:text-lg"
               initial={reduceMotion ? false : { opacity: 0, y: 16 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: 0.2 }}

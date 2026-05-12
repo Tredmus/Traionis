@@ -149,16 +149,16 @@ export default function FAQ() {
   };
 
   return (
-    <section id="faq" className="relative overflow-hidden pb-0 pt-28 md:pt-36">
+    <section id="faq" className="relative overflow-hidden pb-0 pt-16 md:pt-20 xl:pt-24 2xl:pt-32">
       <SectionAccent variant="deep" />
-      <div className="container relative z-10 mx-auto px-6 pb-8 md:pb-10">
+      <div className="container relative z-10 mx-auto px-5 pb-8 sm:px-6 md:pb-10">
 
         {/* Heading */}
-        <div className="mb-14">
+        <div className="mb-8 md:mb-9 xl:mb-10 2xl:mb-14">
           <SectionEyebrow>Common questions</SectionEyebrow>
           <SectionHeading words={['Questions']} tealDot />
           <motion.p
-            className="mt-4 text-lg text-white/60 leading-relaxed"
+            className="mt-4 text-base text-white/60 leading-relaxed 2xl:text-lg"
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -169,7 +169,7 @@ export default function FAQ() {
         </div>
 
         {/* Two columns */}
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 gap-2.5 md:grid-cols-2 md:gap-4 lg:gap-5 2xl:gap-8">
           <FAQColumn
             faqs={LEFT_FAQS}
             offset={0}

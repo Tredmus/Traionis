@@ -394,9 +394,9 @@ export default function Hero() {
         ))}
       </div>
 
-      {/* Floating cards — xl only, CSS animated for smoothness */}
+      {/* Floating cards — 2xl only to avoid overlapping content on 1080p */}
       {mounted && (
-        <div className="hidden xl:block">
+        <div className="hidden 2xl:block">
           {FLOATING_CARDS.map((card) => (
             <motion.div
               key={card.id}
@@ -419,17 +419,17 @@ export default function Hero() {
       )}
 
       {/* Main content — flex-1 keeps the wave strip pinned to the viewport bottom on tall screens */}
-      <div className="relative z-10 flex w-full flex-1 flex-col items-center justify-center px-6 pb-16 pt-32 text-center md:pb-20">
-        <div className="mx-auto flex w-full max-w-4xl flex-col items-center">
+      <div className="relative z-10 flex w-full flex-1 flex-col items-center justify-center px-5 pb-10 pt-20 text-center sm:px-6 sm:pt-24 md:pb-14 lg:pt-28 xl:pb-14 2xl:pb-20">
+        <div className="mx-auto flex w-full max-w-3xl flex-col items-center 2xl:max-w-4xl">
 
-        <SectionEyebrow centered className="mb-6">
+        <SectionEyebrow centered className="mb-4 md:mb-6">
           Web & app development
         </SectionEyebrow>
 
         <h1
-          className="mb-6 font-extrabold leading-[1.15]"
+          className="mb-5 font-extrabold leading-[1.15] md:mb-6"
           style={{
-            fontSize: 'clamp(2.6rem, 6.5vw, 5rem)',
+            fontSize: 'clamp(2rem, 4.5vw, 3.6rem)',
             filter: 'drop-shadow(0 4px 48px rgb(from var(--color-main) r g b / 0.2))',
           }}
         >
@@ -445,7 +445,7 @@ export default function Hero() {
         </h1>
 
         <motion.p
-          className="text-white/60 text-lg md:text-xl max-w-2xl leading-relaxed mb-10"
+          className="text-white/60 text-sm leading-relaxed mb-7 max-w-xl sm:text-base sm:max-w-2xl md:mb-9 2xl:text-lg"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
@@ -474,15 +474,15 @@ export default function Hero() {
         </motion.div>
 
         <motion.div
-          className="mt-16 grid w-full grid-cols-2 divide-y divide-white/10 rounded-3xl border border-white/12 bg-white/[0.06] shadow-2xl shadow-black/40 ring-1 ring-inset ring-white/10 backdrop-blur-md md:grid-cols-4 md:divide-x md:divide-y-0"
+          className="mt-8 grid w-full grid-cols-2 divide-y divide-white/10 rounded-3xl border border-white/12 bg-white/[0.06] shadow-2xl shadow-black/40 ring-1 ring-inset ring-white/10 backdrop-blur-md md:mt-10 md:grid-cols-4 md:divide-x md:divide-y-0"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.9 }}
         >
           {stats.map((s) => (
-            <div key={s.label} className="py-8 flex flex-col items-center gap-1">
-              <span className="text-4xl font-extrabold text-white">{s.value}</span>
-              <span className="text-main text-xs font-semibold uppercase tracking-widest">{s.label}</span>
+            <div key={s.label} className="py-3.5 flex flex-col items-center gap-0.5 md:py-4 xl:py-5 2xl:py-7">
+              <span className="text-xl font-extrabold text-white md:text-2xl 2xl:text-3xl">{s.value}</span>
+              <span className="text-main text-[9px] font-semibold uppercase tracking-[0.12em] md:text-[10px] 2xl:text-xs">{s.label}</span>
             </div>
           ))}
         </motion.div>

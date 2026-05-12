@@ -85,6 +85,14 @@ export default function Header() {
           mobileMenuOpen ? 'translate-x-0' : 'translate-x-full pointer-events-none'
         }`}
       >
+        <button
+          type="button"
+          className="absolute right-6 top-6 rounded-full border border-white/20 p-2 text-white"
+          onClick={() => setMobileMenuOpen(false)}
+          aria-label="Close menu"
+        >
+          <X size={22} />
+        </button>
         <nav className="flex flex-col gap-1">
           {NAV.map((item) => (
             <a

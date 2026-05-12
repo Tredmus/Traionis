@@ -104,7 +104,7 @@ function FeaturedDetailContent({
 
   return (
     <div
-      className="relative flex min-h-0 flex-1 flex-col gap-6 overflow-hidden p-8 lg:p-12"
+      className="relative flex min-h-0 flex-1 flex-col gap-4 overflow-hidden p-5 lg:p-6 xl:p-7 2xl:p-10"
       onMouseEnter={() => onHover(true)}
       onMouseLeave={() => onHover(false)}
     >
@@ -153,14 +153,14 @@ function FeaturedDetailContent({
       </div>
 
       <motion.h3
-        className="relative text-3xl font-extrabold leading-tight text-white lg:text-4xl"
+        className="relative text-xl font-extrabold leading-tight text-white lg:text-2xl 2xl:text-3xl"
         animate={{ x: hovered ? 4 : 0 }}
         transition={{ type: 'spring', stiffness: 300, damping: 20 }}
       >
         {service.title}
       </motion.h3>
 
-      <p className="relative max-w-md text-lg leading-relaxed text-white/65">{service.description}</p>
+      <p className="relative max-w-md text-sm leading-relaxed text-white/65 md:text-base 2xl:text-lg">{service.description}</p>
 
       <div className="relative rounded-full border-t border-white/15" />
 
@@ -168,7 +168,7 @@ function FeaturedDetailContent({
         {service.offerings.map((item) => (
           <li
             key={item}
-            className="flex items-start gap-3 rounded-xl border border-transparent px-1 py-0.5 text-base text-white/75 transition-colors duration-200 hover:border-white/[0.06] hover:bg-white/[0.03]"
+            className="flex items-start gap-3 rounded-xl border border-transparent px-1 py-0.5 text-sm text-white/75 transition-colors duration-200 hover:border-white/[0.06] hover:bg-white/[0.03] md:text-base"
           >
             <motion.span
               className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${dotClass}`}
@@ -191,7 +191,7 @@ function FeaturedSlot({ service }: { service: Service }) {
   }, [service.id]);
 
   return (
-    <div className="relative flex h-full min-h-[28rem] items-stretch lg:min-h-[36rem]">
+    <div className="relative flex h-full min-h-[20rem] items-stretch lg:min-h-[22rem] xl:min-h-[24rem] 2xl:min-h-[30rem]">
       <div
         className="flex h-full min-h-0 w-full flex-1 flex-col rounded-3xl p-px shadow-[0_20px_50px_-28px_rgb(from_var(--color-main)_r_g_b_/_0.18)]"
         style={{
@@ -234,7 +234,7 @@ function CompactServiceCard({
   return (
     <button
       type="button"
-      className={`group relative w-full overflow-hidden rounded-3xl border border-white/[0.09] bg-[#0c1624] p-8 text-left shadow-[0_16px_40px_-24px_rgba(0,0,0,0.65)] transition-[border-color,box-shadow] duration-300 ${accentStyles.borderHover} hover:shadow-[0_18px_44px_-20px_rgb(from_var(--color-main)_r_g_b_/_0.12)] focus:outline-none focus-visible:ring-2 focus-visible:ring-main/50`}
+      className={`group relative w-full overflow-hidden rounded-3xl border border-white/[0.09] bg-[#0c1624] p-4 text-left md:p-5 xl:p-6 2xl:p-8 shadow-[0_16px_40px_-24px_rgba(0,0,0,0.65)] transition-[border-color,box-shadow] duration-300 ${accentStyles.borderHover} hover:shadow-[0_18px_44px_-20px_rgb(from_var(--color-main)_r_g_b_/_0.12)] focus:outline-none focus-visible:ring-2 focus-visible:ring-main/50`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onClick={() => onSelect(service.id)}
@@ -265,7 +265,7 @@ function CompactServiceCard({
       </div>
 
       <motion.h3
-        className="relative mt-4 text-xl font-extrabold leading-tight text-white md:text-2xl"
+        className="relative mt-3 text-lg font-extrabold leading-tight text-white md:mt-4 md:text-xl xl:text-2xl"
         animate={{ x: hovered ? 2 : 0 }}
         transition={{ type: 'spring', stiffness: 300, damping: 20 }}
       >
@@ -306,15 +306,15 @@ export default function Services() {
   const compact = SERVICES.filter((s) => s.id !== activeId);
 
   return (
-    <section id="services" className="relative overflow-hidden pb-0 pt-28 md:pt-36">
+    <section id="services" className="relative overflow-hidden pb-0 pt-16 md:pt-20 xl:pt-24 2xl:pt-32">
       <SectionAccent variant="coast" />
 
-      <div className="container relative z-10 mx-auto px-6 pb-8 md:pb-10">
-        <div className="mb-12 md:mb-16">
+      <div className="container relative z-10 mx-auto px-5 pb-8 sm:px-6 md:pb-10">
+        <div className="mb-8 md:mb-10 xl:mb-12 2xl:mb-16">
           <SectionEyebrow>Our services</SectionEyebrow>
           <SectionHeading words={['What', 'We', 'Build']} tealDot />
           <motion.p
-            className="mt-4 max-w-xl text-lg leading-relaxed text-white/65"
+            className="mt-4 max-w-xl text-base leading-relaxed text-white/65 2xl:text-lg"
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -324,7 +324,7 @@ export default function Services() {
           </motion.p>
         </div>
 
-        <div className="relative overflow-visible rounded-[2rem] border border-white/[0.08] bg-[#080f18] p-5 shadow-[0_24px_60px_-36px_rgba(0,0,0,0.55)] ring-1 ring-inset ring-white/[0.05] md:p-8">
+        <div className="relative overflow-visible rounded-[2rem] border border-white/[0.08] bg-[#080f18] p-3 shadow-[0_24px_60px_-36px_rgba(0,0,0,0.55)] ring-1 ring-inset ring-white/[0.05] md:p-4 xl:p-5 2xl:p-8">
           <div
             className="pointer-events-none absolute inset-0 rounded-[2rem] opacity-30"
             style={{
@@ -333,7 +333,7 @@ export default function Services() {
             }}
             aria-hidden
           />
-          <div className="relative grid grid-cols-1 items-stretch gap-6 overflow-visible lg:grid-cols-2 lg:gap-8">
+          <div className="relative grid grid-cols-1 items-stretch gap-4 overflow-visible lg:grid-cols-2 lg:gap-5 xl:gap-6 2xl:gap-8">
             <FeaturedSlot service={active} />
             <div className="flex min-h-0 flex-col gap-6">
               {compact.map((service) => (
