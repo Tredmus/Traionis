@@ -16,7 +16,7 @@ const NAV_LINKS = [
 export default function Footer() {
   return (
     <footer className="relative mt-6 rounded-t-[2rem] bg-gradient-to-b from-white/[0.04] to-transparent text-white md:rounded-t-[2.25rem]">
-      <div className="container mx-auto px-6 py-16 md:py-20">
+      <div className="container mx-auto px-6 py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
 
           {/* Brand */}
