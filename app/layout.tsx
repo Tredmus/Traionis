@@ -1,43 +1,89 @@
-import type { Metadata, Viewport } from 'next';
-import { Archivo, DM_Sans } from 'next/font/google';
-import './globals.css';
+import type { Metadata } from "next";
+import { Archivo, Instrument_Sans, Newsreader } from "next/font/google";
 
-const dmSans = DM_Sans({
-  subsets: ['latin', 'latin-ext'],
-  variable: '--font-dm-sans',
-  display: 'swap',
+import { DepthRail } from "@/components/depth/DepthRail";
+import { SiteFooter } from "@/components/SiteFooter";
+import { SiteHeader } from "@/components/SiteHeader";
+import { SkipLink } from "@/components/SkipLink";
+import { LocaleProvider } from "@/lib/locale-context";
+import "./globals.css";
+
+/**
+ * Three families, each with exactly one job.
+ *
+ * Archivo carries the display voice via its width axis — wide and structural,
+ * reading as signage rather than fashion. Deliberately not a high-contrast
+ * serif, which is the default look for this kind of page and would undercut
+ * the engineering claim.
+ */
+const archivo = Archivo({
+  variable: "--font-archivo",
+  subsets: ["latin", "latin-ext"], // latin-ext carries Bulgarian Cyrillic's neighbours
+  axes: ["wdth"],
+  display: "swap",
 });
 
-const archivo = Archivo({
-  subsets: ['latin', 'latin-ext'],
-  variable: '--font-archivo',
-  display: 'swap',
-  weight: ['500', '600', '700', '800'],
+const instrumentSans = Instrument_Sans({
+  variable: "--font-instrument-sans",
+  subsets: ["latin", "latin-ext"],
+  display: "swap",
+});
+
+/** Long-form only. Case studies should read as documents, not as marketing. */
+const newsreader = Newsreader({
+  variable: "--font-newsreader",
+  subsets: ["latin", "latin-ext"],
+  axes: ["opsz"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: 'Traionis | Уебсайтове и приложения за българския бизнес',
+  metadataBase: new URL("https://traionis.com"),
+  title: {
+    default: "Traionis — Web development studio in Varna, Bulgaria",
+    template: "%s — Traionis",
+  },
   description:
-    'Изработка на уебсайтове, уеб приложения и автоматизации за фирми в България. Ясни срокове, стабилен код, директна комуникация.',
-  metadataBase: new URL('https://traionis.com'),
+    "Traionis is a web development and digital automation agency based in Varna, Bulgaria. We build custom websites and web applications — you talk to the person who builds it.",
+  alternates: { canonical: "/" },
   openGraph: {
-    title: 'Traionis | Уебсайтове и приложения за българския бизнес',
+    type: "website",
+    siteName: "Traionis",
+    locale: "en",
+    url: "/",
+    title: "Traionis — You talk to the person who builds it",
     description:
-      'Инженерен подход към уеб разработка и дигитални продукти за местни компании.',
-    url: 'https://traionis.com/',
-    type: 'website',
+      "A web development studio in Varna, Bulgaria building custom websites and web applications. Real engineering, not a template resold.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Traionis — You talk to the person who builds it",
+    description:
+      "A web development studio in Varna, Bulgaria building custom websites and web applications.",
   },
   robots: { index: true, follow: true },
 };
 
-export const viewport: Viewport = {
-  themeColor: '#0f2040',
-};
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${dmSans.variable} ${archivo.variable}`}>
-      <body className="font-sans antialiased bg-navy text-white">{children}</body>
+    <html
+      lang="en"
+      // Next 16 no longer overrides scroll-behavior on navigation; this opts
+      // back in, so route changes stay instant while in-page anchors glide.
+      data-scroll-behavior="smooth"
+      className={`${archivo.variable} ${instrumentSans.variable} ${newsreader.variable} h-full`}
+    >
+      <body className="flex min-h-full flex-col">
+        <LocaleProvider>
+          <SkipLink />
+          <SiteHeader />
+          <DepthRail />
+          <main id="main" className="flex-1">
+            {children}
+          </main>
+          <SiteFooter />
+        </LocaleProvider>
+      </body>
     </html>
   );
 }

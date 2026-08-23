@@ -1,79 +1,195 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
+/* ============================================================
+   TRAIONIS — DESIGN TOKENS
+   Tokens only. No component styles in this file.
+
+   The descent: five flat colour bands, hue fixed at ~262deg,
+   lightness AND chroma both decreasing with depth. By the floor
+   the colour is neutral black. There are no gradients anywhere
+   in this system, by design.
+   ============================================================ */
+
+@theme {
+  /* --- Foreground ------------------------------------------ */
+  /* One foreground for the whole descent. The surface band is dusk, not
+     daylight, so no band inverts and there is no second ink. */
+  --color-ink: #f2f6fa;
+
+  /* --- Accent ---------------------------------------------- */
+  /* Bioluminescence — the only artificial light in the descent.
+     High chroma cyan-blue, distinct from the zone blues so interaction
+     never reads as water. */
+  --color-accent: #0a4f6e; /* flat blocks. deep lumen body */
+  --color-accent-hi: #12a8d4; /* <3% of surface. living glow */
+
+  /* --- Depth zones ----------------------------------------- */
+  /* The medium is BLUE. Interaction is a brighter bioluminescent cyan —
+     see the accent tokens above — so zones stay water, not brand. */
+  --color-zone-surface: #0d1b2e; /* dusk above water   15.4:1 */
+  --color-zone-shallows: #1f3e70; /* the plunge          9.7:1 */
+  --color-zone-mid: #14294d; /* light fading       13.2:1 */
+  --color-zone-deep: #0a1730; /* lamp only          16.3:1 */
+  --color-zone-abyss: #03070f; /* the floor          18.7:1 */
+
+  /* --- Typography ------------------------------------------ */
+  --font-display: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-prose: var(--font-newsreader), ui-serif, Georgia, serif;
+
+  --text-display-xl: clamp(3.25rem, 9vw, 7.5rem);
+  --text-display-xl--line-height: 0.92;
+  --text-display-xl--letter-spacing: -0.03em;
+
+  --text-display-l: clamp(2.5rem, 6vw, 5rem);
+  --text-display-l--line-height: 0.96;
+  --text-display-l--letter-spacing: -0.025em;
+
+  --text-display-m: clamp(1.875rem, 4vw, 3.25rem);
+  --text-display-m--line-height: 1.02;
+  --text-display-m--letter-spacing: -0.015em;
+
+  --text-lead: clamp(1.125rem, 1.6vw, 1.4rem);
+  --text-lead--line-height: 1.5;
+
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.6;
+
+  --text-prose: 1.1875rem;
+  --text-prose--line-height: 1.7;
+
+  --text-label: 0.75rem;
+  --text-label--line-height: 1.2;
+  --text-label--letter-spacing: 0.14em;
+
+  /* --- Motion ---------------------------------------------- */
+  /* The only easing curve in this codebase. */
+  --ease-descent: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Hairlines. Not in @theme — these are rgba and belong to the zone, not the
+   palette. One pairing only: every band is light-on-dark. */
 :root {
-  --color-navy: #0f2040;
-  /**
-   * Brand palette — change these hex values only (no separate RGB vars).
-   * `main`: primary brand (headlines, links, most accents). `accent`: secondary highlight.
-   */
-  --color-main: #33ccff;
-  --color-accent: #00c4b4;
-  --radius-pill: 9999px;
-  --radius-card: 1.5rem;
-  --radius-panel: 1.75rem;
+  --line: rgb(242 246 250 / 0.1);
+  --line-strong: rgb(242 246 250 / 0.22);
+
+  /* Set per-zone by DepthZone so children inherit the right pairing. */
+  --zone-ink: var(--color-ink);
+  --zone-line: var(--line);
+  --zone-line-strong: var(--line-strong);
+
+  --header-h: 4.5rem;
+
+  /* --- The waterline --------------------------------------- */
+  /* Single source of truth for where the hero's horizon sits. HeroCanvas
+     reads this once per resize, so the painted water and the type block
+     above it can never disagree.
+     Air, not decoration: the type has to fit between the header and the
+     waterline. On a short laptop viewport the waterline drops and the hero
+     type scales against viewport height as well as width — without that,
+     the block grows upward into the header and clips. */
+  --hero-horizon: 47%;
+  --hero-content-bottom: calc(var(--hero-waterline-overlap) + 52dvh);
+  /* How far the plunge sits below the first viewport. The hero is
+     100dvh plus this, so the silhouette lives in the shallows, not on
+     the fold. Also the canvas/shallows overlap for crest punches. */
+  --hero-waterline-overlap: 6.75rem;
+
+  --hero-brand: clamp(1.85rem, min(6.5vw, 9dvh), 5.25rem);
+  --hero-headline: clamp(1.3rem, min(2.8vw, 4.1dvh), 2.6rem);
+  --hero-lead: clamp(0.95rem, min(1.3vw, 2.05dvh), 1.2rem);
+  --hero-cta-h: clamp(2.75rem, min(3.5rem, 6.4dvh), 3.5rem);
 }
 
-@layer utilities {
-  /** Primary CTA — teal → cyan gradient (Easyweb-style “alive” accent, on-brand) */
-  .btn-cta-gradient {
-    background-image: linear-gradient(105deg, var(--color-main) 0%, #2ecfb9 42%, #38bdf8 100%);
-    box-shadow: 0 12px 36px -12px rgb(from var(--color-main) r g b / 0.45);
-    transition:
-      filter 0.2s ease,
-      box-shadow 0.2s ease,
-      transform 0.15s ease;
-  }
-  .btn-cta-gradient:hover:not(:disabled) {
-    filter: brightness(1.07);
-    box-shadow: 0 16px 42px -10px rgba(56, 189, 248, 0.42);
-  }
-  .btn-cta-gradient:active:not(:disabled) {
-    transform: scale(0.98);
-  }
-  .btn-cta-gradient:disabled {
-    filter: grayscale(0.2);
+/* The type shrinks more slowly than the viewport does — the lead has a
+   legibility floor — so the waterline has to keep giving air back as the
+   viewport gets shorter. Steps, not a formula: each one is the height at
+   which the block would otherwise reach the header.
+
+   --hero-content-bottom is measured from the bottom of the (taller-than-
+   the-viewport) hero, so it includes the plunge overlap. The far horizon
+   still sits in the first 100dvh. */
+@media (max-height: 1040px) {
+  :root {
+    --hero-horizon: 53%;
+    --hero-content-bottom: calc(var(--hero-waterline-overlap) + 46dvh);
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .btn-cta-gradient:active:not(:disabled) {
-    transform: none;
+@media (max-height: 830px) {
+  :root {
+    --hero-horizon: 60%;
+    --hero-content-bottom: calc(var(--hero-waterline-overlap) + 39dvh);
+  }
+}
+
+/* Netbook heights, and 768p laptops at 125% scaling. Air has run out; the
+   type gives up a step and the header thins rather than the block clipping. */
+@media (max-height: 640px) {
+  :root {
+    --header-h: 3.75rem;
+    --hero-horizon: 64%;
+    --hero-content-bottom: calc(var(--hero-waterline-overlap) + 35dvh);
+    --hero-brand: clamp(1.6rem, min(6.5vw, 8.4dvh), 5.25rem);
+    --hero-headline: clamp(1.15rem, min(2.8vw, 3.9dvh), 2.6rem);
+    --hero-lead: clamp(0.9rem, min(1.3vw, 2dvh), 1.2rem);
   }
 }
 
 html {
+  /* Next 16 no longer overrides scroll-behavior during navigation;
+     this attribute opts back in so route changes stay instant while
+     in-page anchors (the jump to the floor) stay smooth. */
   scroll-behavior: smooth;
+  scroll-padding-top: var(--header-h);
+  background-color: var(--color-zone-abyss);
+  -webkit-text-size-adjust: 100%;
 }
 
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: 1.6;
+  color: var(--zone-ink);
+  background-color: var(--color-zone-abyss);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Focus: visible, never removed, and legible on every band.
+   Two rings so it survives both the light surface and the abyss. */
+:focus-visible {
+  outline: 2px solid var(--color-accent-hi);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+::selection {
+  background-color: var(--color-accent-hi);
+  color: var(--color-ink);
+}
+
+/* Buttons and inputs inherit type by default. */
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+/* The descent must remain fully coherent with all motion disabled. */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
-}
 
-.bg-grid-pattern {
-  background-image:
-    linear-gradient(to right, rgba(26, 105, 134, 0.12) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(26, 105, 134, 0.12) 1px, transparent 1px);
-  background-size: 48px 48px;
-}
-
-@keyframes float {
-  0% {
-    transform: translate(0, 0);
-  }
-  25% {
-    transform: translate(40px, 30px);
-  }
-  50% {
-    transform: translate(80px, -40px);
-  }
-  75% {
-    transform: translate(40px, -70px);
-  }
-  100% {
-    transform: translate(0, 0);
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
