@@ -77,6 +77,8 @@ export function HeroCanvas({ className = "" }: HeroCanvasProps) {
     /** The first viewport, in device px. Horizon and type live in this. */
     let viewHeight = 0;
     let dpr = 1;
+    /** True when the far-field wavelength is too short for the wide-canvas step. */
+    let dense = false;
     /** Far horizon at rest, as a fraction of the first viewport. Owned by CSS. */
     let horizonFrac = 0.47;
     /** 0 = elevated looking-down sea; 1 = water-break, surface almost gone. */
@@ -171,7 +173,10 @@ export function HeroCanvas({ className = "" }: HeroCanvasProps) {
       );
       if (Number.isFinite(declared)) horizonFrac = declared / 100;
 
-      dpr = Math.min(window.devicePixelRatio || 1, coarse ? 1.5 : 2);
+      // Phones are 2–3x. Capping them at 1.5 (or even 2 on a 3x screen) scaled
+      // a soft bitmap up over sharp type, which is exactly the stair-stepped
+      // crests. Wide layouts stay capped at 2 so the desktop paint is unchanged.
+      dpr = Math.min(window.devicePixelRatio || 1, rect.width < 768 ? 3 : 2);
       width = Math.max(1, Math.round(rect.width * dpr));
       height = Math.max(1, Math.round(rect.height * dpr));
       viewHeight = Math.max(1, Math.round(window.innerHeight * dpr));
@@ -179,6 +184,10 @@ export function HeroCanvas({ className = "" }: HeroCanvasProps) {
         1,
         Math.round((parent?.height ?? rect.height) * dpr),
       );
+      // Wavelength scales with canvas width. On a phone the far field is
+      // ~35–50px; the wide-canvas step then yields two segments per crest.
+      const desktopStep = Math.max(10, Math.round(9 * dpr));
+      dense = (width * 0.045) / desktopStep < 6;
       canvas!.width = width;
       canvas!.height = height;
       canvas!.style.width = `${rect.width}px`;
@@ -319,17 +328,22 @@ export function HeroCanvas({ className = "" }: HeroCanvasProps) {
      * cross it, which is exactly what "rough" looks like.
      */
     function drawSurface(t: number, horizon: number, depthBelow: number, sunX: number) {
-      const rows = coarse ? 24 : 42;
-      // Sampling step, device px. The shortest wavelength on screen is ~110px
-      // and lines are 1–3px, so ~10 samples per wave is already smooth; going
-      // finer just doubles the path work on a 2500px canvas.
-      const stepX = Math.max(10, Math.round(9 * dpr));
+      const rows = coarse ? 32 : 42;
+      // Sampling step, device px. On a wide canvas the shortest wavelength is
+      // ~110px and lines are 1–3px, so ~10 samples per wave is already smooth;
+      // going finer just doubles the path work on a 2500px canvas. Dense
+      // (phone) canvases sample the shortest train ~16× and stroke with
+      // quadratics; wide canvases keep the original step and lineTo.
+      const desktopStep = Math.max(10, Math.round(9 * dpr));
+      const farWl = width * 0.045;
+      const stepX = dense ? Math.max(2, Math.round(farWl / 16)) : desktopStep;
       const rippleR = width * 0.16;
       const pointerLit =
         pointerStrength > 0.01 && pointerX >= 0 && pointerY > horizon;
       const impactLit = impactStrength > 0.01 && impactX >= 0 && impactY > horizon;
 
-      ctx!.lineCap = "butt";
+      ctx!.lineCap = dense ? "round" : "butt";
+      ctx!.lineJoin = dense ? "round" : "miter";
       const edgeAmp = silhouetteAmp();
 
       for (let i = 0; i < rows; i += 1) {
@@ -398,18 +412,47 @@ export function HeroCanvas({ className = "" }: HeroCanvasProps) {
         ctx!.lineWidth = lineWidth;
         ctx!.beginPath();
 
-        for (let x = -stepX; x <= width + stepX; x += stepX) {
+        const crestAt = (x: number) => {
           const texture =
             Math.sin((x / wl1) * TAU + phase) * amp +
             Math.sin((x / wl2) * TAU - phase2) * amp * 0.4;
-          let yy =
+          return (
             y +
             texture * (1 - towardEdge) * (1 - towardEdge) +
             waveShape(x, t) * edgeAmp * towardEdge +
-            rippleDelta(x, y, t, amp);
+            rippleDelta(x, y, t, amp)
+          );
+        };
 
-          if (x === -stepX) ctx!.moveTo(x, yy);
-          else ctx!.lineTo(x, yy);
+        if (dense) {
+          let prevX = 0;
+          let prevY = 0;
+          let started = false;
+          for (let x = -stepX; x <= width + stepX; x += stepX) {
+            const yy = crestAt(x);
+            if (!started) {
+              ctx!.moveTo(x, yy);
+              prevX = x;
+              prevY = yy;
+              started = true;
+            } else {
+              ctx!.quadraticCurveTo(
+                prevX,
+                prevY,
+                (prevX + x) / 2,
+                (prevY + yy) / 2,
+              );
+              prevX = x;
+              prevY = yy;
+            }
+          }
+          ctx!.lineTo(prevX, prevY);
+        } else {
+          for (let x = -stepX; x <= width + stepX; x += stepX) {
+            const yy = crestAt(x);
+            if (x === -stepX) ctx!.moveTo(x, yy);
+            else ctx!.lineTo(x, yy);
+          }
         }
 
         ctx!.stroke();
@@ -490,7 +533,11 @@ export function HeroCanvas({ className = "" }: HeroCanvasProps) {
      */
     function drawWaterline(t: number, baseY: number, sunX: number) {
       const amp = silhouetteAmp();
-      const step = Math.max(4, Math.round(3 * dpr));
+      // 24 samples on the shortest silhouette cycle (6.4 across the width).
+      // Wide canvases keep the original step so the cut does not change.
+      const step = dense
+        ? Math.max(2, Math.round(width / (6.4 * 24)))
+        : Math.max(4, Math.round(3 * dpr));
       const rippleR = width * 0.16;
       const pointerLit =
         pointerStrength > 0.01 &&
