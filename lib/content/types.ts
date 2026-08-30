@@ -46,39 +46,32 @@ export interface HeroCopy {
   ctaContinue: string;
 }
 
-export interface ProblemEvidenceCopy {
-  /** What proves the claim above. Never a testimonial, never a metric. */
-  body: string;
-  /** Omitted when the proof is this page itself and there is nowhere to go. */
-  href?: string;
-  linkLabel?: string;
-}
-
 export interface ProblemCopy {
   id: string;
+  /**
+   * Diagnostic tab question — the reader self-selects.
+   * e.g. "Do you need an application that runs the business?"
+   */
+  question: string;
+  /** Small mono label — "THE OPERATION" / "THE SITE". */
+  label: string;
   /** Framed as a problem the buyer has, never as a service we sell. */
   title: string;
   body: string;
-  /**
-   * What the framing above translates into. Specification lines, not feature
-   * bullets: each one has to be a thing a buyer could hold us to.
-   */
-  builds: readonly string[];
-  evidence: ProblemEvidenceCopy;
+  /** Exactly three deliverable lines. */
+  deliverables: readonly [string, string, string];
+  /** Proof link — destination may be provisional until the case page exists. */
+  proof: { href: string; label: string };
+  /** Muted one-liner that filters the wrong buyer out. */
+  disqualifier: string;
 }
 
 export interface OfferingsCopy {
+  /** Zone name alone — never a numeric depth reading. */
+  zoneLabel: string;
   heading: string;
   intro: string;
-  /** Labels the deliverable list. Sits below the body — never above a heading. */
-  buildsLabel: string;
-  evidenceLabel: string;
   problems: readonly ProblemCopy[];
-  /**
-   * The third case: neither problem is yours. Stated plainly, because
-   * filtering the wrong buyer out early is the point of this section.
-   */
-  filter: string;
 }
 
 export interface ProcessStepCopy {

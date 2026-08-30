@@ -36,47 +36,47 @@ export const en: SiteCopy = {
   },
 
   offerings: {
-    heading: "Two problems we solve",
+    zoneLabel: "SHALLOWS",
+    heading: "Two problems worth paying properly to solve",
     intro:
-      "Not a service list. These are the two situations where hiring us makes sense — and if yours isn't one of them, that's worth knowing early.",
-    buildsLabel: "What that means in practice",
-    evidenceLabel: "Evidence",
+      "Not a service list. If neither of these is your situation, we are probably not the right studio, and it is better to know that now.",
     problems: [
       {
-        id: "site",
-        title: "The site that has to actually earn its place",
-        // Closing sentence removed deliberately: it listed the same three
-        // things `builds` now states as commitments, one line each.
-        body: "Your website is doing commercial work. It is the thing a prospect judges you by before they ever speak to you, and the thing that decides whether they speak to you at all.",
-        builds: [
-          "Built from scratch — no theme, no page builder, no plugin stack",
-          "Measured on a mid-range phone, not on the machine it was built on",
-          "Structure and copy written to persuade, not to fill a layout",
-          "Search performance treated as part of the build, not bolted on after",
+        id: "operation",
+        question: "Do you need an application that runs the business?",
+        label: "THE OPERATION",
+        title: "The application that runs the business",
+        body: "Bookings, listings, accounts, dashboards, internal tools. The hard part is not the interface, it is the model underneath it.",
+        deliverables: [
+          "Roles and permissions modelled before a screen is drawn",
+          "The admin side built, not just the customer side",
+          "Payments, notifications and automation wired in, not bolted on",
         ],
-        evidence: {
-          body: "The page you're reading. No theme underneath it, nothing bought in — if you have someone technical, have them open the source.",
+        proof: {
+          href: "/work/parkqui",
+          label: "See how this worked on ParkQui",
         },
+        disqualifier: "Not this if an off-the-shelf tool already fits.",
       },
       {
-        id: "app",
-        title: "The application that runs the business",
-        body: "Bookings, listings, accounts, dashboards, internal tools. Software with real data and real users behind it, where the hard part is not the interface but the model underneath it. Built to be maintained for years, not demoed once.",
-        builds: [
-          "Accounts, roles and permissions modelled before a screen is drawn",
-          "A schema built to survive the features that come after it",
-          "The admin side — the screens the owner uses, not the customer",
-          "Payments, notifications and automation wired into the product itself",
+        id: "site",
+        question: "Do you need a site that has to earn its place?",
+        label: "THE SITE",
+        title: "The site that has to earn its place",
+        body: "Your website is doing commercial work. It is the thing a prospect judges you by before they ever speak to you.",
+        deliverables: [
+          "Built from scratch, no theme, no page builder, no plugin stack",
+          "Measured on a mid-range phone, not the machine it was built on",
+          "Structure and copy written to persuade, not to fill a layout",
         ],
-        evidence: {
-          body: "ParkQui — a full-stack parking marketplace for a 2,000-member community. Interactive maps, authentication, listing management and an admin dashboard.",
-          href: "/work/parkqui",
-          linkLabel: "Read the breakdown",
+        proof: {
+          // Orvyx case page not published yet — index until it is.
+          href: "/work",
+          label: "See how this worked on Orvyx LifePod",
         },
+        disqualifier: "Not this if you need it live next week.",
       },
     ],
-    filter:
-      "If neither of these describes your situation, we're probably not the right studio — and it costs both of us less to establish that now than three emails in.",
   },
 
   process: {

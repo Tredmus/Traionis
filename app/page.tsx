@@ -33,10 +33,13 @@ export default function HomePage() {
         zone="shallows"
         padding="none"
         id="offerings"
+        overflow="visible"
         className="relative z-0 -mt-[var(--hero-waterline-overlap)] pb-32 pt-[calc(var(--hero-waterline-overlap)+7rem)] sm:pb-44 sm:pt-[calc(var(--hero-waterline-overlap)+9rem)]"
       >
-        <ZoneThreshold zone="shallows" />
+        {/* Zone name lives in the services rail (SHALLOWS). Numeric −40m
+            threshold removed for this band — readings elsewhere stay. */}
         <Offerings />
+        {/* Process stays here for now; move after Portfolio in a later pass. */}
         <Process />
       </DepthZone>
 

@@ -1,416 +1,283 @@
 "use client";
 
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import {
-  useEffect,
-  useLayoutEffect,
+  useId,
   useRef,
   useState,
-  type FocusEvent,
+  type KeyboardEvent,
 } from "react";
 
 import { ZoneInner } from "@/components/depth/DepthZone";
-import { Reveal } from "@/components/motion/Reveal";
 import { HoverLink } from "@/components/ui/HoverLink";
 import type { ProblemCopy } from "@/lib/content";
+import { EASE_DESCENT } from "@/lib/depth";
 import { useCopy } from "@/lib/locale-context";
 
 /**
- * SHALLOWS — −40m. First half of the band.
+ * SHALLOWS — diagnostic tabs.
  *
- * Content only: the band itself is composed in app/page.tsx so one DepthZone
- * spans the whole depth and the atmosphere runs continuously through it.
- *
- * A diptych, not a card grid. The two problem framings sit either side of a
- * single hairline, each carrying the framing, what it translates into, and the
- * one honest piece of proof behind it. The visitor is meant to recognise which
- * of the two they are — or recognise that they are neither, which the closing
- * line makes easy on purpose.
- *
- * MOTION — one idea, taken from the band itself. At −40m daylight still
- * reaches, so attention is spent as LIGHT: the panel under the pointer takes
- * the shaft and the other recedes into the blue. Nothing resizes, nothing
- * reflows, and every word is legible at rest with no pointer on the page.
- * Where there is no pointer the light follows whichever panel is crossing the
- * middle of the viewport, so scrolling drives the same gesture on a phone.
+ * Reader picks a question; the pane below swaps. Not a services list and not
+ * a newspaper column — a recessed instrument plate with a segmented control.
+ * Two diagnostics only (app that runs the business / site that earns its place).
  */
 
-const useIsomorphicLayoutEffect =
-  typeof window === "undefined" ? useEffect : useLayoutEffect;
-
-/**
- * Rule-draw trigger. Same contract as Reveal — drawn by default, armed in a
- * layout effect — so the server HTML and a no-JS render show every hairline.
- */
-function useDrawIn<T extends HTMLElement>() {
-  const ref = useRef<T>(null);
-  const [state, setState] = useState<"idle" | "pending" | "in">("idle");
-
-  useIsomorphicLayoutEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    setState("pending");
-  }, []);
-
-  useEffect(() => {
-    if (state !== "pending") return;
-    const node = ref.current;
-    if (!node) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          setState("in");
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "0px 0px -14% 0px", threshold: 0.01 },
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [state]);
-
-  return { ref, drawn: state !== "pending", armed: state !== "idle" };
-}
-
-const POINTER_QUERY = "(hover: hover) and (pointer: fine)";
-
-function readHasPointer() {
-  if (typeof window === "undefined") return true;
-  return window.matchMedia(POINTER_QUERY).matches;
-}
+const SWAP_MS = 0.38;
 
 export function Offerings() {
-  return (
-    <ZoneInner className="pb-28 sm:pb-36">
-      <OfferingsContent />
-    </ZoneInner>
-  );
-}
-
-function OfferingsContent() {
   const copy = useCopy();
+  const reduced = useReducedMotion();
+  const baseId = useId();
   const problems = copy.offerings.problems;
+  const [active, setActive] = useState(0);
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
-  const { ref: diptychRef, drawn, armed } = useDrawIn<HTMLDivElement>();
+  const selected = problems[active] ?? problems[0];
 
-  /** Which panel holds the light. null = rest, both lit equally. */
-  const [active, setActive] = useState<number | null>(null);
-  /**
-   * A real pointer drives the light; otherwise the viewport centre does.
-   * Read at init rather than in an effect — `active` starts null either way, so
-   * the first client render is byte-identical to the server's.
-   */
-  const [hasPointer, setHasPointer] = useState(readHasPointer);
-  const panelRefs = useRef<(HTMLElement | null)[]>([]);
+  function select(index: number) {
+    setActive(index);
+  }
 
-  // Plugging in a mouse, or picking up a tablet, swaps which gesture is live.
-  useEffect(() => {
-    const query = window.matchMedia(POINTER_QUERY);
-    const onChange = () => {
-      setHasPointer(query.matches);
-      setActive(null);
-    };
-    query.addEventListener("change", onChange);
-    return () => query.removeEventListener("change", onChange);
-  }, []);
-
-  // Touch and coarse pointers: the light follows the panel crossing the middle
-  // of the viewport. Scrolling is the gesture, so nothing has to be tapped.
-  useEffect(() => {
-    if (hasPointer) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    const nodes = panelRefs.current.filter(
-      (node): node is HTMLElement => node !== null,
-    );
-    if (nodes.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          const index = nodes.indexOf(entry.target as HTMLElement);
-          if (index !== -1) setActive(index);
-        }
-      },
-      // A narrow band across the middle of the viewport. Only one panel can
-      // occupy it at a time, so the light never flickers between the two.
-      { rootMargin: "-45% 0px -45% 0px", threshold: 0 },
-    );
-
-    for (const node of nodes) observer.observe(node);
-    return () => observer.disconnect();
-  }, [hasPointer]);
-
-  return (
-    <>
-      <Reveal as="h2" className="max-w-[18ch] text-display-l font-bold text-balance">
-        {copy.offerings.heading}
-      </Reveal>
-      <Reveal as="p" index={1} className="mt-8 max-w-[60ch] text-lead opacity-70">
-        {copy.offerings.intro}
-      </Reveal>
-
-      <div ref={diptychRef} className="relative mt-16 sm:mt-24">
-        {/* The seam. Draws downward on entry — the one motion in this section
-            that reads as descent rather than as arrival. */}
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 left-1/2 hidden w-px md:block"
-          style={{
-            // Brightest where the light enters and gone by the bottom — the
-            // seam obeys the same rule as everything else in the descent.
-            backgroundImage:
-              "linear-gradient(to bottom, var(--zone-line-strong) 0%, var(--zone-line) 58%, transparent 100%)",
-            transformOrigin: "top center",
-            transform: drawn ? "scaleY(1)" : "scaleY(0)",
-            transition: armed
-              ? "transform 1100ms var(--ease-descent) 140ms"
-              : undefined,
-          }}
-        />
-
-        {/* Three shared rows — framing, deliverables, evidence — so both
-            columns rule off at exactly the same heights however long the copy
-            runs, in either language. Title and body travel in one row: a
-            two-line title should leave its air at the foot of the block, not
-            stranded between the heading and the paragraph. */}
-        <div className="grid gap-y-14 md:grid-cols-2 md:grid-rows-[auto_auto_auto] md:gap-y-0">
-          {problems.map((problem, index) => (
-            <Reveal
-              key={problem.id}
-              index={index}
-              delay={0.06}
-              className="relative flex flex-col md:row-span-3 md:grid md:grid-rows-subgrid"
-            >
-              <ProblemPanel
-                panelRef={(node) => {
-                  panelRefs.current[index] = node;
-                }}
-                problem={problem}
-                buildsLabel={copy.offerings.buildsLabel}
-                evidenceLabel={copy.offerings.evidenceLabel}
-                side={index === 0 ? "left" : "right"}
-                drawn={drawn}
-                armed={armed}
-                state={active === null ? "rest" : active === index ? "lit" : "dim"}
-                onEnter={() => hasPointer && setActive(index)}
-                onLeave={() => hasPointer && setActive(null)}
-              />
-            </Reveal>
-          ))}
-        </div>
-      </div>
-
-      {/* The third case. Filtering the wrong buyer out is this section's job as
-          much as attracting the right one. */}
-      <Reveal
-        index={2}
-        delay={0.1}
-        className="mt-16 flex max-w-[68ch] items-start gap-5 sm:mt-20"
-      >
-        <span
-          aria-hidden="true"
-          className="mt-[0.72em] block h-px w-10 shrink-0"
-          style={{ backgroundColor: "var(--zone-line-strong)" }}
-        />
-        <p className="text-body opacity-65">{copy.offerings.filter}</p>
-      </Reveal>
-    </>
-  );
-}
-
-type PanelState = "rest" | "lit" | "dim";
-
-interface ProblemPanelProps {
-  panelRef: (node: HTMLElement | null) => void;
-  problem: ProblemCopy;
-  buildsLabel: string;
-  evidenceLabel: string;
-  side: "left" | "right";
-  drawn: boolean;
-  armed: boolean;
-  state: PanelState;
-  onEnter: () => void;
-  onLeave: () => void;
-}
-
-/** Shaft strength per state. Rest is deliberately mid — nothing is ever "off". */
-const LIGHT: Record<PanelState, { opacity: number; scaleY: number }> = {
-  rest: { opacity: 0.55, scaleY: 0.88 },
-  lit: { opacity: 1, scaleY: 1 },
-  dim: { opacity: 0.14, scaleY: 0.8 },
-};
-
-function ProblemPanel({
-  panelRef,
-  problem,
-  buildsLabel,
-  evidenceLabel,
-  side,
-  drawn,
-  armed,
-  state,
-  onEnter,
-  onLeave,
-}: ProblemPanelProps) {
-  const lit = state === "lit";
-  const light = LIGHT[state];
-
-  // Horizontal air lives on the rows, not on the panel: the shaft and the top
-  // rule have to reach the seam, and padding on a subgrid box would pull the
-  // shared row tracks out of alignment with the other column.
-  const row = side === "left" ? "md:pr-10 lg:pr-16" : "md:pl-10 lg:pl-16";
-  const rowStyle = {
-    // Recession is the light's job. The dim never goes far enough to drop body
-    // copy under 4.5:1 — both panels stay readable in every state.
-    opacity: state === "dim" ? 0.88 : 1,
-    transition: "opacity 640ms var(--ease-descent)",
-  } as const;
-
-  function handleBlur(event: FocusEvent<HTMLElement>) {
-    if (event.currentTarget.contains(event.relatedTarget)) return;
-    onLeave();
+  function onTabKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    const last = problems.length - 1;
+    let next: number | null = null;
+    if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+      next = active === last ? 0 : active + 1;
+    } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+      next = active === 0 ? last : active - 1;
+    } else if (event.key === "Home") {
+      next = 0;
+    } else if (event.key === "End") {
+      next = last;
+    }
+    if (next === null) return;
+    event.preventDefault();
+    select(next);
+    tabRefs.current[next]?.focus();
   }
 
   return (
-    <article
-      ref={panelRef}
-      onMouseEnter={onEnter}
-      onMouseLeave={onLeave}
-      onFocus={onEnter}
-      onBlur={handleBlur}
-      className="relative flex flex-col md:row-span-3 md:grid md:grid-rows-subgrid"
+    <section
+      aria-labelledby="offerings-heading"
+      className="relative pb-28 sm:pb-36"
     >
-      {/* The shaft. Daylight still reaches −40m, so attention is spent as light
-          rather than as a border, a shadow or a lift. */}
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-0"
-        style={{
-          // Both layers are radial and both reach zero before the panel's own
-          // edges. A linear wash here would give the light a straight vertical
-          // side, and a rectangle of light is a card by another name.
-          backgroundImage: [
-            "radial-gradient(72% 46% at 50% -2%, rgb(196 228 255 / 0.22), rgb(196 228 255 / 0) 68%)",
-            "radial-gradient(58% 92% at 50% 0%, rgb(146 200 255 / 0.115), rgb(146 200 255 / 0) 70%)",
-          ].join(","),
-          opacity: light.opacity,
-          transformOrigin: "top center",
-          transform: `scaleY(${light.scaleY})`,
-          transition:
-            "opacity 640ms var(--ease-descent), transform 760ms var(--ease-descent)",
-        }}
-      />
+      <ZoneInner className="max-w-5xl">
+        <header className="max-w-2xl">
+          <p className="font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-[color-mix(in_srgb,var(--zone-ink)_55%,transparent)]">
+            {copy.offerings.zoneLabel}
+          </p>
+          <h2
+            id="offerings-heading"
+            className="mt-5 font-display text-display-m font-bold leading-[1.08] tracking-[-0.02em] text-balance"
+            style={{ fontStretch: "108%" }}
+          >
+            {copy.offerings.heading}
+          </h2>
+          <p className="mt-5 max-w-[52ch] text-body text-[color-mix(in_srgb,var(--zone-ink)_78%,transparent)]">
+            {copy.offerings.intro}
+          </p>
+        </header>
 
-      {/* Continuous across the seam on md, and the divider between the two on a
-          phone. The accent overlay is the site's one hover gesture — the same
-          1px sweep the buttons carry. */}
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-px"
-        style={{
-          backgroundColor: "var(--zone-line)",
-          transformOrigin: side === "right" ? "right center" : "left center",
-          transform: drawn ? "scaleX(1)" : "scaleX(0)",
-          transition: armed ? "transform 820ms var(--ease-descent)" : undefined,
-        }}
-      />
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 z-[2] h-px origin-left"
-        style={{
-          backgroundColor: "var(--color-accent-hi)",
-          opacity: lit ? 0.9 : 0,
-          transform: lit ? "scaleX(1)" : "scaleX(0)",
-          transition:
-            "transform 620ms var(--ease-descent), opacity 320ms var(--ease-descent)",
-        }}
-      />
+        <div className="mt-12 sm:mt-14">
+          {/* Segmented diagnostic control */}
+          <div
+            role="tablist"
+            aria-label={copy.offerings.heading}
+            onKeyDown={onTabKeyDown}
+            className="diagnostic-glass-track grid gap-2 rounded-[14px] p-1.5 sm:grid-cols-2"
+          >
+            {problems.map((problem, index) => {
+              const isActive = index === active;
+              const tabId = `${baseId}-tab-${problem.id}`;
+              const panelId = `${baseId}-panel-${problem.id}`;
+              return (
+                <button
+                  key={problem.id}
+                  ref={(node) => {
+                    tabRefs.current[index] = node;
+                  }}
+                  type="button"
+                  role="tab"
+                  id={tabId}
+                  aria-selected={isActive}
+                  aria-controls={panelId}
+                  tabIndex={isActive ? 0 : -1}
+                  onClick={() => select(index)}
+                  className={`group relative flex min-h-[3.75rem] items-start gap-3 rounded-[10px] px-3.5 py-3 text-left transition-[background-color,color,box-shadow,border-color,backdrop-filter] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-hi)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-zone-shallows)] sm:min-h-[4.25rem] sm:px-4 sm:py-3.5 ${
+                    isActive ? "diagnostic-glass-tab-active" : ""
+                  }`}
+                  style={{
+                    transitionDuration: "500ms",
+                    transitionTimingFunction: "var(--ease-descent)",
+                    backgroundColor: isActive ? undefined : "transparent",
+                    border: isActive ? undefined : "1px solid transparent",
+                    color: isActive
+                      ? "var(--color-ink)"
+                      : "color-mix(in srgb, var(--zone-ink) 78%, transparent)",
+                  }}
+                >
+                  <span
+                    aria-hidden="true"
+                    className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-lg"
+                    style={{
+                      backgroundColor: isActive
+                        ? "color-mix(in srgb, var(--color-accent-hi) 22%, transparent)"
+                        : "color-mix(in srgb, var(--zone-ink) 8%, transparent)",
+                      color: isActive
+                        ? "var(--color-accent-hi)"
+                        : "color-mix(in srgb, var(--zone-ink) 62%, transparent)",
+                      transition:
+                        "background-color 500ms var(--ease-descent), color 500ms var(--ease-descent)",
+                    }}
+                  >
+                    <DiagnosticIcon id={problem.id} />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-[0.9375rem] font-medium leading-snug tracking-[-0.01em] sm:text-[1rem]">
+                      {problem.question}
+                    </span>
+                  </span>
+                </button>
+              );
+            })}
+          </div>
 
-      <div className={`relative z-10 pt-9 sm:pt-10 ${row}`} style={rowStyle}>
+          {/* Swapping content plate — frosted shallows glass */}
+          <div className="diagnostic-glass-panel relative mt-3 overflow-hidden rounded-[16px]">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-x-0 top-0 h-px"
+              style={{
+                background:
+                  "linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-accent-hi) 40%, transparent), transparent)",
+              }}
+            />
+
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={selected.id}
+                role="tabpanel"
+                id={`${baseId}-panel-${selected.id}`}
+                aria-labelledby={`${baseId}-tab-${selected.id}`}
+                tabIndex={0}
+                initial={
+                  reduced
+                    ? false
+                    : { opacity: 0, y: 10, filter: "blur(4px)" }
+                }
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                exit={
+                  reduced
+                    ? undefined
+                    : { opacity: 0, y: -8, filter: "blur(4px)" }
+                }
+                transition={{
+                  duration: reduced ? 0 : SWAP_MS,
+                  ease: EASE_DESCENT,
+                }}
+                className="relative px-5 py-7 sm:px-8 sm:py-9 lg:px-10 lg:py-10"
+              >
+                <DiagnosticPane problem={selected} />
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
+      </ZoneInner>
+    </section>
+  );
+}
+
+function DiagnosticPane({ problem }: { problem: ProblemCopy }) {
+  return (
+    <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(14rem,0.42fr)] lg:gap-12 lg:items-start">
+      <div className="min-w-0">
+        <p className="font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-[color-mix(in_srgb,var(--zone-ink)_55%,transparent)]">
+          {problem.label}
+        </p>
         <h3
-          className="max-w-[19ch] font-display text-[clamp(1.5rem,2.9vw,2.2rem)] font-bold leading-[1.04] tracking-[-0.02em] text-balance"
-          style={{ fontStretch: "106%" }}
+          className="mt-4 max-w-[22ch] font-display font-bold leading-[1.08] tracking-[-0.02em] text-balance"
+          style={{
+            fontStretch: "108%",
+            fontSize: "clamp(1.55rem, 2.6vw, 2.15rem)",
+          }}
         >
           {problem.title}
         </h3>
+        <p className="mt-5 max-w-[58ch] text-body text-[color-mix(in_srgb,var(--zone-ink)_82%,transparent)]">
+          {problem.body}
+        </p>
 
-        <p className="mt-6 max-w-[52ch] text-body opacity-72">{problem.body}</p>
-      </div>
+        <span
+          aria-hidden="true"
+          className="mt-7 block h-px w-full"
+          style={{
+            backgroundColor:
+              "color-mix(in srgb, var(--color-accent-hi) 28%, var(--zone-line))",
+          }}
+        />
 
-      <div className={`relative z-10 mt-11 ${row}`} style={rowStyle}>
-        <div className="flex items-center gap-4">
-          <span className="text-label uppercase opacity-45">{buildsLabel}</span>
-          <span
-            aria-hidden="true"
-            className="h-px flex-1"
-            style={{ backgroundColor: "var(--zone-line)" }}
-          />
-        </div>
-
-        <ul className="mt-6 flex flex-col gap-4">
-          {problem.builds.map((item, index) => (
-            <li key={item} className="flex items-start gap-1">
-              {/* Calibration. The ticks extend and take the accent when the
-                  panel holds the light — a measurement being read, not a
-                  bullet being decorated. */}
-              <span aria-hidden="true" className="flex w-8 shrink-0 pt-[0.72em]">
-                <span
-                  className="block h-px w-4 origin-left"
-                  style={{
-                    backgroundColor: lit
-                      ? "var(--color-accent-hi)"
-                      : "var(--zone-line-strong)",
-                    transform: lit ? "scaleX(1.8)" : "scaleX(1)",
-                    transition: `transform 520ms var(--ease-descent) ${index * 55}ms, background-color 420ms var(--ease-descent) ${index * 55}ms`,
-                  }}
-                />
+        <ul className="mt-6 flex flex-col gap-3.5">
+          {problem.deliverables.map((line) => (
+            <li key={line} className="flex gap-3 text-body leading-snug">
+              <span
+                aria-hidden="true"
+                className="mt-[0.55em] size-1.5 shrink-0 rounded-full"
+                style={{ backgroundColor: "var(--color-accent-hi)" }}
+              />
+              <span className="text-[color-mix(in_srgb,var(--zone-ink)_90%,transparent)]">
+                {line}
               </span>
-              <span className="max-w-[42ch] text-body opacity-80">{item}</span>
             </li>
           ))}
         </ul>
+
+        <HoverLink
+          href={problem.proof.href}
+          className="mt-8 inline-flex text-body font-medium"
+        >
+          {problem.proof.label}
+        </HoverLink>
       </div>
 
-      <div
-        className={`relative z-10 mt-12 pt-7 ${row}`}
-        style={{ ...rowStyle, borderTop: "1px solid var(--zone-line)" }}
-      >
-        <p className="text-label uppercase opacity-45">{evidenceLabel}</p>
-        <p className="mt-4 max-w-[48ch] text-body opacity-72">
-          {problem.evidence.body}
+      <aside className="diagnostic-glass-callout rounded-[12px] px-4 py-4 sm:px-5 sm:py-5 lg:mt-10">
+        <p className="text-[0.9375rem] leading-snug text-[color-mix(in_srgb,var(--zone-ink)_68%,transparent)]">
+          {problem.disqualifier}
         </p>
-        {problem.evidence.href && problem.evidence.linkLabel && (
-          <HoverLink
-            href={problem.evidence.href}
-            className="mt-5 text-body font-medium"
-          >
-            {/* HoverLink hands its children to one inline span, so the arrow
-                would break to its own line. Keep label and arrow on one row. */}
-            <span className="inline-flex items-center gap-2 whitespace-nowrap">
-              {problem.evidence.linkLabel}
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 14 14"
-                fill="none"
-                aria-hidden="true"
-                className="shrink-0"
-              >
-                <path
-                  d="M3 7h8m0 0L7.25 3.25M11 7l-3.75 3.75"
-                  stroke="currentColor"
-                  strokeWidth="1.4"
-                  strokeLinecap="square"
-                  strokeLinejoin="miter"
-                />
-              </svg>
-            </span>
-          </HoverLink>
-        )}
-      </div>
-    </article>
+      </aside>
+    </div>
+  );
+}
+
+function DiagnosticIcon({ id }: { id: string }) {
+  const common = {
+    width: 18,
+    height: 18,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.6,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+    "aria-hidden": true as const,
+  };
+
+  if (id === "operation") {
+    return (
+      <svg {...common}>
+        <rect x="3.5" y="4" width="17" height="16" rx="2" />
+        <path d="M3.5 9h17" />
+        <path d="M8 13h3.5M8 16.5h5.5" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg {...common}>
+      <rect x="3.5" y="4.5" width="17" height="15" rx="2" />
+      <path d="M3.5 8.5h17" />
+      <circle cx="6.2" cy="6.5" r="0.7" fill="currentColor" stroke="none" />
+      <circle cx="8.4" cy="6.5" r="0.7" fill="currentColor" stroke="none" />
+      <path d="M7 12h6.5M7 15.5h4" />
+    </svg>
   );
 }
