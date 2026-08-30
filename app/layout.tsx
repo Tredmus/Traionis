@@ -72,8 +72,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       // back in, so route changes stay instant while in-page anchors glide.
       data-scroll-behavior="smooth"
       className={`${archivo.variable} ${instrumentSans.variable} ${newsreader.variable} h-full`}
+      suppressHydrationWarning
     >
-      <body className="flex min-h-full flex-col">
+      <body className="flex min-h-full flex-col" suppressHydrationWarning>
         <LocaleProvider>
           <SkipLink />
           <SiteHeader />

@@ -16,7 +16,7 @@ export function LocaleToggle() {
     <div
       role="group"
       aria-label={copy.nav.localeLabel}
-      className="flex items-center rounded-[5px]"
+      className="flex h-9 items-center rounded-[5px]"
       style={{ border: "1px solid var(--zone-line-strong)" }}
     >
       {LOCALES.map((option) => {
@@ -27,7 +27,7 @@ export function LocaleToggle() {
             type="button"
             onClick={() => setLocale(option)}
             aria-pressed={active}
-            className="px-2.5 py-1.5 text-label uppercase transition-opacity duration-300 [transition-timing-function:var(--ease-descent)]"
+            className="flex h-full items-center px-2 text-label uppercase transition-opacity duration-300 [transition-timing-function:var(--ease-descent)]"
             style={{
               backgroundColor: active
                 ? "color-mix(in srgb, var(--zone-ink) 12%, transparent)"
