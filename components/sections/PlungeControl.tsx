@@ -16,10 +16,10 @@ function easeOutCubic(t: number) {
 /**
  * The invite past the fold.
  *
- * Copy stays neutral — the descent is never named. Idle state is a sounding
- * line: accent travels top → bottom so the control reads as something to
- * press. On click: splash the surface, then scroll once that break has played
- * out (button only — ordinary scroll never fires the splash).
+ * Copy stays neutral — the descent is never named. Idle state is a line-weight
+ * anchor on a short tether; accent travels down the tether as the click cue.
+ * On click: splash the surface, then scroll once that break has played out
+ * (button only — ordinary scroll never fires the splash).
  */
 export function PlungeControl({ className = "" }: { className?: string }) {
   const copy = useCopy();
@@ -114,81 +114,102 @@ export function PlungeControl({ className = "" }: { className?: string }) {
           {copy.hero.ctaContinue}
         </span>
 
-        {/* Sounding line — accent runs top → bottom as the click cue. */}
-        <span
+        {/* Modern line-weight anchor — ring, stock, shank, flukes. */}
+        <motion.span
           aria-hidden="true"
-          className="relative flex h-[4.75rem] w-11 flex-col items-center"
+          className="relative mt-1 flex h-14 w-10 items-end justify-center transition-colors duration-300 [transition-timing-function:var(--ease-descent)] group-hover:text-[var(--color-accent-hi)] group-focus-visible:text-[var(--color-accent-hi)]"
+          animate={
+            reduced || plunging
+              ? { y: 0 }
+              : { y: [0, 5, 0] }
+          }
+          transition={
+            reduced || plunging
+              ? { duration: 0.2 }
+              : { duration: 2.6, repeat: Infinity, ease: "easeInOut" }
+          }
         >
+          {/* Short tether into the ring */}
           <span
-            className="absolute top-0 bottom-3 left-1/2 w-px -translate-x-1/2"
+            className="absolute left-1/2 top-0 h-3 w-px -translate-x-1/2"
             style={{
               background:
-                "color-mix(in srgb, var(--color-ink) 22%, transparent)",
+                "color-mix(in srgb, currentColor 28%, transparent)",
             }}
           />
           {!reduced && !plunging && (
             <motion.span
-              className="absolute left-1/2 top-0 w-[2px] -translate-x-1/2 rounded-full"
-              style={{
-                height: "38%",
-                background:
-                  "linear-gradient(to bottom, transparent, var(--color-accent-hi))",
-              }}
-              animate={{ y: ["0%", "175%"], opacity: [0, 1, 1, 0] }}
+              className="absolute left-1/2 top-0 h-2 w-[1.5px] -translate-x-1/2 rounded-full"
+              style={{ background: "var(--color-accent-hi)" }}
+              animate={{ y: [0, 10], opacity: [0, 1, 0] }}
               transition={{
-                duration: 1.85,
+                duration: 1.9,
                 repeat: Infinity,
                 ease: "easeInOut",
-                times: [0, 0.12, 0.78, 1],
-              }}
-            />
-          )}
-          {reduced && (
-            <span
-              className="absolute left-1/2 top-[18%] h-[42%] w-[2px] -translate-x-1/2 rounded-full"
-              style={{
-                background:
-                  "linear-gradient(to bottom, transparent, var(--color-accent-hi))",
+                times: [0, 0.45, 1],
               }}
             />
           )}
 
-          <motion.span
-            className="absolute bottom-0 flex h-10 w-10 items-center justify-center rounded-[5px] transition-colors duration-300 [transition-timing-function:var(--ease-descent)] group-hover:border-[var(--color-accent-hi)] group-focus-visible:border-[var(--color-accent-hi)]"
-            style={{
-              border: "1px solid var(--zone-line-strong)",
-              background:
-                "color-mix(in srgb, var(--color-zone-surface) 55%, transparent)",
-            }}
-            animate={
-              reduced || plunging
-                ? { y: 0 }
-                : { y: [0, 4, 0] }
-            }
-            transition={
-              reduced || plunging
-                ? { duration: 0.2 }
-                : { duration: 2.4, repeat: Infinity, ease: "easeInOut" }
-            }
+          <svg
+            width="28"
+            height="36"
+            viewBox="0 0 28 36"
+            fill="none"
+            className="relative"
           >
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 14 14"
-              fill="none"
-              aria-hidden="true"
-              className="transition-colors duration-300 group-hover:text-[var(--color-accent-hi)] group-focus-visible:text-[var(--color-accent-hi)]"
-            >
-              <path
-                d="M2.5 5.25 7 9.75l4.5-4.5"
-                stroke="currentColor"
-                strokeWidth="1.4"
-                strokeLinecap="square"
-                strokeLinejoin="miter"
-              />
-            </svg>
-          </motion.span>
-        </span>
+            {/* Ring */}
+            <circle
+              cx="14"
+              cy="5.75"
+              r="3.1"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            />
+            {/* Shank */}
+            <path
+              d="M14 8.9V27.5"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
+            {/* Stock */}
+            <path
+              d="M8 13.25h12"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
+            {/* Arms */}
+            <path
+              d="M14 27.5c-5.6 0-8.6-3.35-8.6-7.85"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
+            <path
+              d="M14 27.5c5.6 0 8.6-3.35 8.6-7.85"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
+            {/* Flukes — tip slightly upward */}
+            <path
+              d="M5.4 19.65 5.4 16.4M5.4 19.65h3.4"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M22.6 19.65 22.6 16.4M22.6 19.65h-3.4"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </motion.span>
       </motion.button>
 
       {plunging &&

@@ -261,23 +261,28 @@ function DiagnosticIcon({ id }: { id: string }) {
     "aria-hidden": true as const,
   };
 
+  // Operation — connected system nodes (the model under the interface).
   if (id === "operation") {
     return (
       <svg {...common}>
-        <rect x="3.5" y="4" width="17" height="16" rx="2" />
-        <path d="M3.5 9h17" />
-        <path d="M8 13h3.5M8 16.5h5.5" />
+        <circle cx="12" cy="6.5" r="2.4" />
+        <circle cx="6.5" cy="17" r="2.4" />
+        <circle cx="17.5" cy="17" r="2.4" />
+        <path d="M10.6 8.2 7.8 14.7M13.4 8.2l2.8 6.5" />
       </svg>
     );
   }
 
+  // Site — browser with a commercial page (hero + CTA).
   return (
     <svg {...common}>
-      <rect x="3.5" y="4.5" width="17" height="15" rx="2" />
-      <path d="M3.5 8.5h17" />
-      <circle cx="6.2" cy="6.5" r="0.7" fill="currentColor" stroke="none" />
-      <circle cx="8.4" cy="6.5" r="0.7" fill="currentColor" stroke="none" />
-      <path d="M7 12h6.5M7 15.5h4" />
+      <rect x="3.5" y="4" width="17" height="16" rx="2" />
+      <path d="M3.5 8h17" />
+      <circle cx="6.1" cy="6" r="0.7" fill="currentColor" stroke="none" />
+      <circle cx="8.4" cy="6" r="0.7" fill="currentColor" stroke="none" />
+      <circle cx="10.7" cy="6" r="0.7" fill="currentColor" stroke="none" />
+      <rect x="6.25" y="10.25" width="11.5" height="4" rx="0.7" />
+      <path d="M6.25 16.75h6.5" />
     </svg>
   );
 }

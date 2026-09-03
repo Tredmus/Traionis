@@ -4,12 +4,19 @@
  * Built as a product surface, not a decorated rectangle, so the mid-water
  * band is composed against the volume of an actual interface.
  */
-export function ParkQuiShot() {
+export function ParkQuiShot({
+  lit = false,
+  caption = true,
+}: {
+  /** Bioluminescent map pin pulse — mid-water specimen entrance. */
+  lit?: boolean;
+  caption?: boolean;
+}) {
   return (
     <figure className="w-full">
       <div
-        className="overflow-hidden rounded-[5px]"
-        style={{ border: "1px solid var(--zone-line-strong)" }}
+        className="overflow-hidden"
+        style={{ borderBottom: "1px solid var(--zone-line)" }}
       >
         <div
           className="flex h-10 items-center justify-between px-4 text-label uppercase tracking-[0.14em]"
@@ -28,19 +35,21 @@ export function ParkQuiShot() {
           </span>
         </div>
 
-        <div className="grid min-h-[280px] sm:min-h-[360px] lg:min-h-[420px] lg:grid-cols-[minmax(0,1fr)_17rem]">
-          <MapPlane />
+        <div className="grid min-h-[280px] sm:min-h-[360px] lg:min-h-[440px] lg:grid-cols-[minmax(0,1fr)_17rem]">
+          <MapPlane lit={lit} />
           <ListingRail />
         </div>
       </div>
-      <figcaption className="mt-2 text-label uppercase opacity-35">
-        TODO — screenshot
-      </figcaption>
+      {caption && (
+        <figcaption className="mt-2 text-label uppercase opacity-35">
+          TODO — screenshot
+        </figcaption>
+      )}
     </figure>
   );
 }
 
-function MapPlane() {
+function MapPlane({ lit }: { lit: boolean }) {
   return (
     <div className="relative min-h-[220px] overflow-hidden" style={{ backgroundColor: "#07080c" }}>
       <svg
@@ -98,7 +107,11 @@ function MapPlane() {
           <rect x="246" y="168" width="8" height="8" fill="rgba(242,246,250,0.45)" />
           <rect x="428" y="88" width="8" height="8" fill="rgba(242,246,250,0.45)" />
           <rect x="340" y="230" width="8" height="8" fill="rgba(242,246,250,0.45)" />
-          <rect x="512" y="150" width="8" height="8" fill="#12a8d4" />
+          <g className={lit ? "specimen-pin-lit" : undefined}>
+            <circle cx="516" cy="154" r="14" fill="rgba(18,168,212,0.12)" />
+            <circle cx="516" cy="154" r="7" fill="rgba(18,168,212,0.22)" />
+            <rect x="512" y="150" width="8" height="8" fill="#12a8d4" />
+          </g>
         </g>
       </svg>
     </div>
@@ -126,7 +139,10 @@ function ListingRail() {
           className="flex flex-1 items-center justify-between gap-4 px-4 py-3.5 lg:border-t-0 lg:py-0"
           style={{
             borderTop: index === 0 ? undefined : "1px solid var(--zone-line)",
-            backgroundColor: index === 2 ? "rgba(123, 47, 247, 0.08)" : undefined,
+            backgroundColor:
+              index === 2
+                ? "color-mix(in srgb, var(--color-accent-hi) 10%, transparent)"
+                : undefined,
           }}
         >
           <div>
