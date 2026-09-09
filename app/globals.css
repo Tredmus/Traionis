@@ -213,59 +213,6 @@ textarea {
 }
 
 /*
- * Mid-water specimen plate — darker frost than shallows diagnostics so the
- * product surface reads as an artifact under a lamp, not a control panel.
- */
-.specimen-glass {
-  background-color: rgb(3 7 15 / 0.42);
-  border: 1px solid rgb(242 246 250 / 0.12);
-  box-shadow:
-    inset 0 1px 0 rgb(242 246 250 / 0.06),
-    0 32px 70px -40px rgb(3 7 15 / 0.75);
-  -webkit-backdrop-filter: blur(22px) saturate(1.1);
-  backdrop-filter: blur(22px) saturate(1.1);
-}
-
-.specimen-pin-lit {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: specimen-pin-pulse 2.4s var(--ease-descent) 0.6s both;
-}
-
-@keyframes specimen-pin-pulse {
-  0% {
-    opacity: 0.35;
-    transform: scale(0.55);
-  }
-  35% {
-    opacity: 1;
-    transform: scale(1.15);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .specimen-pin-lit {
-    animation: none;
-  }
-}
-
-@media (prefers-reduced-transparency: reduce) {
-  .specimen-glass {
-    background-color: color-mix(
-      in srgb,
-      var(--color-zone-abyss) 55%,
-      var(--color-zone-mid)
-    );
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-  }
-}
-
-/*
  * Diagnostic glass — same idea as the header: dark water looking through
  * frost. A white wash over shallows reads as light blue; abyss tint keeps
  * the plate in the water instead of sitting on top of it.
@@ -334,10 +281,998 @@ textarea {
   }
 }
 
+/* ============================================================
+   THE DIVE GALLERY — mid-water evidence, and the lamp you carry
+   ------------------------------------------------------------
+   Ambient light has nearly run out at −200m, so the work is dark
+   by default and full colour arrives only where the lamp falls.
+
+   The lit copy of each shot sits in a fixed-size masked box that
+   is TRANSLATED to the lamp, with the image counter-translated
+   inside it so it stays registered with the dark copy beneath.
+   Both are transforms, so the beam moves on the compositor and
+   the radial mask is rasterised exactly once. Animating a mask
+   position instead repaints a full-width image every frame,
+   which is what fails on a phone.
+
+   No lamp state = every plate fully lit. That is the no-JS
+   render, the reduced-motion render, and the floor this section
+   is allowed to fall back to. Nothing is hidden behind effect.
+   ============================================================ */
+
+.dive-column {
+  position: relative;
+  /* The light belongs to this band. It does not cross a boundary the
+     whole system is built on. */
+  overflow: clip;
+}
+
+.dive-column__plates {
+  position: relative;
+  z-index: 10;
+  margin-inline: auto;
+  display: flex;
+  width: 100%;
+  max-width: 72rem;
+  flex-direction: column;
+  gap: 7rem;
+  padding-inline: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .dive-column__plates {
+    gap: 9.5rem;
+    padding-inline: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .dive-column__plates {
+    /* Wider than the text measure above it, and clearly so. The work is
+       bigger than the page describing it; a near-match would just read as a
+       misaligned edge. */
+    max-width: 80rem;
+    gap: 13rem;
+    padding-inline: 4rem;
+  }
+}
+
+/* The pool of light. Plain alpha, no blend mode: the band is dark enough
+   that a low-alpha wash reads as a light pool, and blend modes are trapped
+   inside the zone's stacking context anyway. */
+.dive-lamp {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 44rem;
+  height: 44rem;
+  margin: -22rem 0 0 -22rem;
+  opacity: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    closest-side,
+    rgb(168 214 255 / 0.13) 0%,
+    rgb(140 196 255 / 0.075) 30%,
+    rgb(110 170 240 / 0.03) 56%,
+    rgb(110 170 240 / 0) 78%
+  );
+  will-change: transform, opacity;
+}
+
+.plate {
+  position: relative;
+  display: grid;
+  width: var(--plate-w, 100%);
+  gap: 2.25rem;
+}
+
+.plate[data-side="right"] {
+  margin-left: auto;
+}
+
+@media (min-width: 1024px) {
+  .plate {
+    grid-template-columns: minmax(0, 1fr) 20rem;
+    align-items: end;
+    gap: 3.5rem;
+  }
+
+  .plate[data-side="right"] {
+    grid-template-columns: 20rem minmax(0, 1fr);
+  }
+
+  .plate[data-side="right"] .plate__figure {
+    order: 2;
+  }
+
+  .plate[data-side="right"] .plate__label {
+    order: 1;
+  }
+}
+
+.plate__figure {
+  position: relative;
+  margin: 0;
+}
+
+.plate__window {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--zone-line);
+  border-radius: 16px;
+  background-color: rgb(3 7 15 / 0.6);
+  box-shadow:
+    inset 0 1px 0 rgb(242 246 250 / 0.05),
+    0 44px 90px -52px rgb(0 0 0 / 0.85);
+  transition: border-color 480ms var(--ease-descent);
+}
+
+.plate:hover .plate__window,
+.plate:focus-within .plate__window {
+  border-color: rgb(18 168 212 / 0.5);
+}
+
+.plate__shot {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.plate__base {
+  position: relative;
+  transition: filter 700ms var(--ease-descent);
+}
+
+/* Narrow screens: a 2.2:1 browser capture shrunk to phone width is a strip
+   with nothing readable in it. Crop to the working corner instead — where
+   every one of these sites puts its name and its claim — so the evidence
+   arrives at a size worth looking at. Most of this site's traffic is here. */
+@media (max-width: 1023px) {
+  .plate__window {
+    aspect-ratio: 4 / 3;
+  }
+
+  .plate__base {
+    position: absolute;
+    inset: 0;
+  }
+
+  .plate__shot {
+    height: 100%;
+    object-fit: cover;
+    object-position: left top;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .plate__window {
+    aspect-ratio: 16 / 10;
+  }
+}
+
+/* Water standing between you and the plate. Sibling of the base, so the
+   beam cuts through it rather than being dimmed by it. */
+.plate__veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0;
+  background-color: color-mix(in srgb, var(--color-zone-mid) 40%, transparent);
+  transition: opacity 700ms var(--ease-descent);
+  pointer-events: none;
+}
+
+[data-lamp] .plate__base {
+  filter: brightness(var(--ambient, 0.5)) saturate(0.34) contrast(1.12);
+}
+
+[data-lamp] .plate__veil {
+  opacity: 1;
+}
+
+.plate__beam {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: var(--beam, 27rem);
+  height: var(--beam, 27rem);
+  margin-top: calc(var(--beam, 27rem) / -2);
+  margin-left: calc(var(--beam, 27rem) / -2);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(var(--lx, 0px), var(--ly, 0px), 0);
+  -webkit-mask-image: radial-gradient(
+    closest-side,
+    #000 0%,
+    #000 22%,
+    rgb(0 0 0 / 0.72) 46%,
+    rgb(0 0 0 / 0.22) 68%,
+    transparent 86%
+  );
+  mask-image: radial-gradient(
+    closest-side,
+    #000 0%,
+    #000 22%,
+    rgb(0 0 0 / 0.72) 46%,
+    rgb(0 0 0 / 0.22) 68%,
+    transparent 86%
+  );
+  /* No `will-change` here, deliberately. Promoting a masked layer makes
+     Chrome paint it over the plate beneath it — the whole shot goes black.
+     Chrome promotes an actively transformed element on its own, so the beam
+     still moves on the compositor without the hint. */
+}
+
+.plate__carry {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--pw, 0px);
+  height: var(--ph, 0px);
+  transform: translate3d(
+    calc(var(--beam, 27rem) / 2 - var(--lx, 0px)),
+    calc(var(--beam, 27rem) / 2 - var(--ly, 0px)),
+    0
+  );
+}
+
+.plate__shot--lit {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* The lamp is closer than the sun was. */
+  filter: saturate(1.14) brightness(1.06);
+}
+
+[data-lamp] .plate__beam {
+  opacity: 1;
+}
+
+/* Coarse pointer: there is no cursor to carry the lamp, so the lamp lands on
+   each plate as it crosses the viewport. Driven by a scroll timeline, which
+   runs off the main thread — the only way this holds 60fps on a phone. */
+@supports (animation-timeline: view()) {
+  [data-lamp="scroll"] .plate__beam {
+    --beam: calc(var(--pw, 0px) * 1.15);
+    --lx: calc(var(--pw, 0px) / 2);
+    --ly: calc(var(--ph, 0px) / 2);
+    animation: plate-sweep linear both;
+    animation-timeline: view();
+    animation-range: entry 26% cover 54%;
+  }
+}
+
+@keyframes plate-sweep {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Instrumentation on the plate's outer edge. A measurement — where this build
+   hangs in the column — not a section number. */
+.plate__depth {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .plate__depth {
+    position: absolute;
+    top: 0.25rem;
+    display: block;
+    writing-mode: vertical-rl;
+    font-size: var(--text-label);
+    letter-spacing: 0.16em;
+    color: color-mix(in srgb, var(--zone-ink) 52%, transparent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .plate[data-side="left"] .plate__depth {
+    left: -2.5rem;
+  }
+
+  .plate[data-side="right"] .plate__depth {
+    right: -2.5rem;
+  }
+
+  .plate__depth::after {
+    content: "";
+    position: absolute;
+    top: calc(100% + 0.85rem);
+    left: 50%;
+    width: 1px;
+    height: 4rem;
+    background-image: linear-gradient(
+      to bottom,
+      var(--zone-line-strong),
+      transparent
+    );
+  }
+}
+
+/* The tag riveted to the plate. Chrome, not part of the shot, so it stays
+   legible whether the lamp has found this one or not. */
+.plate__tag {
+  position: absolute;
+  bottom: 0.875rem;
+  left: 0.875rem;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgb(242 246 250 / 0.14);
+  border-radius: 7px;
+  padding: 0.35rem 0.6rem;
+  background-color: rgb(3 7 15 / 0.64);
+  -webkit-backdrop-filter: blur(10px) saturate(1.1);
+  backdrop-filter: blur(10px) saturate(1.1);
+  font-size: var(--text-label);
+  letter-spacing: 0.08em;
+  color: color-mix(in srgb, var(--zone-ink) 78%, transparent);
+  pointer-events: none;
+}
+
+@media (min-width: 640px) {
+  .plate__tag {
+    bottom: 1.25rem;
+    left: 1.25rem;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .plate__tag {
+    background-color: rgb(3 7 15 / 0.92);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+.plate__name {
+  font-size: clamp(2rem, 5.2vw, 3.4rem);
+  line-height: 0.94;
+  letter-spacing: -0.028em;
+}
+
+/* Same hover vocabulary as every other link on the site: a 1px accent rule
+   drawing left to right. Here it is driven by the whole plate. */
+.plate__link {
+  position: relative;
+  color: inherit;
+  text-decoration: none;
+  background-image: linear-gradient(
+    var(--color-accent-hi),
+    var(--color-accent-hi)
+  );
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  transition: background-size 340ms var(--ease-descent);
+}
+
+.plate:hover .plate__link,
+.plate__link:focus-visible {
+  background-size: 100% 1px;
+}
+
+/* The plate-wide click target. Sits under the explicit links below it. */
+.plate__link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.plate__status {
+  margin-top: 0.9rem;
+  font-size: var(--text-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--zone-ink) 64%, transparent);
+}
+
+.plate__links {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 2rem;
+  margin-top: 2.25rem;
+}
+
+/* ============================================================
+   PROCESS TRAIL — mid-water current
+   ------------------------------------------------------------
+   Alternating L/R stations. One SVG path snakes between them and
+   draws as a jellyfish rides its tip. Geometry is measured in JS;
+   these rules only own layout, stroke weight, and the living mark.
+   ============================================================ */
+
+.process-trail__list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3.5rem, 8vw, 6.5rem);
+}
+
+.process-trail__step {
+  position: relative;
+  display: flex;
+  /* Leave a centre corridor on narrow screens so the path + jelly
+     don't swim through the copy. */
+  width: min(86%, 28rem);
+  max-width: 100%;
+  align-items: flex-start;
+  gap: 1.1rem;
+}
+
+.process-trail__step--left {
+  align-self: flex-start;
+  padding-right: 0.25rem;
+}
+
+.process-trail__step--right {
+  align-self: flex-end;
+  text-align: right;
+  padding-left: 0.25rem;
+}
+
+.process-trail__step--right .process-trail__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+@media (min-width: 768px) {
+  .process-trail__step {
+    width: min(46%, 26rem);
+  }
+
+  .process-trail__step--left {
+    padding-right: 0;
+  }
+
+  .process-trail__step--right {
+    padding-left: 0;
+  }
+}
+
+.process-trail__station {
+  position: relative;
+  z-index: 2;
+  margin-top: 0.45rem;
+  display: block;
+  width: 11px;
+  height: 11px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1.5px solid color-mix(in srgb, var(--zone-ink) 35%, transparent);
+  background-color: transparent;
+  box-shadow: none;
+  transition:
+    border-color 480ms var(--ease-descent),
+    background-color 480ms var(--ease-descent),
+    box-shadow 480ms var(--ease-descent);
+}
+
+.process-trail__station[data-lit="true"] {
+  border-color: var(--color-accent-hi);
+  background-color: color-mix(in srgb, var(--color-accent-hi) 55%, transparent);
+  box-shadow: 0 0 14px -1px color-mix(in srgb, var(--color-accent-hi) 70%, transparent);
+}
+
+.process-trail__title {
+  display: inline;
+  padding-bottom: 0.2em;
+  background-image: linear-gradient(
+    var(--color-accent-hi),
+    var(--color-accent-hi)
+  );
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: 0% 1.5px;
+  transition: background-size 620ms var(--ease-descent);
+}
+
+.process-trail__step--right .process-trail__title {
+  background-position: right bottom;
+}
+
+.process-trail__step[data-current="true"] .process-trail__title {
+  background-size: 100% 1.5px;
+}
+
+.process-trail__ghost {
+  stroke: color-mix(in srgb, var(--zone-ink) 14%, transparent);
+  stroke-width: 1.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.process-trail__line {
+  stroke: color-mix(in srgb, var(--color-accent-hi) 72%, var(--zone-ink));
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.process-jelly {
+  transform-box: fill-box;
+  transform-origin: center;
+  will-change: transform;
+}
+
+.process-jelly__mark {
+  animation: process-jelly-drift 3.6s ease-in-out infinite;
+}
+
+.process-jelly__glow {
+  fill: color-mix(in srgb, var(--color-accent-hi) 16%, transparent);
+}
+
+.process-jelly__bell {
+  fill: color-mix(in srgb, var(--color-accent-hi) 22%, transparent);
+  stroke: var(--color-accent-hi);
+  stroke-width: 1.35;
+  stroke-linejoin: round;
+}
+
+.process-jelly__shine {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-ink) 55%, var(--color-accent-hi));
+  stroke-width: 1;
+  stroke-linecap: round;
+  opacity: 0.7;
+}
+
+.process-jelly__tendril {
+  fill: none;
+  stroke: var(--color-accent-hi);
+  stroke-width: 1.1;
+  stroke-linecap: round;
+  animation: process-tendril 2.8s ease-in-out infinite;
+  transform-origin: 0px 2px;
+}
+
+.process-jelly__tendril--mid {
+  animation-delay: 0.35s;
+}
+
+.process-jelly__tendril--late {
+  animation-delay: 0.7s;
+}
+
+@keyframes process-jelly-drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(0.6px, 1.4px) scale(1.04);
+  }
+}
+
+@keyframes process-tendril {
+  0%,
+  100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(4deg);
+  }
+}
+
+
+/* ============================================================
+   THE FAQ — −1,000m
+   ------------------------------------------------------------
+   Native <details>/<summary>. No cards: hairline-separated rows,
+   the same vocabulary as every other list on the site. The
+   question carries the site's single hover gesture — the 3px
+   shift Button and HoverLink already use — so opening an answer
+   feels like every other interaction here.
+
+   `interpolate-size` is scoped to the list rather than :root: it
+   is only needed to animate height to `auto`, and a global
+   opt-in would quietly change how every other keyword size on
+   the site animates.
+   ============================================================ */
+
+.faq-list {
+  border-top: 1px solid var(--zone-line);
+  interpolate-size: allow-keywords;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--zone-line);
+}
+
+.faq-summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 1.6rem 0;
+  cursor: pointer;
+  /* Both are required: the second is the only one older WebKit reads. */
+  list-style: none;
+  transition: color 300ms var(--ease-descent);
+}
+
+.faq-summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-summary:focus-visible {
+  outline: 2px solid var(--color-accent-hi);
+  outline-offset: 4px;
+  border-radius: 3px;
+}
+
+.faq-question {
+  font-family: var(--font-display);
+  font-size: clamp(1.0625rem, 1.6vw, 1.3rem);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  font-stretch: 106%;
+  text-wrap: balance;
+  transition: transform 280ms var(--ease-descent);
+}
+
+.faq-summary:hover .faq-question {
+  transform: translateX(3px);
+}
+
+.faq-mark {
+  width: 0.875rem;
+  height: 0.875rem;
+  flex-shrink: 0;
+  align-self: center;
+  color: color-mix(in srgb, var(--zone-ink) 50%, transparent);
+  transition: color 300ms var(--ease-descent);
+}
+
+.faq-summary:hover .faq-mark,
+.faq-item[open] .faq-mark {
+  color: var(--color-accent-hi);
+}
+
+/* Plus becomes minus. The stem collapses rather than the whole glyph
+   spinning — a rotation would be motion for its own sake. */
+.faq-mark__stem {
+  transform-origin: center;
+  transform-box: fill-box;
+  transition: transform 320ms var(--ease-descent);
+}
+
+.faq-item[open] .faq-mark__stem {
+  transform: scaleY(0);
+}
+
+.faq-answer {
+  padding-bottom: 2rem;
+  max-width: 62ch;
+}
+
+.faq-answer p {
+  color: color-mix(in srgb, var(--zone-ink) 74%, transparent);
+}
+
+.faq-answer p + p {
+  margin-top: 1.1rem;
+}
+
+/* Progressive enhancement: browsers without ::details-content simply snap
+   open, which is a perfectly good accordion. */
+@supports selector(::details-content) {
+  .faq-item::details-content {
+    block-size: 0;
+    overflow: hidden;
+    content-visibility: hidden;
+    transition:
+      block-size 420ms var(--ease-descent),
+      content-visibility 420ms allow-discrete;
+  }
+
+  .faq-item[open]::details-content {
+    block-size: auto;
+    content-visibility: visible;
+  }
+}
+
+/* ============================================================
+   THE ABYSS FORM — −4,000m, and the decision
+   ------------------------------------------------------------
+   Bioluminescence: the thing the accent token was named for.
+   The light is built to behave like an emitter rather than a
+   CSS glow — a near-white core with a blue cast, the cyan accent
+   as the body, a deeper blue-green in the falloff. A flat
+   single-hue blur is what reads as cheap; three stops read as
+   something actually emitting.
+
+   Light lands on the interactive parts ONLY: rules, caret, focus,
+   button, selection. Headings, labels and body copy stay plain
+   ink. Neon type is the cheap version of this idea and would
+   wreck contrast at the exact moment someone is writing to you.
+
+   The glows here are light sources, not the zero-offset halos
+   this codebase otherwise refuses. Button.tsx says "no glow, no
+   shadow" and means it — `.abyss-emitter` is that rule's single
+   scoped exception, in the one band where the atmosphere data
+   says daylight is zero and artificial light is all there is.
+   ============================================================ */
+
+.abyss-contact {
+  /* Scoped to this section rather than the whole band: Founder shares the
+     abyss and keeps the site's neutral hairlines. */
+  --abyss-line: rgb(94 196 238 / 0.22);
+  --abyss-line-filled: rgb(94 196 238 / 0.42);
+  --abyss-hot: var(--color-accent-hi);
+  --abyss-core: rgb(196 240 255);
+  /* The one other colour the deep actually has. Deliberately foreign against
+     all that cyan — the wrong wavelength for this depth, which is exactly what
+     an error should feel like. Never the only signal: the text names the
+     problem and the fix. */
+  --abyss-warn: #ff9a6a;
+}
+
+/* The band announces itself with one lit rule. The heading above it stays
+   plain ink so the submit keeps the only real emission. */
+.abyss-contact__rule {
+  display: block;
+  width: min(22rem, 100%);
+  height: 1px;
+  margin-top: 2.25rem;
+  background-color: var(--abyss-hot);
+  opacity: 0.55;
+}
+
+.abyss-contact__body {
+  display: grid;
+  gap: 3.5rem;
+  margin-top: 4.5rem;
+}
+
+.abyss-contact__form {
+  min-width: 0;
+}
+
+.abyss-contact__aside {
+  border-top: 1px solid var(--abyss-line);
+  padding-top: 2rem;
+}
+
+@media (min-width: 1024px) {
+  .abyss-contact__body {
+    grid-template-columns: minmax(0, 1fr) 19rem;
+    align-items: start;
+    gap: 5.5rem;
+    margin-top: 6rem;
+  }
+
+  .abyss-contact__aside {
+    border-top: 0;
+    border-left: 1px solid var(--abyss-line);
+    padding-top: 0.5rem;
+    padding-left: 3rem;
+  }
+}
+
+.abyss-form {
+  display: flex;
+  max-width: 40rem;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.abyss-form__pair {
+  display: grid;
+  gap: 2.5rem;
+}
+
+@media (min-width: 640px) {
+  .abyss-form__pair {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.abyss-field__label {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  font-size: var(--text-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--zone-ink) 62%, transparent);
+}
+
+.abyss-field__optional {
+  letter-spacing: 0.08em;
+  text-transform: none;
+  color: color-mix(in srgb, var(--zone-ink) 42%, transparent);
+}
+
+.abyss-field__line {
+  position: relative;
+  margin-top: 0.85rem;
+}
+
+.abyss-field__control {
+  display: block;
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid var(--abyss-line);
+  background-color: transparent;
+  padding: 0.65rem 0 0.7rem;
+  /* 1rem floor: iOS zooms the whole page on focus below 16px, and most of
+     this site's traffic is on a phone. */
+  font-size: max(1rem, var(--text-body));
+  color: var(--zone-ink);
+  /* The blinking cursor in a dark field is a small living light. */
+  caret-color: var(--abyss-hot);
+  transition: border-color 420ms var(--ease-descent);
+}
+
+.abyss-field__control--area {
+  min-height: 9.5rem;
+  resize: vertical;
+  font-size: max(1rem, var(--text-lead));
+  line-height: 1.5;
+}
+
+.abyss-field__control::placeholder {
+  color: color-mix(in srgb, var(--zone-ink) 38%, transparent);
+}
+
+/* Burns steady once it holds something. The form visibly responds to being
+   used, with no JavaScript involved. */
+.abyss-field__control:not(:placeholder-shown) {
+  border-bottom-color: var(--abyss-line-filled);
+}
+
+.abyss-field__control:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Focus ignites the rule left to right — a wake through dinoflagellates. */
+.abyss-field__line::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 1px;
+  background-color: var(--abyss-hot);
+  box-shadow: 0 0 10px -1px color-mix(in srgb, var(--abyss-hot) 70%, transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 460ms var(--ease-descent);
+  pointer-events: none;
+}
+
+.abyss-field__line:focus-within::after {
+  transform: scaleX(1);
+}
+
+/* The keyboard ring is never removed — it is moved off the type and turned
+   into a frame, so it belongs to the field instead of boxing the words. */
+.abyss-field__control:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--abyss-hot) 70%, transparent);
+  outline-offset: 6px;
+  border-radius: 3px;
+}
+
+.abyss-field[data-invalid="true"] .abyss-field__control {
+  border-bottom-color: var(--abyss-warn);
+}
+
+.abyss-field[data-invalid="true"] .abyss-field__line::after {
+  background-color: var(--abyss-warn);
+  box-shadow: none;
+  transform: scaleX(1);
+}
+
+.abyss-field__help,
+.abyss-field__error {
+  margin-top: 0.7rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.abyss-field__help {
+  color: color-mix(in srgb, var(--zone-ink) 54%, transparent);
+}
+
+.abyss-field__error {
+  color: var(--abyss-warn);
+}
+
+/* Off-screen rather than display:none — bots skip what is hidden that way. */
+.abyss-form__trap {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.abyss-form__send {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem 2rem;
+  margin-top: 0.5rem;
+}
+
+/* The emitter. Every other element on this band is a hairline; this is the
+   one solid object, so it is where the light concentrates — a core on the top
+   edge, falloff into the water around it. */
+.abyss-emitter {
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--abyss-core) 55%, transparent),
+    0 2px 12px -2px color-mix(in srgb, var(--abyss-hot) 55%, transparent),
+    0 10px 40px -8px color-mix(in srgb, var(--abyss-hot) 45%, transparent);
+  transition:
+    box-shadow 420ms var(--ease-descent),
+    background-color 300ms var(--ease-descent);
+}
+
+/* Intensifying, not merely brightening — a real source blooms outward. */
+.abyss-emitter:hover:not(:disabled) {
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--abyss-core) 78%, transparent),
+    0 3px 18px -2px color-mix(in srgb, var(--abyss-hot) 72%, transparent),
+    0 16px 60px -10px color-mix(in srgb, var(--abyss-hot) 55%, transparent);
+}
+
+/* Lights dip under load. */
+.abyss-emitter:active:not(:disabled) {
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--abyss-core) 32%, transparent),
+    0 1px 8px -2px color-mix(in srgb, var(--abyss-hot) 40%, transparent);
+}
+
+.abyss-emitter:disabled {
+  box-shadow: none;
+}
+
+/* The resolution: the descent gets an ending. */
+.abyss-done {
+  max-width: 40rem;
+  border-top: 1px solid var(--abyss-hot);
+  padding-top: 2.5rem;
+}
+
 /* The descent must remain fully coherent with all motion disabled. */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  /* No lamp, no gloom. Every plate is simply lit. */
+  .dive-lamp,
+  .plate__beam {
+    display: none;
+  }
+
+  /* A finished path rather than a half-drawn one. Scroll-driven path
+     progress has no CSS duration, so the blanket rule cannot reach it —
+     the jellyfish settles on the last station instead. */
+  .process-jelly__mark,
+  .process-jelly__tendril {
+    animation: none !important;
+  }
+
+  [data-lamp] .plate__base {
+    filter: none;
+  }
+
+  [data-lamp] .plate__veil {
+    opacity: 0;
   }
 
   *,

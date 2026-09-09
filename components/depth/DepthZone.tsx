@@ -45,7 +45,7 @@ interface DepthZoneProps {
   blendHeight?: string;
   /**
    * The surface band paints past its box so the waterline can sit on the
-   * shallows. Hidden everywhere else — atmosphere canvases must not leak.
+   * shallows. Clipped everywhere else — atmosphere canvases must not leak.
    */
   overflow?: "hidden" | "visible";
   /** Replaces the zone token. Gradients allowed — the surface fades out so
@@ -82,7 +82,18 @@ export function DepthZone({
 
   const paddingClass =
     padding === "none" ? "" : "py-28 sm:py-36 lg:py-48";
-  const overflowClass = overflow === "visible" ? "overflow-visible" : "overflow-hidden";
+  /**
+   * `clip`, never `hidden`. Both clip identically, but `overflow: hidden` is a
+   * programmatically scrollable box and therefore a scroll container — which
+   * makes it the resolution target for every `view()` scroll timeline inside
+   * it. Since the band never scrolls, those timelines resolve inactive and
+   * their animations silently freeze at their end state. `clip` is not a
+   * scroll container, so timelines pass through to the document scroller.
+   *
+   * The dive profile and the work gallery's mobile plate sweep both depend on
+   * this.
+   */
+  const overflowClass = overflow === "visible" ? "overflow-visible" : "overflow-clip";
 
   return (
     <Tag

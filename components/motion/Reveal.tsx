@@ -44,6 +44,8 @@ interface RevealProps {
   as?: ElementType;
   className?: string;
   style?: CSSProperties;
+  /** Passed through so a revealed heading can still be an aria target. */
+  id?: string;
 }
 
 export function Reveal({
@@ -54,6 +56,7 @@ export function Reveal({
   as: Tag = "div",
   className,
   style,
+  id,
 }: RevealProps) {
   const ref = useRef<HTMLElement>(null);
   const [state, setState] = useState<RevealState>("idle");
@@ -89,6 +92,7 @@ export function Reveal({
   return (
     <Tag
       ref={ref}
+      id={id}
       className={className}
       style={{
         ...style,

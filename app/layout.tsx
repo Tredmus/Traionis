@@ -75,6 +75,25 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col" suppressHydrationWarning>
+        {/*
+          The direction this band was built to. Emitted as a real HTML comment
+          (not a JSX one, which the compiler strips) so it survives the
+          production build and can be audited against the render.
+        */}
+        <div
+          hidden
+          dangerouslySetInnerHTML={{
+            __html: `<!--
+impeccable:direction — work gallery (MID band)
+THESIS: evidence you have to find. The portfolio refuses the grid of equal thumbnails; the work hangs in the water column and resolves only where the lamp falls.
+OWN-WORLD: the descent's own five flat bands, cyan bioluminescent accent, hairlines, Archivo on its width axis. No new palette, no new components.
+STORY: three real builds, each labelled with what it honestly proves; the visitor sweeps the light, finds them, and follows one out to the live site.
+FIRST VIEWPORT: heading and one line at the measure, then the nearest plate at full width, dark, with the lamp already lit and trailing the cursor.
+FORM: a column of unequal plates receding by width and by ambient light; extension of an established surface, so no concept tournament was run.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance.
+-->` ,
+          }}
+        />
         <LocaleProvider>
           <SkipLink />
           <SiteHeader />

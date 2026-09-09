@@ -91,6 +91,8 @@ export interface WorkSectionCopy {
   intro: string;
   readMore: string;
   viewAll: string;
+  /** Outbound link to a build that is actually live. */
+  visitLive: string;
 }
 
 export interface CapabilityCopy {
@@ -113,27 +115,55 @@ export interface FounderCopy {
   body: readonly string[];
 }
 
-export interface BudgetOptionCopy {
-  value: string;
-  label: string;
+export interface FaqItemCopy {
+  id: string;
+  question: string;
+  /**
+   * Empty array = not answered yet, and the item does not render at all.
+   * Every answer here is a factual claim about how the studio operates, so an
+   * unanswered question waits rather than getting something plausible. Same
+   * rule as `lib/work.ts`.
+   */
+  answer: readonly string[];
+}
+
+export interface FaqCopy {
+  heading: string;
+  intro: string;
+  items: readonly FaqItemCopy[];
 }
 
 export interface ContactCopy {
   heading: string;
   intro: string;
+  /**
+   * Declaration order is the render order, and it leads with the work rather
+   * than the person. Asking for a name first says "identify yourself"; asking
+   * what they are building says "tell me about the work" — and anyone without
+   * a project to describe stalls on the first field, which is the filter doing
+   * its job without a gate.
+   *
+   * There is no budget field. Confirmed decision: scope is captured in prose
+   * and money comes up on the call. A bracket selector reads as a price gate,
+   * and there is no floor for it to enforce.
+   */
   fields: {
+    project: { label: string; placeholder: string; help: string };
+    timeline: { label: string; placeholder: string };
     name: { label: string; placeholder: string };
     email: { label: string; placeholder: string };
     company: { label: string; placeholder: string; optional: string };
-    project: { label: string; placeholder: string; help: string };
-    timeline: { label: string; placeholder: string };
-    budget: { label: string; help: string; options: readonly BudgetOptionCopy[] };
   };
   submit: string;
   submitting: string;
+  successHeading: string;
   success: string;
   errorRequired: string;
   errorEmail: string;
+  /** Shown when the form service refuses the POST or the network fails. */
+  errorSubmit: string;
+  /** Build-time guard. Rendered only when no endpoint is configured. */
+  errorUnconfigured: string;
   /** The filtering line. Honest, not defensive. */
   exclusionsHeading: string;
   exclusions: string;
@@ -162,6 +192,7 @@ export interface SiteCopy {
   process: ProcessCopy;
   work: WorkSectionCopy;
   capabilities: CapabilitiesCopy;
+  faq: FaqCopy;
   founder: FounderCopy;
   contact: ContactCopy;
   footer: FooterCopy;

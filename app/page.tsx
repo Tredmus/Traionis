@@ -2,6 +2,7 @@ import { DepthZone } from "@/components/depth/DepthZone";
 import { ZoneThreshold } from "@/components/depth/ZoneThreshold";
 import { Capabilities } from "@/components/sections/Capabilities";
 import { Contact } from "@/components/sections/Contact";
+import { Faq } from "@/components/sections/Faq";
 import { Founder } from "@/components/sections/Founder";
 import { Hero } from "@/components/sections/Hero";
 import { Offerings } from "@/components/sections/Offerings";
@@ -39,8 +40,6 @@ export default function HomePage() {
         {/* Zone name lives in the services rail (SHALLOWS). Numeric −40m
             threshold removed for this band — readings elsewhere stay. */}
         <Offerings />
-        {/* Process stays here for now; move after Portfolio in a later pass. */}
-        <Process />
       </DepthZone>
 
       <DepthZone
@@ -52,6 +51,9 @@ export default function HomePage() {
       >
         <ZoneThreshold zone="mid" />
         <WorkZone />
+        {/* Proof, then procedure. Someone holding three proposals wants to see
+            that you can build the thing before hearing how the work is run. */}
+        <Process />
       </DepthZone>
 
       <DepthZone
@@ -62,6 +64,9 @@ export default function HomePage() {
       >
         <ZoneThreshold zone="deep" />
         <Capabilities />
+        {/* What gets built, then how the arrangement works — the objections
+            are handled here so the floor can stay about the decision. */}
+        <Faq />
       </DepthZone>
 
       <DepthZone
