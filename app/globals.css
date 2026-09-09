@@ -782,6 +782,8 @@ textarea {
 
 .process-trail__step[data-current="true"] .process-trail__title {
   background-size: 100% 1.5px;
+  /* Let the station light first, then draw the line. */
+  transition-delay: 160ms;
 }
 
 .process-trail__ghost {

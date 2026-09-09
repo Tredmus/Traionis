@@ -208,22 +208,21 @@ export function Process() {
     if (line) line.style.strokeDashoffset = String(1 - progress);
 
     const stops = motion.current.stops;
-    const current = nearestStop(progress, stops);
-    let currentIndex = 0;
+    let activeIndex = -1;
     for (let i = 0; i < stops.length; i++) {
-      if (Math.abs(stops[i] - current.stop) < 0.0001) {
-        currentIndex = i;
-        break;
-      }
+      // Only once the jelly has reached the station checkpoint.
+      if (progress >= stops[i] - 0.008) activeIndex = i;
+      else break;
     }
 
     stationRefs.current.forEach((node, i) => {
       if (!node) return;
       const stop = stops[i] ?? 0;
-      node.dataset.lit = progress >= stop - 0.015 ? "true" : "false";
+      const reached = progress >= stop - 0.008;
+      node.dataset.lit = reached ? "true" : "false";
       const step = node.closest(".process-trail__step");
       if (step instanceof HTMLElement) {
-        step.dataset.current = i === currentIndex ? "true" : "false";
+        step.dataset.current = i === activeIndex ? "true" : "false";
       }
     });
   }, []);
