@@ -50,7 +50,7 @@ export function Faq() {
   if (items.length === 0) return null;
 
   return (
-    <section aria-labelledby="faq-heading" className="mt-32 sm:mt-44">
+    <section aria-labelledby="faq-heading" className="mt-20 sm:mt-28">
       <ZoneInner>
         <Reveal
           as="h2"

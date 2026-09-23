@@ -35,7 +35,7 @@ export default function HomePage() {
         padding="none"
         id="offerings"
         overflow="visible"
-        className="relative z-0 -mt-[var(--hero-waterline-overlap)] pb-32 pt-[calc(var(--hero-waterline-overlap)+7rem)] sm:pb-44 sm:pt-[calc(var(--hero-waterline-overlap)+9rem)]"
+        className="relative z-0 -mt-[var(--hero-waterline-overlap)] pb-20 pt-[calc(var(--hero-waterline-overlap)+5.5rem)] sm:pb-28 sm:pt-[calc(var(--hero-waterline-overlap)+7rem)]"
       >
         {/* Zone name lives in the services rail (SHALLOWS). Numeric −40m
             threshold removed for this band — readings elsewhere stay. */}
@@ -47,7 +47,7 @@ export default function HomePage() {
         padding="none"
         id="work"
         blendFrom="shallows"
-        className="pb-32 pt-28 sm:pb-44 sm:pt-36"
+        className="pb-20 pt-16 sm:pb-28 sm:pt-24"
       >
         <ZoneThreshold zone="mid" />
         <WorkZone />
@@ -60,7 +60,7 @@ export default function HomePage() {
         zone="deep"
         padding="none"
         blendFrom="mid"
-        className="pb-32 pt-28 sm:pb-44 sm:pt-36"
+        className="pb-20 pt-16 sm:pb-28 sm:pt-24"
       >
         <ZoneThreshold zone="deep" />
         <Capabilities />
@@ -73,7 +73,7 @@ export default function HomePage() {
         zone="abyss"
         padding="none"
         blendFrom="deep"
-        className="pb-32 pt-28 sm:pb-44 sm:pt-36"
+        className="pb-20 pt-16 sm:pb-28 sm:pt-24"
       >
         <ZoneThreshold zone="abyss" />
         <Founder />

@@ -409,7 +409,7 @@ export function Process() {
   }, [pathD, paint, stepCount]);
 
   return (
-    <section aria-labelledby="process-heading" className="mt-32 sm:mt-44">
+    <section aria-labelledby="process-heading" className="mt-20 sm:mt-28">
       <ZoneInner>
         <Reveal
           as="h2"

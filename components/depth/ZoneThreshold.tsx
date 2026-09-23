@@ -18,7 +18,7 @@ export function ZoneThreshold({ zone }: { zone: ZoneId }) {
   return (
     <ZoneInner>
       <div
-        className="flex items-center gap-5 pb-16 sm:pb-24"
+        className="flex items-center gap-5 pb-10 sm:pb-14"
         style={{ borderTop: "1px solid var(--zone-line)" }}
       >
         <span

@@ -59,7 +59,7 @@ export function Offerings() {
   return (
     <section
       aria-labelledby="offerings-heading"
-      className="relative pb-28 sm:pb-36"
+      className="relative pb-12 sm:pb-16"
     >
       <ZoneInner className="max-w-5xl">
         <header className="max-w-2xl">

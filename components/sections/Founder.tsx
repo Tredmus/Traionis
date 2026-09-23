@@ -18,7 +18,7 @@ export function Founder() {
   const copy = useCopy();
 
   return (
-    <ZoneInner className="pb-28 sm:pb-36">
+    <ZoneInner className="pb-16 sm:pb-24">
       <Reveal as="h2" className="max-w-[18ch] text-display-m font-bold text-balance">
         {copy.founder.heading}
       </Reveal>

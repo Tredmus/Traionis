@@ -42,13 +42,13 @@ export function WorkZone() {
         </header>
       </ZoneInner>
 
-      <div className="mt-20 sm:mt-28 lg:mt-36">
+      <div className="mt-14 sm:mt-20 lg:mt-24">
         <DiveGallery />
       </div>
 
-      <ZoneInner className="mt-24 sm:mt-32">
+      <ZoneInner className="mt-14 sm:mt-20">
         <div
-          className="flex flex-wrap items-center gap-x-8 gap-y-4 pt-8"
+          className="flex flex-wrap items-center gap-x-8 gap-y-4 pt-6"
           style={{ borderTop: "1px solid var(--zone-line)" }}
         >
           <HoverLink href="/work" className="text-body font-medium">
