@@ -76,12 +76,12 @@ export const CASE_STUDIES: readonly CaseStudy[] = [
     slug: "orvyx",
     name: "Orvyx",
     summary:
-      "The product site for LifePod 72 — a sealed hard case built to keep someone alive for 72 hours.",
+      "Product site for LifePod 72 — a sealed IP67 hard case built to keep someone alive for 72 hours.",
     // Confirmed by Miroslav: nothing about this build was technically hard.
     // It must never be written up as an engineering case study, and it carries
     // no invented decisions, constraints, or difficulty.
     proves:
-      "Paid client work, shipped and live. Small scope, fast turnaround, the client's own brand held intact.",
+      "A launch site in the client's own dark, engineered brand, shipped fast and live today.",
     status: "client",
     statusLabel: "Client project — live",
     year: null, // TODO(year): confirm the delivery date.
@@ -108,13 +108,13 @@ export const CASE_STUDIES: readonly CaseStudy[] = [
     slug: "parkqui",
     name: "ParkQui",
     summary:
-      "A full-stack parking marketplace built for a 2,000-member community in Bulgaria.",
+      "A full-stack parking marketplace for a 2,000-member community in Bulgaria.",
     proves:
-      "The engineering one. Roles and permissions, geospatial search, and the admin side that makes a marketplace usable.",
-    // TODO(status): confirm whether ParkQui was a paid client engagement or
-    // self-initiated. Until confirmed, the label below claims nothing.
-    status: "self-initiated",
-    statusLabel: "Full-stack build",
+      "Accounts and roles, map search over live listings, and the admin side that keeps a marketplace running.",
+    // Confirmed by Miroslav: built for a founder, unpaid. Never labelled paid
+    // client work; the arrangement and how it ended stay off the site.
+    status: "unconfirmed",
+    statusLabel: "Built for a founder",
     year: null, // TODO(year)
     stack: ["Next.js", "TypeScript", "PostgreSQL", "Interactive maps", "Auth"],
     live: { href: "https://park-qui.vercel.app/", label: "park-qui.vercel.app" },
@@ -161,14 +161,12 @@ export const CASE_STUDIES: readonly CaseStudy[] = [
     // Both lines below are descriptions of what the live page itself says and
     // shows. Nothing here claims a client, a fee, or an outcome.
     summary:
-      "A launch and waitlist site for an unofficial wrist adapter for the AP × Swatch Royal Pop.",
+      "Launch and waitlist site for an unofficial wrist adapter for the AP × Swatch Royal Pop.",
     proves:
-      "A product launch page carried entirely by type and colour, with the waitlist as its single action.",
-    // TODO(status): Miroslav to confirm what PopWrists actually is — client
-    // work, self-initiated, or a test — and whether it stays in the gallery.
-    // It is standing in for Morion Stones, whose link and code are lost.
-    status: "unconfirmed",
-    statusLabel: "Product site",
+      "Carried by type and colour, with one action: join the waitlist.",
+    // Confirmed by Miroslav: in-house product concept.
+    status: "self-initiated",
+    statusLabel: "In-house product",
     year: null,
     stack: [],
     live: { href: "https://popwrists.vercel.app/", label: "popwrists.vercel.app" },

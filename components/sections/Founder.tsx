@@ -8,11 +8,8 @@ import { useCopy } from "@/lib/locale-context";
  * ABYSS — −4,000m. First half of the band.
  *
  * The pronoun drop. The site speaks as "we" the whole way down and resolves
- * here to one named person, which is what makes the direct-builder-access
- * claim concrete rather than rhetorical.
- *
- * SCAFFOLD: name and role are real; the bio is TODO pending Miroslav's chosen
- * direction. See lib/content/en.ts → founder.body.
+ * here to one named person, speaking as "I". Facts only — see PRODUCT.md for
+ * what this section may and may not say.
  */
 export function Founder() {
   const copy = useCopy();
@@ -32,6 +29,14 @@ export function Founder() {
           {copy.founder.name}
         </p>
         <p className="mt-5 text-label uppercase opacity-45">{copy.founder.role}</p>
+      </Reveal>
+      <Reveal index={2} className="mt-10 flex max-w-[60ch] flex-col gap-5">
+        {copy.founder.body.map((paragraph) => (
+          <p key={paragraph} className="text-lead opacity-80">
+            {paragraph}
+          </p>
+        ))}
+        <p className="mt-3 text-label uppercase opacity-45">{copy.founder.facts}</p>
       </Reveal>
     </ZoneInner>
   );

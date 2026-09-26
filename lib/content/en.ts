@@ -4,22 +4,23 @@ import type { SiteCopy } from "./types";
  * English — the populated source of truth.
  *
  * Every claim here is checkable. Nothing asserts a client, a metric, a
- * testimonial, or a capability that does not exist. If a fact is missing it
- * is marked TODO rather than filled with something plausible.
+ * testimonial, or a capability that does not exist. Voice rules live in
+ * PRODUCT.md: confident, factual, no disqualifiers, minimal negation.
  */
 export const en: SiteCopy = {
   meta: {
-    title: "Traionis — Web development studio in Varna, Bulgaria",
+    title: "Traionis — Custom websites & applications, Varna, Bulgaria",
     description:
-      "Traionis is a web development and digital automation agency based in Varna, Bulgaria. We build custom websites and web applications — you talk to the person who builds it.",
-    ogTitle: "Traionis — Custom websites, built for the business",
+      "Traionis is a web development studio in Varna, Bulgaria. We design and build custom websites and web and mobile applications from the ground up.",
+    ogTitle: "Traionis — You bring the idea. We build the product.",
     ogDescription:
-      "A web development studio in Varna, Bulgaria building custom websites and web applications. You talk to the person who builds it.",
+      "Custom websites and web and mobile applications, designed and built from the ground up by a studio in Varna, Bulgaria.",
   },
 
   nav: {
+    services: "Services",
     work: "Work",
-    about: "About",
+    process: "Process",
     contact: "Contact",
     cta: "Start a project",
     skipToContent: "Skip to content",
@@ -28,269 +29,192 @@ export const en: SiteCopy = {
 
   hero: {
     brand: "Traionis",
-    headline: "Want a website built for your business — not a template?",
-    lead: "Custom websites and web applications from scratch. You talk to the person who builds it. Traionis is a web development and digital automation agency based in Varna, Bulgaria.",
-    ctaPrimary: "I'm ready to start",
-    ctaSecondary: "See what we've built",
-    ctaContinue: "Continue",
+    eyebrow: "Web development studio · Varna, Bulgaria · Est. 2023",
+    headline: "You bring the idea. We build the product.",
+    lead: "Websites and web & mobile applications, designed and built from the first line of code.",
+    ctaPrimary: "Start a project",
+    ctaSecondary: "See the work",
+    ctaContinue: "Dive in",
   },
 
   offerings: {
-    zoneLabel: "SHALLOWS",
-    heading: "Two problems worth paying properly to solve",
-    intro:
-      "Not a service list. If neither of these is your situation, we are probably not the right studio, and it is better to know that now.",
+    zoneLabel: "Services",
+    heading: "What we build",
+    intro: "Designed and built from scratch, around how your business actually works.",
     problems: [
       {
-        id: "operation",
-        question: "Do you need an application that runs the business?",
-        label: "THE OPERATION",
-        title: "The application that runs the business",
-        body: "Bookings, listings, accounts, dashboards, internal tools. The hard part is not the interface, it is the model underneath it.",
+        id: "site",
+        question: "Websites",
+        label: "Websites",
+        title: "Websites that do commercial work",
+        body: "The site a prospect judges you by before they ever speak to you. Designed around what it has to sell, coded from scratch, and tuned for the phone most of your visitors are holding.",
         deliverables: [
-          "Roles and permissions modelled before a screen is drawn",
-          "The admin side built, not just the customer side",
-          "Payments, notifications and automation wired in, not bolted on",
+          "Custom design and front-end, coded by hand",
+          "Fast on mid-range phones, measured on real devices",
+          "Structured for Google and AI search answers",
+          "Bilingual when your market is",
+          "Code, hosting and domain in your name",
         ],
-        proof: {
-          href: "/work/parkqui",
-          label: "See how this worked on ParkQui",
-        },
-        disqualifier: "Not this if an off-the-shelf tool already fits.",
+        proof: { href: "#plate-orvyx", label: "See Orvyx" },
+        timeline: "Live in 1–3 weeks",
       },
       {
-        id: "site",
-        question: "Do you need a site that has to earn its place?",
-        label: "THE SITE",
-        title: "The site that has to earn its place",
-        body: "Your website is doing commercial work. It is the thing a prospect judges you by before they ever speak to you.",
+        id: "operation",
+        question: "Web & mobile applications",
+        label: "Applications",
+        title: "Applications the business runs on",
+        body: "Booking systems, marketplaces, client portals, operations and internal tools — web and mobile, built around how your business actually works.",
         deliverables: [
-          "Built from scratch, no theme, no page builder, no plugin stack",
-          "Measured on a mid-range phone, not the machine it was built on",
-          "Structure and copy written to persuade, not to fill a layout",
+          "Data modelling, accounts, roles and permissions",
+          "Maps and location search",
+          "Admin dashboards and moderation",
+          "Payments, notifications and third-party integrations",
+          "Automation and AI assistants, built into the product",
         ],
-        proof: {
-          // Orvyx case page not published yet — index until it is.
-          href: "/work",
-          label: "See how this worked on Orvyx LifePod",
-        },
-        disqualifier: "Not this if you need it live next week.",
+        proof: { href: "#plate-parkqui", label: "See ParkQui" },
+        timeline: "First working release in 2–5 weeks",
       },
     ],
+    rebuild:
+      "Already have a site? We rebuild it from the foundations. It's easier to build a mansion than to turn an old hut into one.",
   },
 
   process: {
-    heading: "How we work",
-    intro:
-      "Four steps, and the same person is on all four. There is no account manager, because there is no account management layer to put one in.",
+    heading: "How a project runs",
+    intro: "Four stages, each ending with something you can hold.",
     steps: [
       {
         id: "call",
-        title: "A call with the person who will build it",
-        body: "Thirty to forty-five minutes working out what the thing actually has to do, and whether we're the right people to do it. If we aren't, we'll say so on that call.",
+        title: "Discovery call",
+        body: "Thirty to forty-five minutes on what it has to do, who uses it, and what's driving the timing. You leave with a clear next step.",
       },
       {
         id: "scope",
-        title: "A written scope and a fixed price",
-        body: "Before anything is built you get the scope, the timeline and the cost in writing. What's included is written down, and so is what isn't.",
+        title: "Scope and fixed price",
+        body: "Scope, timeline and cost in writing before any code is written. What's included is on paper, and so is what isn't.",
       },
       {
         id: "build",
-        title: "Built where you can see it",
-        body: "You get a working link from the first week and it stays current. Progress is something you check, not something you're told about.",
+        title: "Built in the open",
+        body: "A working link from the first week, updated as we build. You check progress whenever you like.",
       },
       {
         id: "handover",
-        title: "Handed over properly",
-        body: "The repository, the hosting accounts, the domain, and a walkthrough of how the thing works. You leave the engagement able to hire anyone you like next.",
+        title: "Launch and handover",
+        body: "Code, hosting and domain in your name, plus a walkthrough of how it all fits together. Thirty days of fixes included.",
       },
     ],
   },
 
   work: {
-    heading: "What we've built",
-    intro:
-      "Three builds, each shown as it actually ships. What they prove is different in each case, and we say which is which.",
-    readMore: "Read the full breakdown",
+    heading: "Selected work",
+    intro: "Live and linkable. Open any of them on your phone.",
+    readMore: "Read the build breakdown",
     viewAll: "All projects",
     visitLive: "Visit the live site",
   },
 
-  capabilities: {
-    heading: "What that actually involves",
-    intro:
-      "The part a template can't reach. This is where most of the engineering time goes, and it's the reason the work costs what it costs.",
-    items: [
-      {
-        id: "data",
-        title: "Data modelling and access control",
-        body: "Accounts, roles, permissions, and the schema underneath them. Get this wrong at the start and every feature after it is more expensive.",
-      },
-      {
-        id: "geo",
-        title: "Maps and geospatial queries",
-        body: "Interactive maps backed by real location data — searching, filtering, and rendering results without the interface falling over.",
-      },
-      {
-        id: "admin",
-        title: "Admin and moderation systems",
-        body: "The screens the owner uses, not the customer. Listings, approvals, and the day-to-day operations that decide whether a product is actually usable.",
-      },
-      {
-        id: "automation",
-        title: "Integrations and automation, built in",
-        body: "Payment providers, booking assistants, notifications and internal tooling wired into the product itself rather than bolted on as a separate service.",
-      },
-      {
-        id: "performance",
-        title: "Performance as a requirement",
-        body: "Bundle size, scroll behaviour and first paint treated as part of the build rather than something to look at afterwards. This site is the demonstration.",
-      },
-    ],
-  },
-
-  /**
-   * Deliberately NOT led by "How much does it cost" — that ordering signals
-   * the cheap market and is forbidden outright. The price question is answered
-   * honestly, mid-list, where it belongs.
-   *
-   * An item with an empty `answer` does not render. Four questions below are
-   * waiting on facts only Miroslav has; none of them get a plausible-sounding
-   * placeholder, because every answer here is a claim that has to survive
-   * being asked about on the call.
-   */
   faq: {
-    // Deliberately NOT "what working together involves" — that is the Process
-    // section's job, and two headings arguing the same point in different
-    // words is length, not substance. This one is shaped like an objection.
-    heading: "The questions worth asking first",
-    intro:
-      "The questions buyers ask on the call, answered before it. If what you need to know isn't here, put it in the brief.",
+    heading: "Before you ask",
+    intro: "The questions that usually come up on the first call.",
     items: [
-      {
-        id: "who-builds",
-        question: "Who actually writes the code?",
-        answer: [
-          "The person you speak with. There is no account manager in between, and the work is not passed to a junior or sent elsewhere once you have signed.",
-          "That is a fact about how the studio is set up rather than a promise about service quality — which is why it stays true on the days the schedule is tight.",
-        ],
-      },
       {
         id: "timeline",
-        question: "How long does a build take?",
-        // TODO(faq): needs real ranges from Miroslav — typical elapsed time for
-        // a site versus an application, and what actually drives the spread.
-        // Do not invent a number; a timeline is a promise.
-        answer: [],
-      },
-      {
-        id: "price",
-        question: "Why isn't there a price on the site?",
+        question: "How long does a project take?",
         answer: [
-          "Because the number would be wrong. Two projects that sound identical in one sentence can differ by an order of magnitude once you know who uses the thing and what it has to do on the day it goes live.",
-          "You get a real figure on the call, once there is enough on the table to price it honestly. Nothing is quoted before that, and there is no minimum to clear before we will talk.",
+          "Websites take one to three weeks. Applications reach a first working release in two to five weeks, and we build on it from there. The exact timeline goes into the written scope.",
         ],
-      },
-      {
-        id: "after-launch",
-        question: "What happens after it goes live?",
-        // TODO(faq): what is actually offered — handover, a support window,
-        // ongoing maintenance, or nothing by default. State only what is true.
-        answer: [],
       },
       {
         id: "ownership",
         question: "Who owns the code?",
-        // Answered from the handover step in `process.steps`, which is already
-        // confirmed copy. Restating it here is deliberate: someone scanning
-        // the questions should not have to find the answer in another section.
         answer: [
-          "You do. At handover you get the repository, the hosting accounts and the domain, plus a walkthrough of how the thing works.",
-          "Which means you leave able to hire whoever you like next. That is the arrangement working as intended, not a concession.",
+          "You do. The repository, hosting and domain sit in your own accounts from launch day.",
         ],
       },
       {
-        id: "availability",
-        question: "What if you're unavailable in the middle of a project?",
-        // TODO(faq): the honest answer to the question direct-builder access
-        // invites. A one-person studio has a real answer to this and it is
-        // better said plainly than left for the buyer to worry about.
-        answer: [],
+        id: "after-launch",
+        question: "What happens after launch?",
+        answer: [
+          "Every project includes thirty days of fixes. After that, you can keep us on a monthly care plan — hosting, updates, monitoring and small changes — or take the project anywhere you like.",
+        ],
+      },
+      {
+        id: "rebuild",
+        question: "Can you rebuild our existing site?",
+        answer: [
+          "Yes — from the foundations. We don't patch old sites or work in WordPress; it's easier to build a mansion than to turn an old hut into one. You keep your domain, and we carry your search rankings over through the move.",
+        ],
+      },
+      {
+        id: "mobile",
+        question: "Do you build mobile apps?",
+        answer: [
+          "Yes, as part of application work. When a product needs to live on the phone, the mobile app is built alongside the web platform, on the same backend.",
+        ],
       },
       {
         id: "international",
         question: "Do you work with clients outside Bulgaria?",
-        answer: [
-          "Yes — most enquiries come from outside the country. The studio is based in Varna, on the Bulgarian coast, and works in English and Bulgarian.",
-        ],
-      },
-      {
-        id: "fit",
-        question: "What if it turns out we're not a fit?",
-        answer: [
-          "You will hear it on the call, not three weeks into a proposal. Telling you that early costs us a project and saves you a bad one, and it is the reason the call is worth taking even if nothing comes of it.",
-        ],
+        answer: ["Yes. We work remotely, in English and Bulgarian."],
       },
     ],
   },
 
   founder: {
-    heading: "Who you're working with",
+    heading: "Behind the work",
     name: "Miroslav Todorov",
-    role: "Founder — Traionis",
-    // TODO(bio): placeholder. Three written directions pending Miroslav's choice.
-    // Needs: background, years working, what he's best at, why he works this way.
+    role: "Founder & Lead Engineer",
     body: [
-      "TODO(bio): first paragraph — who he is and what he actually does day to day.",
-      "TODO(bio): second paragraph — why the studio is structured this way.",
+      "I started Traionis in 2023 to bring the standard of enterprise software teams to businesses of any size. Before that, I built front-end for a European enterprise healthcare platform and trained at Endava.",
+      "Every project we ship is held to the standard of the site you're reading now.",
     ],
+    facts: "Est. 2023 · Varna, Bulgaria · English / Bulgarian",
   },
 
   contact: {
     heading: "Start a project",
     intro:
-      "Tell us what you're building. You'll get a straight answer on whether we're the right fit and what it would take — not a brochure.",
+      "Tell us what you're building. We'll reply within two working days with next steps.",
     fields: {
       project: {
-        label: "What you're building",
+        label: "What are you building?",
         placeholder:
-          "What it needs to do, who uses it, and what's driving the timing.",
-        help: "Rough notes are fine. Detail here saves a round of emails.",
+          "What it needs to do, who will use it, and when you'd like it live.",
+        help: "A few rough lines are enough.",
       },
-      timeline: { label: "Timeline", placeholder: "When you'd like it live" },
+      timeline: { label: "Ideal launch date", placeholder: "e.g. before March" },
       name: { label: "Name", placeholder: "Your name" },
       email: { label: "Email", placeholder: "you@company.com" },
       company: { label: "Company", placeholder: "Company name", optional: "Optional" },
     },
-    submit: "Send project brief",
+    submit: "Send brief",
     submitting: "Sending…",
     successHeading: "Brief received.",
-    success: "We'll come back to you within two working days — from the person who'd build it, not an account manager.",
+    success: "We'll be in touch within two working days.",
     errorRequired: "This field is required.",
     errorEmail: "Enter a valid email address.",
-    errorSubmit:
-      "That didn't send. Try once more — if it fails again, the fault is ours, not yours.",
+    errorSubmit: "That didn't go through. Please try again in a moment.",
     // TODO(endpoint): remove once NEXT_PUBLIC_CONTACT_ENDPOINT is set in the
     // deploy environment. Visible on purpose — a form that silently accepts a
     // brief and drops it is the worst bug this site could ship.
     errorUnconfigured: "This form isn't connected yet.",
-    exclusionsHeading: "What we don't take on",
-    exclusions:
-      "WordPress theme installs, template customisation, and five-page brochure sites. If that's what you need, you'll get it faster and cheaper somewhere else — and we'd rather say so now.",
   },
 
   footer: {
     description:
-      "Traionis is a web development and digital automation agency based in Varna, Bulgaria, building custom websites and web applications.",
+      "Traionis is a web development studio in Varna, Bulgaria, building custom websites and web and mobile applications.",
+    legalName: "Traionis EOOD",
     location: "Varna, Bulgaria",
     rights: "All rights reserved.",
     columns: [
       {
         heading: "Site",
         links: [
-          { label: "Work", href: "/work" },
-          { label: "About", href: "/about" },
-          { label: "Contact", href: "/contact" },
+          { label: "Services", href: "/#offerings" },
+          { label: "Work", href: "/#work" },
+          { label: "Process", href: "/#process" },
+          { label: "Contact", href: "/#contact" },
         ],
       },
     ],

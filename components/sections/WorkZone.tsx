@@ -2,7 +2,6 @@
 
 import { ZoneInner } from "@/components/depth/DepthZone";
 import { Reveal } from "@/components/motion/Reveal";
-import { HoverLink } from "@/components/ui/HoverLink";
 import { DiveGallery } from "@/components/work/DiveGallery";
 import { useCopy } from "@/lib/locale-context";
 
@@ -45,17 +44,6 @@ export function WorkZone() {
       <div className="mt-14 sm:mt-20 lg:mt-24">
         <DiveGallery />
       </div>
-
-      <ZoneInner className="mt-14 sm:mt-20">
-        <div
-          className="flex flex-wrap items-center gap-x-8 gap-y-4 pt-6"
-          style={{ borderTop: "1px solid var(--zone-line)" }}
-        >
-          <HoverLink href="/work" className="text-body font-medium">
-            {copy.work.viewAll}
-          </HoverLink>
-        </div>
-      </ZoneInner>
     </section>
   );
 }

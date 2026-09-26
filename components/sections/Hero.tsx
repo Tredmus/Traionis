@@ -1,8 +1,9 @@
 "use client";
 
+import type { CSSProperties } from "react";
+
 import { DepthZone, ZoneInner } from "@/components/depth/DepthZone";
 import { HeroCanvas } from "@/components/HeroCanvas";
-import { Reveal } from "@/components/motion/Reveal";
 import { PlungeControl } from "@/components/sections/PlungeControl";
 import { ButtonLink } from "@/components/ui/Button";
 import { useCopy } from "@/lib/locale-context";
@@ -39,49 +40,73 @@ export function Hero() {
       <HeroCanvas className="absolute inset-x-0 top-0 z-[1] h-[calc(100%+3rem)] w-full" />
 
       <ZoneInner className="absolute inset-x-0 top-0 z-10 flex flex-col justify-end overflow-visible pb-2 pt-[calc(var(--header-h)+0.5rem)] sm:pb-3 bottom-[var(--hero-content-bottom)]">
-        <Reveal
-          as="h1"
-          index={0}
-          className="max-w-[14ch] font-display text-[length:var(--hero-brand)] font-bold leading-[0.95] tracking-[-0.02em] text-balance sm:max-w-[16ch]"
-          style={{ fontStretch: "110%" }}
-        >
-          {copy.hero.headline}
-        </Reveal>
+        {/* CSS-only entrance: runs from first paint, never waits on
+            hydration. The headline only rises — it is never transparent, so
+            it paints (and counts as LCP) immediately. */}
+        <p className="hero-in hero-eyebrow flex flex-wrap gap-y-1" style={{ "--i": 0 } as CSSProperties}>
+          {/* Breaks only between segments, never inside "Varna, Bulgaria". */}
+          {copy.hero.eyebrow.split(" · ").map((part, i, parts) => (
+            <span key={part} className="whitespace-nowrap">
+              {part}
+              {i < parts.length - 1 && (
+                <span aria-hidden="true" className="mx-[0.6em] opacity-60">·</span>
+              )}
+            </span>
+          ))}
+        </p>
 
-        <Reveal
-          as="p"
-          index={1}
-          className="mt-[min(0.875rem,1.8dvh)] max-w-[48ch] text-[length:var(--hero-lead)] leading-relaxed sm:mt-[min(1.1rem,2dvh)] [@media(max-height:1040px)]:max-w-[58ch]"
-          style={{
-            // Tinted from the water, never grey.
-            color: "color-mix(in srgb, var(--color-ink) 68%, rgb(58 104 148))",
-          }}
+        <h1
+          data-hero-reflect
+          className="hero-in hero-in--solid mt-[min(1rem,2dvh)] font-display text-[length:var(--hero-brand)] font-bold leading-[0.95] tracking-[-0.02em]"
+          style={{ fontStretch: "110%", "--i": 0 } as CSSProperties}
+        >
+          {/* One sentence per line — the two halves of the deal. */}
+          {copy.hero.headline.split(/(?<=\.)\s+/).map((sentence) => (
+            <span key={sentence} className="block">
+              {sentence}
+            </span>
+          ))}
+        </h1>
+
+        <p
+          className="hero-in mt-[min(0.875rem,1.8dvh)] max-w-[48ch] text-[length:var(--hero-lead)] leading-relaxed sm:mt-[min(1.1rem,2dvh)]"
+          style={
+            {
+              // Tinted from the water, never grey.
+              color: "color-mix(in srgb, var(--color-ink) 68%, rgb(58 104 148))",
+              "--i": 1,
+            } as CSSProperties
+          }
         >
           {copy.hero.lead}
-        </Reveal>
+        </p>
 
-        <Reveal
-          index={2}
-          className="mt-[min(1.25rem,2.6dvh)] flex flex-col gap-3 sm:mt-[min(1.5rem,3dvh)] sm:flex-row sm:items-center sm:gap-4"
+        <div
+          className="hero-in mt-[min(1.25rem,2.6dvh)] flex flex-col gap-3 sm:mt-[min(1.5rem,3dvh)] sm:flex-row sm:items-center sm:gap-4"
+          style={{ "--i": 2 } as CSSProperties}
         >
           <ButtonLink href="/#contact" style={{ height: "var(--hero-cta-h)" }}>
             {copy.hero.ctaPrimary}
           </ButtonLink>
-          <ButtonLink href="/work" variant="outline" style={{ height: "var(--hero-cta-h)" }}>
+          <ButtonLink href="/#work" variant="outline" style={{ height: "var(--hero-cta-h)" }}>
             {copy.hero.ctaSecondary}
           </ButtonLink>
-        </Reveal>
+        </div>
       </ZoneInner>
 
       {/* On the near water, clear of the fold — sounding line into the plunge. */}
-      <Reveal
-        index={3}
-        delay={0.15}
-        className="absolute inset-x-0 z-10 flex justify-center"
-        style={{ bottom: "calc(var(--hero-waterline-overlap) + 4rem)" }}
+      <div
+        data-hero-floor
+        className="hero-in absolute inset-x-0 z-10 flex justify-center"
+        style={
+          {
+            bottom: "calc(var(--hero-waterline-overlap) + 4rem)",
+            "--i": 4,
+          } as CSSProperties
+        }
       >
         <PlungeControl />
-      </Reveal>
+      </div>
     </DepthZone>
   );
 }

@@ -15,11 +15,11 @@ import { EASE_DESCENT } from "@/lib/depth";
 import { useCopy } from "@/lib/locale-context";
 
 /**
- * SHALLOWS — diagnostic tabs.
+ * SHALLOWS — the two offerings.
  *
- * Reader picks a question; the pane below swaps. Not a services list and not
- * a newspaper column — a recessed instrument plate with a segmented control.
- * Two diagnostics only (app that runs the business / site that earns its place).
+ * Reader picks an offering; the pane below swaps. A recessed instrument plate
+ * with a segmented control. Two offerings only (websites / applications).
+ * Interim layout — the section is redesigned after the copy pass.
  */
 
 const SWAP_MS = 0.38;
@@ -181,6 +181,10 @@ export function Offerings() {
               </motion.div>
             </AnimatePresence>
           </div>
+
+          <p className="mt-8 max-w-[62ch] text-body text-[color-mix(in_srgb,var(--zone-ink)_72%,transparent)]">
+            {copy.offerings.rebuild}
+          </p>
         </div>
       </ZoneInner>
     </section>
@@ -240,8 +244,8 @@ function DiagnosticPane({ problem }: { problem: ProblemCopy }) {
       </div>
 
       <aside className="diagnostic-glass-callout rounded-[12px] px-4 py-4 sm:px-5 sm:py-5 lg:mt-10">
-        <p className="text-[0.9375rem] leading-snug text-[color-mix(in_srgb,var(--zone-ink)_68%,transparent)]">
-          {problem.disqualifier}
+        <p className="text-[0.9375rem] font-medium leading-snug text-[color-mix(in_srgb,var(--zone-ink)_88%,transparent)]">
+          {problem.timeline}
         </p>
       </aside>
     </div>

@@ -40,26 +40,26 @@ const newsreader = Newsreader({
 export const metadata: Metadata = {
   metadataBase: new URL("https://traionis.com"),
   title: {
-    default: "Traionis — Web development studio in Varna, Bulgaria",
+    default: "Traionis — Custom websites & applications, Varna, Bulgaria",
     template: "%s — Traionis",
   },
   description:
-    "Traionis is a web development and digital automation agency based in Varna, Bulgaria. We build custom websites and web applications — you talk to the person who builds it.",
+    "Traionis is a web development studio in Varna, Bulgaria. We design and build custom websites and web and mobile applications from the ground up.",
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     siteName: "Traionis",
     locale: "en",
     url: "/",
-    title: "Traionis — You talk to the person who builds it",
+    title: "Traionis — You bring the idea. We build the product.",
     description:
-      "A web development studio in Varna, Bulgaria building custom websites and web applications. Real engineering, not a template resold.",
+      "Custom websites and web and mobile applications, designed and built from the ground up by a studio in Varna, Bulgaria.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Traionis — You talk to the person who builds it",
+    title: "Traionis — You bring the idea. We build the product.",
     description:
-      "A web development studio in Varna, Bulgaria building custom websites and web applications.",
+      "Custom websites and web and mobile applications, designed and built from the ground up by a studio in Varna, Bulgaria.",
   },
   robots: { index: true, follow: true },
 };

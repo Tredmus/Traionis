@@ -18,10 +18,6 @@ import { useCopy } from "@/lib/locale-context";
  * white-alpha every other band uses — while the heading itself stays plain ink
  * and the submit keeps the only real emission. Arrival, without the button
  * having to compete with its own surroundings.
- *
- * The exclusions line sits BESIDE the form rather than after it. It is the
- * actual qualifier now that the budget bracket is gone, so a wrong-fit visitor
- * should meet it before typing, not after sending. Filter, not funnel.
  */
 export function Contact() {
   const copy = useCopy();
@@ -44,15 +40,6 @@ export function Contact() {
         <div className="abyss-contact__body">
           <Reveal index={3} className="abyss-contact__form">
             <ContactForm />
-          </Reveal>
-
-          <Reveal index={4} className="abyss-contact__aside">
-            <p className="text-label uppercase opacity-45">
-              {copy.contact.exclusionsHeading}
-            </p>
-            <p className="mt-5 max-w-[38ch] text-body opacity-65">
-              {copy.contact.exclusions}
-            </p>
           </Reveal>
         </div>
       </ZoneInner>

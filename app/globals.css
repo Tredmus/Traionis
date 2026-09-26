@@ -1043,24 +1043,9 @@ textarea {
   min-width: 0;
 }
 
-.abyss-contact__aside {
-  border-top: 1px solid var(--abyss-line);
-  padding-top: 2rem;
-}
-
 @media (min-width: 1024px) {
   .abyss-contact__body {
-    grid-template-columns: minmax(0, 1fr) 19rem;
-    align-items: start;
-    gap: 5.5rem;
     margin-top: 6rem;
-  }
-
-  .abyss-contact__aside {
-    border-top: 0;
-    border-left: 1px solid var(--abyss-line);
-    padding-top: 0.5rem;
-    padding-left: 3rem;
   }
 }
 
@@ -1249,10 +1234,47 @@ textarea {
   padding-top: 2.5rem;
 }
 
+/* ── Hero entrance ─────────────────────────────────────────────────────────
+   Pure CSS, so it starts on first paint instead of after hydration. The
+   whole sequence lands inside ~600ms. `--solid` rises without fading: the
+   headline is never transparent, so it paints immediately. */
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+}
+
+@keyframes hero-rise {
+  from {
+    transform: translate3d(0, 10px, 0);
+  }
+}
+
+.hero-in {
+  animation: hero-in 520ms var(--ease-descent) both;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+
+.hero-in--solid {
+  animation-name: hero-rise;
+}
+
+.hero-eyebrow {
+  font-size: var(--text-label);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-ink) 58%, rgb(58 104 148));
+}
+
 /* The descent must remain fully coherent with all motion disabled. */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  .hero-in {
+    animation: none;
   }
 
   /* No lamp, no gloom. Every plate is simply lit. */

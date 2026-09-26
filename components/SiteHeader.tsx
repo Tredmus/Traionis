@@ -102,13 +102,13 @@ export function SiteHeader() {
         <nav aria-label="Primary" className="ml-auto flex items-center gap-7">
           <ul className="hidden items-center gap-7 text-body sm:flex">
             <li>
-              <HoverLink href="/work">{copy.nav.work}</HoverLink>
+              <HoverLink href="/#offerings">{copy.nav.services}</HoverLink>
             </li>
             <li>
-              <HoverLink href="/about">{copy.nav.about}</HoverLink>
+              <HoverLink href="/#work">{copy.nav.work}</HoverLink>
             </li>
             <li>
-              <HoverLink href="/contact">{copy.nav.contact}</HoverLink>
+              <HoverLink href="/#process">{copy.nav.process}</HoverLink>
             </li>
           </ul>
 

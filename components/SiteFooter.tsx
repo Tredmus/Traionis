@@ -53,7 +53,7 @@ export function SiteFooter() {
         </div>
 
         <p className="mt-16 text-label uppercase opacity-35">
-          © {year} Traionis. {copy.footer.rights}
+          © {year} {copy.footer.legalName}. {copy.footer.rights}
         </p>
       </ZoneInner>
     </DepthZone>

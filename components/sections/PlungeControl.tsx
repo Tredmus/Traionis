@@ -16,8 +16,8 @@ function easeOutCubic(t: number) {
 /**
  * The invite past the fold.
  *
- * Copy stays neutral — the descent is never named. Idle state is a line-weight
- * anchor on a short tether; accent travels down the tether as the click cue.
+ * Copy stays neutral — the descent is never named. Idle state is a drop
+ * falling into a ripple ring; accent travels down the tether as the click cue.
  * On click: splash the surface, then scroll once that break has played out
  * (button only — ordinary scroll never fires the splash).
  */
@@ -114,102 +114,55 @@ export function PlungeControl({ className = "" }: { className?: string }) {
           {copy.hero.ctaContinue}
         </span>
 
-        {/* Modern line-weight anchor — ring, stock, shank, flukes. */}
-        <motion.span
+        {/* A drop into still water: light slides down the line, and where it
+            lands a flat ring opens and fades. The same gesture the click
+            makes to the surface, at the scale of an icon. */}
+        <span
           aria-hidden="true"
-          className="relative mt-1 flex h-14 w-10 items-end justify-center transition-colors duration-300 [transition-timing-function:var(--ease-descent)] group-hover:text-[var(--color-accent-hi)] group-focus-visible:text-[var(--color-accent-hi)]"
-          animate={
-            reduced || plunging
-              ? { y: 0 }
-              : { y: [0, 5, 0] }
-          }
-          transition={
-            reduced || plunging
-              ? { duration: 0.2 }
-              : { duration: 2.6, repeat: Infinity, ease: "easeInOut" }
-          }
+          className="relative mt-1 flex h-14 w-12 justify-center transition-colors duration-300 [transition-timing-function:var(--ease-descent)] group-hover:text-[var(--color-accent-hi)] group-focus-visible:text-[var(--color-accent-hi)]"
         >
-          {/* Short tether into the ring */}
+          {/* The line */}
           <span
-            className="absolute left-1/2 top-0 h-3 w-px -translate-x-1/2"
+            className="absolute left-1/2 top-0 h-10 w-px -translate-x-1/2"
             style={{
               background:
-                "color-mix(in srgb, currentColor 28%, transparent)",
+                "linear-gradient(to bottom, transparent, color-mix(in srgb, currentColor 45%, transparent))",
             }}
           />
-          {!reduced && !plunging && (
-            <motion.span
-              className="absolute left-1/2 top-0 h-2 w-[1.5px] -translate-x-1/2 rounded-full"
-              style={{ background: "var(--color-accent-hi)" }}
-              animate={{ y: [0, 10], opacity: [0, 1, 0] }}
-              transition={{
-                duration: 1.9,
-                repeat: Infinity,
-                ease: "easeInOut",
-                times: [0, 0.45, 1],
-              }}
-            />
-          )}
 
-          <svg
-            width="28"
-            height="36"
-            viewBox="0 0 28 36"
-            fill="none"
-            className="relative"
-          >
-            {/* Ring */}
-            <circle
-              cx="14"
-              cy="5.75"
-              r="3.1"
-              stroke="currentColor"
-              strokeWidth="1.5"
-            />
-            {/* Shank */}
-            <path
-              d="M14 8.9V27.5"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-            {/* Stock */}
-            <path
-              d="M8 13.25h12"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-            {/* Arms */}
-            <path
-              d="M14 27.5c-5.6 0-8.6-3.35-8.6-7.85"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-            <path
-              d="M14 27.5c5.6 0 8.6-3.35 8.6-7.85"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-            {/* Flukes — tip slightly upward */}
-            <path
-              d="M5.4 19.65 5.4 16.4M5.4 19.65h3.4"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M22.6 19.65 22.6 16.4M22.6 19.65h-3.4"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </motion.span>
+          {/* Resting ring — always there, so the icon reads without motion. */}
+          <span
+            className="absolute left-1/2 top-[2.6rem] h-[5px] w-4 -translate-x-1/2 rounded-[50%] border"
+            style={{ borderColor: "color-mix(in srgb, currentColor 55%, transparent)" }}
+          />
+
+          {!reduced && !plunging && (
+            <>
+              <motion.span
+                className="absolute left-1/2 top-0 h-2.5 w-[2px] -translate-x-1/2 rounded-full"
+                style={{ background: "var(--color-accent-hi)" }}
+                animate={{ y: [0, 34, 34], opacity: [0, 1, 0] }}
+                transition={{
+                  duration: 2.2,
+                  repeat: Infinity,
+                  ease: ["easeIn", "linear"],
+                  times: [0, 0.42, 0.5],
+                }}
+              />
+              <motion.span
+                className="absolute left-1/2 top-[2.6rem] h-[5px] w-4 rounded-[50%] border"
+                style={{ borderColor: "var(--color-accent-hi)", x: "-50%" }}
+                animate={{ scale: [0.4, 0.4, 2.6], opacity: [0, 0.9, 0] }}
+                transition={{
+                  duration: 2.2,
+                  repeat: Infinity,
+                  ease: "easeOut",
+                  times: [0, 0.44, 1],
+                }}
+              />
+            </>
+          )}
+        </span>
       </motion.button>
 
       {plunging &&

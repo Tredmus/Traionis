@@ -319,8 +319,6 @@ function ProjectPlate({
           {name}
         </h3>
 
-        <p className="plate__status">{project.statusLabel}</p>
-
         <p className="mt-6 max-w-[42ch] text-body text-[color-mix(in_srgb,var(--zone-ink)_82%,transparent)]">
           {project.summary}
         </p>

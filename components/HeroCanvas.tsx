@@ -29,6 +29,15 @@ import { PLUNGE_IMPACT_EVENT, PLUNGE_IMPACT_MS, type PlungeImpactDetail } from "
  *
  * Scroll lowers the camera: the looking-down sea compresses toward the cut
  * until only a thin water-break ribbon remains, then the page goes under.
+ *
+ * The headline is reflected in the water. It is read from the DOM (the
+ * element marked `data-hero-reflect`), rasterised once into an offscreen
+ * canvas in the same face, and drawn every frame mirrored about the live
+ * horizon in thin strips, each pushed sideways by its own swell — which is
+ * how a reflection actually breaks up on moving water. The pointer ripple and
+ * the plunge splash tear it the same way they move the crests. It is fitted
+ * into the open water above `data-hero-floor` (the Continue control), so it
+ * never runs into it at any viewport.
  */
 
 interface HeroCanvasProps {
@@ -116,6 +125,14 @@ export function HeroCanvas({ className = "" }: HeroCanvasProps) {
 
     let stars: Star[] = [];
 
+    /** The headline, rasterised once per layout. Null until measured. */
+    let reflectCanvas: HTMLCanvasElement | null = null;
+    /** Top-left of the offscreen text canvas, in hero-canvas device px. */
+    let reflectTop = 0;
+    let reflectLeft = 0;
+    /** Lowest the reflection may reach — top of the Continue control. */
+    let reflectFloor = 0;
+
     let raf = 0;
     let visible = true;
     let running = false;
@@ -162,6 +179,206 @@ export function HeroCanvas({ className = "" }: HeroCanvasProps) {
       });
     }
 
+    /**
+     * Read the headline's real line boxes and paint them into an offscreen
+     * canvas at the same position and size. Measured per word and regrouped by
+     * line, so a sentence that wraps on a narrow phone still lines up.
+     */
+    function measureReflection() {
+      reflectCanvas = null;
+      const zone = wrap!.closest("[data-zone]") ?? wrap!.parentElement;
+      const head = zone?.querySelector<HTMLElement>("[data-hero-reflect]");
+      if (!head) return;
+      const box = canvas!.getBoundingClientRect();
+      if (box.width === 0) return;
+
+      const floorEl = zone?.querySelector<HTMLElement>("[data-hero-floor]");
+      reflectFloor = floorEl
+        ? (floorEl.getBoundingClientRect().top - box.top) * dpr
+        : viewHeight * 0.82;
+
+      interface Line {
+        words: string[];
+        left: number;
+        right: number;
+        top: number;
+        bottom: number;
+      }
+      const lines: Line[] = [];
+      const range = document.createRange();
+      const walker = document.createTreeWalker(head, NodeFilter.SHOW_TEXT);
+      for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+        const text = node.textContent ?? "";
+        for (const match of text.matchAll(/\S+/g)) {
+          range.setStart(node, match.index);
+          range.setEnd(node, match.index + match[0].length);
+          const r = range.getBoundingClientRect();
+          if (r.width === 0) continue;
+          const line = lines.find((l) => Math.abs(l.top - r.top) < r.height * 0.5);
+          if (line) {
+            line.words.push(match[0]);
+            line.left = Math.min(line.left, r.left);
+            line.right = Math.max(line.right, r.right);
+            line.bottom = Math.max(line.bottom, r.bottom);
+          } else {
+            lines.push({
+              words: [match[0]],
+              left: r.left,
+              right: r.right,
+              top: r.top,
+              bottom: r.bottom,
+            });
+          }
+        }
+      }
+      range.detach();
+      if (lines.length === 0) return;
+
+      const style = getComputedStyle(head);
+      const size = parseFloat(style.fontSize) * dpr;
+      const pad = Math.round(6 * dpr);
+      const left = Math.min(...lines.map((l) => l.left));
+      const right = Math.max(...lines.map((l) => l.right));
+      const top = Math.min(...lines.map((l) => l.top));
+      const bottom = Math.max(...lines.map((l) => l.bottom));
+
+      const off = document.createElement("canvas");
+      off.width = Math.max(1, Math.ceil((right - left) * dpr) + pad * 2);
+      off.height = Math.max(1, Math.ceil((bottom - top) * dpr) + pad * 2);
+      const tctx = off.getContext("2d");
+      if (!tctx) return;
+
+      tctx.font = `${style.fontWeight} ${size}px ${style.fontFamily}`;
+      // The page sets the width axis to 110%; canvas only takes keywords, and
+      // each line is fitted to its measured width below, so the nearest
+      // keyword is enough.
+      if ("fontStretch" in tctx) tctx.fontStretch = "semi-expanded";
+      const tracking = parseFloat(style.letterSpacing);
+      if ("letterSpacing" in tctx && Number.isFinite(tracking)) {
+        tctx.letterSpacing = `${tracking * dpr}px`;
+      }
+      // Softened, not smeared: phone type is small enough that the swell
+      // alone does the breaking up.
+      if ("filter" in tctx) tctx.filter = `blur(${(coarse ? 0.45 : 0.9) * dpr}px)`;
+      tctx.fillStyle = "rgb(214 234 255)";
+      tctx.textBaseline = "alphabetic";
+
+      for (const line of lines) {
+        const text = line.words.join(" ");
+        const m = tctx.measureText(text);
+        if (m.width === 0) continue;
+        const ascent = m.fontBoundingBoxAscent || size * 0.8;
+        const descent = m.fontBoundingBoxDescent || size * 0.2;
+        const h = (line.bottom - line.top) * dpr;
+        const baseline = pad + (line.top - top) * dpr + (h * ascent) / (ascent + descent);
+        tctx.save();
+        tctx.translate(pad + (line.left - left) * dpr, baseline);
+        tctx.scale(((line.right - line.left) * dpr) / m.width, 1);
+        tctx.fillText(text, 0, 0);
+        tctx.restore();
+      }
+
+      reflectCanvas = off;
+      reflectLeft = (left - box.left) * dpr - pad;
+      reflectTop = (top - box.top) * dpr - pad;
+    }
+
+    /**
+     * The headline, mirrored about the live horizon and broken by the swell.
+     * Painted under the crest lines, so the surface texture runs across it.
+     */
+    function drawReflection(t: number, horizon: number) {
+      if (!reflectCanvas) return;
+      // Gone well before the camera reaches the water-break.
+      const fade = 1 - smoothstep(descent * 3.2);
+      if (fade < 0.01) return;
+
+      const srcH = reflectCanvas.height;
+      const srcW = reflectCanvas.width;
+      const nearest = horizon - (reflectTop + srcH); // text bottom → horizon
+      if (nearest <= 0) return;
+
+      // Open water between the horizon and the Continue control. A true
+      // mirror (same distance below as the headline sits above) when it fits;
+      // otherwise the reflection keeps a readable height and moves up toward
+      // the horizon, which is what a phone's taller type block needs.
+      const room = reflectFloor - 16 * dpr - horizon;
+      const c = Math.min(0.8, (room * 0.85) / srcH);
+      if (c < 0.25) return;
+      const band = srcH * c;
+      const mirrorGap = nearest * c;
+      const gap =
+        mirrorGap + band <= room
+          ? mirrorGap
+          : Math.max(4 * dpr, (room - band) * 0.45);
+
+      const yA = horizon + gap;
+      const yB = yA + band;
+
+      const strip = Math.max(2, Math.round((coarse ? 1.5 : 2) * dpr));
+      const pointerOn = pointerStrength > 0.01 && pointerX >= 0 && pointerY > horizon;
+      const impactOn = impactStrength > 0.01;
+      // Only strips the disturbance can actually reach are cut into columns;
+      // everything else stays one draw per strip.
+      const pointerReach = width * 0.16 * 0.42;
+      const span = yB - yA;
+
+      for (let y = yA; y < yB; y += strip) {
+        // Source rows for this strip: mirrored (bottom line nearest the
+        // horizon) and uncompressed.
+        const sBottom = srcH - (y - yA) / c;
+        const sh = strip / c;
+        const sy = Math.max(0, sBottom - sh);
+        if (sBottom <= 0 || sy >= srcH) continue;
+
+        const yc = (y - horizon) / dpr;
+        const across = (y - yA) / span;
+        // Swell: a long roll plus a fast chop, stronger nearer the viewer —
+        // the same perspective the crest lines use.
+        const reach = (1.6 + 0.035 * yc) * dpr;
+        // The high-frequency term shears neighbouring strips apart, which is
+        // what turns clean glyphs into light lying on water.
+        const sway =
+          Math.sin(yc * 0.19 - t * 1.25) * reach +
+          Math.sin(yc * 0.57 + t * 2.3) * reach * 0.5 +
+          Math.sin(yc * 1.9 - t * 3.4) * reach * 0.35;
+        // Broken light: some strips catch the glow, most carry little.
+        const wave = 0.5 + 0.5 * Math.sin(yc * 0.44 - t * 1.8) * Math.sin(yc * 0.12 + t * 0.6);
+        const glint = wave * Math.sqrt(wave);
+        const alpha = 0.26 * fade * (1 - 0.55 * across) * (0.12 + 0.88 * glint);
+        if (alpha < 0.004) continue;
+
+        const rippling = impactOn || (pointerOn && Math.abs(y - pointerY) < pointerReach);
+        const columns = rippling ? 4 : 1;
+        const colW = srcW / columns;
+
+        ctx!.globalAlpha = alpha;
+        // Flip each strip in place so the glyphs read mirrored, not stepped.
+        ctx!.setTransform(1, 0, 0, -1, 0, y * 2 + strip);
+        for (let col = 0; col < columns; col += 1) {
+          const sx = col * colW;
+          const dx =
+            reflectLeft +
+            sx +
+            sway +
+            (rippling ? rippleDelta(reflectLeft + sx + colW / 2, y, t, 5 * dpr) : 0);
+          ctx!.drawImage(
+            reflectCanvas,
+            sx,
+            sy,
+            colW,
+            Math.min(sh, srcH - sy),
+            dx,
+            y,
+            colW,
+            strip,
+          );
+        }
+      }
+      ctx!.setTransform(1, 0, 0, 1, 0, 0);
+      ctx!.globalAlpha = 1;
+    }
+
     function resize() {
       const rect = wrap!.getBoundingClientRect();
       const parent = wrap!.parentElement?.getBoundingClientRect();
@@ -195,6 +412,7 @@ export function HeroCanvas({ className = "" }: HeroCanvasProps) {
       seedStars();
       updateDescent();
       liveHorizon = horizonForDescent();
+      measureReflection();
     }
 
     /**
@@ -741,6 +959,7 @@ export function HeroCanvas({ className = "" }: HeroCanvasProps) {
       ctx!.fillStyle = haze;
       ctx!.fillRect(0, horizon - heroHeight * 0.08, width, heroHeight * 0.18);
 
+      drawReflection(t, horizon);
       drawSurface(t, horizon, depthBelow, sunX);
 
       // Night closing in overhead, so the header sits on darkness.
@@ -841,7 +1060,7 @@ export function HeroCanvas({ className = "" }: HeroCanvasProps) {
       if (!detail) return;
       const rect = canvas!.getBoundingClientRect();
       impactX = (detail.clientX - rect.left) * dpr;
-      let nextY = (detail.clientY - rect.top) * dpr;
+      const nextY = (detail.clientY - rect.top) * dpr;
       const floor = (liveHorizon || viewHeight * horizonFrac) + 10 * dpr;
       const ceiling = heroHeight - 6 * dpr;
       impactY = Math.max(floor, Math.min(ceiling, nextY));
@@ -864,6 +1083,17 @@ export function HeroCanvas({ className = "" }: HeroCanvasProps) {
 
     resize();
     draw(performance.now());
+
+    // The face may still be loading, and the entrance moves the headline for
+    // its first ~800ms — measure again once both have settled.
+    let disposed = false;
+    const remeasure = () => {
+      if (disposed) return;
+      measureReflection();
+      if (!running) draw(performance.now());
+    };
+    document.fonts?.ready.then(remeasure);
+    const settle = window.setTimeout(remeasure, 900);
 
     const resizeObserver = new ResizeObserver(() => {
       resize();
@@ -890,6 +1120,8 @@ export function HeroCanvas({ className = "" }: HeroCanvasProps) {
     document.addEventListener("visibilitychange", onVisibility);
 
     return () => {
+      disposed = true;
+      window.clearTimeout(settle);
       stopLoop();
       resizeObserver.disconnect();
       io.disconnect();

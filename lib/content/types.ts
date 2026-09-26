@@ -6,7 +6,8 @@
  * site is never half-broken mid-translation.
  *
  * COPY RULE — enforced by review, not by types:
- * no nautical vocabulary anywhere. No "dive", "deep dive", "go deeper",
+ * no nautical vocabulary anywhere — the only exception is the hero's scroll
+ * cue (`hero.ctaContinue`), which literally makes the page dive. No "dive", "deep dive", "go deeper",
  * "surface-level", "navigate", "waters", "current". The descent lives
  * entirely in the visual system. The moment copy names it, the structure
  * becomes a theme, and a theme reads as whimsy to a buyer spending €15k.
@@ -18,8 +19,9 @@ export const LOCALES: readonly Locale[] = ["en", "bg"] as const;
 export const DEFAULT_LOCALE: Locale = "en";
 
 export interface NavCopy {
+  services: string;
   work: string;
-  about: string;
+  process: string;
   contact: string;
   /** Persistent escape hatch — a ready buyer should never have to scroll. */
   cta: string;
@@ -33,37 +35,33 @@ export interface HeroCopy {
    * Proper name, not translated. Kept on hero for shared access.
    */
   brand: string;
-  /** Value question — the outcome the buyer wants. */
+  /** Small line above the headline — who, where, since when. Crawlable. */
+  eyebrow: string;
+  /** What the buyer gets — about them, not a slogan about us. */
   headline: string;
-  /**
-   * What they get + the structure claim. Must contain, verbatim and crawlable:
-   * "web development and digital automation agency based in Varna, Bulgaria"
-   */
+  /** What we build. */
   lead: string;
   ctaPrimary: string;
   ctaSecondary: string;
-  /** Scroll cue into the next band. Neutral — never names the descent. */
+  /** Scroll cue into the next band. The one label allowed to name the descent. */
   ctaContinue: string;
 }
 
 export interface ProblemCopy {
   id: string;
-  /**
-   * Diagnostic tab question — the reader self-selects.
-   * e.g. "Do you need an application that runs the business?"
-   */
+  /** Tab label — the offering's plain name. */
   question: string;
-  /** Small mono label — "THE OPERATION" / "THE SITE". */
+  /** Small mono label above the title. */
   label: string;
-  /** Framed as a problem the buyer has, never as a service we sell. */
+  /** Framed as an outcome for the buyer, never as a flat service line. */
   title: string;
   body: string;
-  /** Exactly three deliverable lines. */
-  deliverables: readonly [string, string, string];
-  /** Proof link — destination may be provisional until the case page exists. */
+  /** What the build includes — capabilities, stated as facts. */
+  deliverables: readonly string[];
+  /** Proof link to the matching project on the page. */
   proof: { href: string; label: string };
-  /** Muted one-liner that filters the wrong buyer out. */
-  disqualifier: string;
+  /** Stated timeline, e.g. "Live in 1–3 weeks". */
+  timeline: string;
 }
 
 export interface OfferingsCopy {
@@ -72,6 +70,8 @@ export interface OfferingsCopy {
   heading: string;
   intro: string;
   problems: readonly ProblemCopy[];
+  /** Rebuild line — existing sites are rebuilt from the foundations. */
+  rebuild: string;
 }
 
 export interface ProcessStepCopy {
@@ -95,24 +95,14 @@ export interface WorkSectionCopy {
   visitLive: string;
 }
 
-export interface CapabilityCopy {
-  id: string;
-  title: string;
-  body: string;
-}
-
-export interface CapabilitiesCopy {
-  heading: string;
-  intro: string;
-  items: readonly CapabilityCopy[];
-}
-
 export interface FounderCopy {
   heading: string;
-  /** TODO(bio): awaiting Miroslav's chosen direction. */
   name: string;
   role: string;
+  /** First person singular — the one place the site says "I". */
   body: readonly string[];
+  /** Short checkable facts line, e.g. "Est. 2023 · Varna, Bulgaria". */
+  facts: string;
 }
 
 export interface FaqItemCopy {
@@ -164,14 +154,13 @@ export interface ContactCopy {
   errorSubmit: string;
   /** Build-time guard. Rendered only when no endpoint is configured. */
   errorUnconfigured: string;
-  /** The filtering line. Honest, not defensive. */
-  exclusionsHeading: string;
-  exclusions: string;
 }
 
 export interface FooterCopy {
   /** Second placement of the crawlable phrase. */
   description: string;
+  /** Registered company name, e.g. "Traionis EOOD". */
+  legalName: string;
   location: string;
   rights: string;
   columns: readonly { heading: string; links: readonly { label: string; href: string }[] }[];
@@ -191,7 +180,6 @@ export interface SiteCopy {
   offerings: OfferingsCopy;
   process: ProcessCopy;
   work: WorkSectionCopy;
-  capabilities: CapabilitiesCopy;
   faq: FaqCopy;
   founder: FounderCopy;
   contact: ContactCopy;

@@ -409,7 +409,7 @@ export function Process() {
   }, [pathD, paint, stepCount]);
 
   return (
-    <section aria-labelledby="process-heading" className="mt-20 sm:mt-28">
+    <section id="process" aria-labelledby="process-heading" className="mt-20 scroll-mt-[var(--header-h)] sm:mt-28">
       <ZoneInner>
         <Reveal
           as="h2"

@@ -1,6 +1,5 @@
 import { DepthZone } from "@/components/depth/DepthZone";
 import { ZoneThreshold } from "@/components/depth/ZoneThreshold";
-import { Capabilities } from "@/components/sections/Capabilities";
 import { Contact } from "@/components/sections/Contact";
 import { Faq } from "@/components/sections/Faq";
 import { Founder } from "@/components/sections/Founder";
@@ -15,7 +14,7 @@ import { WorkZone } from "@/components/sections/WorkZone";
  *   SURFACE   0m       waterline — brand and claim above, sounding into blue
  *   SHALLOWS  −40m     light still reaching — the two problems, and how we work
  *   MID       −200m    light fading, particulate thickening — the one project
- *   DEEP      −1,000m  no daylight, lamp on — what that actually involves
+ *   DEEP      −1,000m  no daylight, lamp on — the questions before the call
  *   ABYSS     −4,000m  the floor — who you're working with, then the decision
  *
  * The plunge is the waterline below the first viewport — a living silhouette
@@ -63,9 +62,6 @@ export default function HomePage() {
         className="pb-20 pt-16 sm:pb-28 sm:pt-24"
       >
         <ZoneThreshold zone="deep" />
-        <Capabilities />
-        {/* What gets built, then how the arrangement works — the objections
-            are handled here so the floor can stay about the decision. */}
         <Faq />
       </DepthZone>
 
