@@ -106,7 +106,13 @@ export const en: SiteCopy = {
   work: {
     heading: "Selected work",
     intro: "Live and linkable. Open any of them on your phone.",
-    readMore: "Read the build breakdown",
+    readMore: "How we built it",
+    readLess: "Close the breakdown",
+    breakdown: {
+      problem: "The problem",
+      decisions: "The decisions",
+      outcome: "Where it stands",
+    },
     viewAll: "All projects",
     visitLive: "Visit the live site",
   },

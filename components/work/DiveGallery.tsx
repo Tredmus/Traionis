@@ -1,40 +1,31 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import { HoverAnchor, HoverLink } from "@/components/ui/HoverLink";
+import { HoverAnchor } from "@/components/ui/HoverLink";
 import { useCopy } from "@/lib/locale-context";
 import { COLUMN_PROJECTS, type CaseStudy } from "@/lib/work";
 
 /**
  * The work gallery — objects in the water column, and the lamp you carry.
  *
- * The evidence is dark by default. Ambient light has almost run out at this
- * depth, so each plate sits at the brightness its own depth allows, and full
- * colour only arrives where the lamp falls. Reading the portfolio is the act
- * of searching for it, which is the one thing a grid of thumbnails can never
- * be.
+ * The work is always visible: each plate plays a loop of the live site, with
+ * its phone view set against the corner. The water takes only the edge off,
+ * and the lamp you carry is light laid over it — a pool over the column and a
+ * glow across whichever plate it finds.
  *
  * Three light states, decided once on mount:
  *
- *   (unset)  no lamp — every plate fully lit. The no-JS render, the
- *            reduced-motion render, and any browser that cannot do better.
- *            The section is completely coherent here; nothing is hidden
- *            behind an effect.
+ *   (unset)  no lamp, no tint. The no-JS render, the reduced-motion render,
+ *            and any browser that cannot do better.
  *   "on"     fine pointer — the lamp follows the cursor with a trailing lerp.
- *   "scroll" coarse pointer — the lamp lands on each plate as it crosses the
+ *   "scroll" coarse pointer — the glow lands on each plate as it crosses the
  *            viewport, driven by a scroll timeline off the main thread.
  *
- * PERFORMANCE — the reason this is built the way it is:
- *
- * The lit copy of each shot lives inside a fixed-size masked box (`__beam`)
- * that is TRANSLATED to the lamp, with the image counter-translated by the
- * same amount inside it (`__carry`) so it stays registered with the plate
- * underneath. Both are transforms, so the beam moves entirely on the
- * compositor: the radial mask is rasterised once and never re-rasterised.
- * Animating `mask-image` position instead — the obvious implementation —
- * repaints a full-width image every frame, and that is what fails on a phone.
+ * PERFORMANCE — the glow is one small gradient per plate, TRANSLATED to the
+ * lamp. It moves on the compositor and never repaints the video under it;
+ * a mask or a second copy of the media would.
  */
 
 const LAMP_EASE = 0.14;
@@ -211,6 +202,104 @@ function LiveMark() {
 /** Recession into the column. Nearest plate first; five is the practical floor. */
 const PLATE_WIDTHS = ["100%", "92%", "84%", "79%", "75%"];
 
+/**
+ * A breakdown is published only when every line of it is real. Any TODO left
+ * in the problem, the decisions or the outcome keeps the whole thing hidden —
+ * half an engineering story is worse than none.
+ */
+function hasBreakdown(project: CaseStudy) {
+  if (!project.caseStudy || project.decisions.length === 0) return false;
+  const text = [
+    ...project.problem,
+    ...project.decisions.flatMap((d) => [d.title, d.body]),
+    ...project.outcome,
+  ];
+  return text.length > 0 && text.every((line) => line.trim() && !line.includes("TODO"));
+}
+
+/**
+ * The live site, playing. Loads nothing until the plate comes near, plays
+ * only while it is on screen, and never plays at all under reduced motion —
+ * the poster (the loop's own first frame) stands in.
+ */
+function PlateLoop({ project }: { project: CaseStudy }) {
+  const ref = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = ref.current;
+    if (!video) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      },
+      { rootMargin: "120px 0px", threshold: 0.2 },
+    );
+    io.observe(video);
+    return () => io.disconnect();
+  }, []);
+
+  const loop = project.loop!;
+  return (
+    <video
+      ref={ref}
+      className="plate__shot"
+      poster={loop.poster}
+      width={loop.width}
+      height={loop.height}
+      muted
+      loop
+      playsInline
+      preload="none"
+      aria-label={project.shot?.alt ?? project.name}
+    >
+      <source src={loop.src} type="video/mp4" />
+    </video>
+  );
+}
+
+function Breakdown({ project, id }: { project: CaseStudy; id: string }) {
+  const copy = useCopy();
+  return (
+    <div id={id} className="plate__breakdown">
+      <div className="plate__breakdown-inner">
+        <section>
+          <h4 className="plate__breakdown-head">{copy.work.breakdown.problem}</h4>
+          {project.problem.map((line) => (
+            <p key={line} className="plate__breakdown-body">
+              {line}
+            </p>
+          ))}
+        </section>
+        <section>
+          <h4 className="plate__breakdown-head">{copy.work.breakdown.decisions}</h4>
+          <ol className="plate__decisions">
+            {project.decisions.map((decision) => (
+              <li key={decision.title}>
+                <p className="plate__decision-title">{decision.title}</p>
+                <p className="plate__breakdown-body">{decision.body}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
+        <section>
+          <h4 className="plate__breakdown-head">{copy.work.breakdown.outcome}</h4>
+          {project.outcome.map((line) => (
+            <p key={line} className="plate__breakdown-body">
+              {line}
+            </p>
+          ))}
+        </section>
+      </div>
+    </div>
+  );
+}
+
 function ProjectPlate({
   project,
   index,
@@ -221,33 +310,17 @@ function ProjectPlate({
   innerRef: (node: HTMLElement | null) => void;
 }) {
   const copy = useCopy();
+  const [open, setOpen] = useState(false);
   const side = index % 2 === 0 ? "left" : "right";
   const width = PLATE_WIDTHS[Math.min(index, PLATE_WIDTHS.length - 1)];
   const headingId = `plate-${project.slug}`;
+  const breakdownId = `${headingId}-breakdown`;
+  const breakdown = hasBreakdown(project);
 
-  // The plate-wide click target goes to the deepest thing that exists: the
-  // breakdown when there is one, the live build otherwise.
-  const primary = project.caseStudy
-    ? { href: `/work/${project.slug}`, external: false }
-    : project.live
-      ? { href: project.live.href, external: true }
-      : null;
-
-  const name = primary ? (
-    primary.external ? (
-      <a
-        className="plate__link"
-        href={primary.href}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {project.name}
-      </a>
-    ) : (
-      <a className="plate__link" href={primary.href}>
-        {project.name}
-      </a>
-    )
+  const name = project.live ? (
+    <a className="plate__link" href={project.live.href} target="_blank" rel="noopener noreferrer">
+      {project.name}
+    </a>
   ) : (
     project.name
   );
@@ -258,48 +331,27 @@ function ProjectPlate({
       aria-labelledby={headingId}
       className="plate"
       data-side={side}
-      style={
-        {
-          "--ambient": project.ambient,
-          "--plate-w": width,
-        } as React.CSSProperties
-      }
+      data-open={open}
+      style={{ "--plate-w": width } as React.CSSProperties}
     >
       <figure className="plate__figure">
-        <span className="plate__depth" aria-hidden="true">
-          {project.depth}
-        </span>
-
         <div className="plate__window">
-          {project.shot && (
-            <>
-              <div className="plate__base">
-                <Image
-                  src={project.shot.src}
-                  alt={project.shot.alt}
-                  width={project.shot.width}
-                  height={project.shot.height}
-                  sizes="(min-width: 1024px) 62vw, 92vw"
-                  className="plate__shot"
-                />
-              </div>
-              <span className="plate__veil" aria-hidden="true" />
-
-              {/* The lit copy. Aligned to the plate by counter-translation. */}
-              <div className="plate__beam" aria-hidden="true">
-                <div className="plate__carry">
-                  <Image
-                    src={project.shot.src}
-                    alt=""
-                    width={project.shot.width}
-                    height={project.shot.height}
-                    sizes="(min-width: 1024px) 62vw, 92vw"
-                    className="plate__shot plate__shot--lit"
-                  />
-                </div>
-              </div>
-            </>
+          {project.loop ? (
+            <PlateLoop project={project} />
+          ) : (
+            project.shot && (
+              <Image
+                src={project.shot.src}
+                alt={project.shot.alt}
+                width={project.shot.width}
+                height={project.shot.height}
+                sizes="(min-width: 1024px) 62vw, 92vw"
+                className="plate__shot"
+              />
+            )
           )}
+          <span className="plate__veil" aria-hidden="true" />
+          <span className="plate__beam" aria-hidden="true" />
 
           {project.live && (
             <figcaption className="plate__tag">
@@ -308,6 +360,22 @@ function ProjectPlate({
             </figcaption>
           )}
         </div>
+
+        {project.phone && (
+          <div className="plate__phone">
+            <div className="plate__phone-screen">
+              <span className="plate__phone-status" aria-hidden="true" />
+              <Image
+              src={project.phone.src}
+              alt={project.phone.alt}
+              width={project.phone.width}
+              height={project.phone.height}
+              sizes="(min-width: 1024px) 12rem, 30vw"
+                className="plate__phone-shot"
+              />
+            </div>
+          </div>
+        )}
       </figure>
 
       <div className="plate__label">
@@ -318,6 +386,7 @@ function ProjectPlate({
         >
           {name}
         </h3>
+        <p className="plate__status">{project.kind}</p>
 
         <p className="mt-6 max-w-[42ch] text-body text-[color-mix(in_srgb,var(--zone-ink)_82%,transparent)]">
           {project.summary}
@@ -328,13 +397,17 @@ function ProjectPlate({
         </p>
 
         <div className="plate__links">
-          {project.caseStudy && (
-            <HoverLink
-              href={`/work/${project.slug}`}
-              className="text-body font-medium"
+          {breakdown && (
+            <button
+              type="button"
+              className="plate__toggle text-body font-medium"
+              aria-expanded={open}
+              aria-controls={breakdownId}
+              onClick={() => setOpen((v) => !v)}
             >
-              {copy.work.readMore}
-            </HoverLink>
+              {open ? copy.work.readLess : copy.work.readMore}
+              <span className="plate__toggle-mark" aria-hidden="true" />
+            </button>
           )}
           {project.live && (
             <HoverAnchor
@@ -349,6 +422,8 @@ function ProjectPlate({
           )}
         </div>
       </div>
+
+      {breakdown && <Breakdown project={project} id={breakdownId} />}
     </article>
   );
 }

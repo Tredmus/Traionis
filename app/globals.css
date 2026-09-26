@@ -572,20 +572,16 @@ textarea {
 /* ============================================================
    THE DIVE GALLERY — mid-water evidence, and the lamp you carry
    ------------------------------------------------------------
-   Ambient light has nearly run out at −200m, so the work is dark
-   by default and full colour arrives only where the lamp falls.
+   The work is always visible — it is the proof, and proof does
+   not wait to be discovered. Each plate plays a loop of the live
+   site with the phone view set against its corner; the water only
+   takes the edge off. The lamp is a pool of light carried over
+   the column and a glow that sweeps across whichever plate it
+   finds. The glow is one small translated gradient per plate, so
+   it moves on the compositor and never repaints the video.
 
-   The lit copy of each shot sits in a fixed-size masked box that
-   is TRANSLATED to the lamp, with the image counter-translated
-   inside it so it stays registered with the dark copy beneath.
-   Both are transforms, so the beam moves on the compositor and
-   the radial mask is rasterised exactly once. Animating a mask
-   position instead repaints a full-width image every frame,
-   which is what fails on a phone.
-
-   No lamp state = every plate fully lit. That is the no-JS
-   render, the reduced-motion render, and the floor this section
-   is allowed to fall back to. Nothing is hidden behind effect.
+   No lamp state = no glow and no tint. That is the no-JS render
+   and the reduced-motion render.
    ============================================================ */
 
 .dive-column {
@@ -605,6 +601,8 @@ textarea {
   flex-direction: column;
   gap: 7rem;
   padding-inline: 1.5rem;
+  /* The last plate's phone hangs below its window; the column clips. */
+  padding-bottom: 4rem;
 }
 
 @media (min-width: 640px) {
@@ -687,6 +685,7 @@ textarea {
 .plate__window {
   position: relative;
   overflow: hidden;
+  aspect-ratio: 16 / 10;
   border: 1px solid var(--zone-line);
   border-radius: 16px;
   background-color: rgb(3 7 15 / 0.6);
@@ -704,123 +703,69 @@ textarea {
 .plate__shot {
   display: block;
   width: 100%;
-  height: auto;
-}
-
-.plate__base {
-  position: relative;
+  height: 100%;
+  object-fit: cover;
+  object-position: left top;
   transition: filter 700ms var(--ease-descent);
 }
 
-/* Narrow screens: a 2.2:1 browser capture shrunk to phone width is a strip
-   with nothing readable in it. Crop to the working corner instead — where
-   every one of these sites puts its name and its claim — so the evidence
-   arrives at a size worth looking at. Most of this site's traffic is here. */
-@media (max-width: 1023px) {
-  .plate__window {
-    aspect-ratio: 4 / 3;
-  }
-
-  .plate__base {
-    position: absolute;
-    inset: 0;
-  }
-
-  .plate__shot {
-    height: 100%;
-    object-fit: cover;
-    object-position: left top;
-  }
-}
-
-@media (min-width: 640px) and (max-width: 1023px) {
-  .plate__window {
-    aspect-ratio: 16 / 10;
-  }
-}
-
-/* Water standing between you and the plate. Sibling of the base, so the
-   beam cuts through it rather than being dimmed by it. */
+/* The water only takes the edge off — a slight cool cast, nothing that makes
+   the work read as dimmed. The lamp's glow restores full light. */
 .plate__veil {
   position: absolute;
   inset: 0;
   z-index: 1;
   opacity: 0;
-  background-color: color-mix(in srgb, var(--color-zone-mid) 40%, transparent);
+  background-color: color-mix(in srgb, var(--color-zone-mid) 12%, transparent);
   transition: opacity 700ms var(--ease-descent);
   pointer-events: none;
 }
 
-[data-lamp] .plate__base {
-  filter: brightness(var(--ambient, 0.5)) saturate(0.34) contrast(1.12);
+[data-lamp] .plate__shot {
+  filter: brightness(0.95) saturate(0.94);
 }
 
 [data-lamp] .plate__veil {
   opacity: 1;
 }
 
+[data-lamp] .plate:hover .plate__shot {
+  filter: none;
+}
+
+[data-lamp] .plate:hover .plate__veil {
+  opacity: 0.35;
+}
+
+/* The lamp on the plate: light laid over the video, not a second copy of it. */
 .plate__beam {
   position: absolute;
   top: 0;
   left: 0;
   z-index: 2;
-  width: var(--beam, 27rem);
-  height: var(--beam, 27rem);
-  margin-top: calc(var(--beam, 27rem) / -2);
-  margin-left: calc(var(--beam, 27rem) / -2);
+  width: var(--beam, 30rem);
+  height: var(--beam, 30rem);
+  margin-top: calc(var(--beam, 30rem) / -2);
+  margin-left: calc(var(--beam, 30rem) / -2);
   opacity: 0;
   pointer-events: none;
   transform: translate3d(var(--lx, 0px), var(--ly, 0px), 0);
-  -webkit-mask-image: radial-gradient(
+  background: radial-gradient(
     closest-side,
-    #000 0%,
-    #000 22%,
-    rgb(0 0 0 / 0.72) 46%,
-    rgb(0 0 0 / 0.22) 68%,
-    transparent 86%
+    rgb(214 236 255 / 0.2) 0%,
+    rgb(190 224 255 / 0.1) 38%,
+    rgb(170 214 255 / 0.03) 66%,
+    rgb(170 214 255 / 0) 100%
   );
-  mask-image: radial-gradient(
-    closest-side,
-    #000 0%,
-    #000 22%,
-    rgb(0 0 0 / 0.72) 46%,
-    rgb(0 0 0 / 0.22) 68%,
-    transparent 86%
-  );
-  /* No `will-change` here, deliberately. Promoting a masked layer makes
-     Chrome paint it over the plate beneath it — the whole shot goes black.
-     Chrome promotes an actively transformed element on its own, so the beam
-     still moves on the compositor without the hint. */
-}
-
-.plate__carry {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: var(--pw, 0px);
-  height: var(--ph, 0px);
-  transform: translate3d(
-    calc(var(--beam, 27rem) / 2 - var(--lx, 0px)),
-    calc(var(--beam, 27rem) / 2 - var(--ly, 0px)),
-    0
-  );
-}
-
-.plate__shot--lit {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  /* The lamp is closer than the sun was. */
-  filter: saturate(1.14) brightness(1.06);
+  mix-blend-mode: screen;
 }
 
 [data-lamp] .plate__beam {
   opacity: 1;
 }
 
-/* Coarse pointer: there is no cursor to carry the lamp, so the lamp lands on
-   each plate as it crosses the viewport. Driven by a scroll timeline, which
-   runs off the main thread — the only way this holds 60fps on a phone. */
+/* Coarse pointer: no cursor to carry the lamp, so it lands on each plate as
+   it crosses the viewport, on a scroll timeline off the main thread. */
 @supports (animation-timeline: view()) {
   [data-lamp="scroll"] .plate__beam {
     --beam: calc(var(--pw, 0px) * 1.15);
@@ -841,44 +786,74 @@ textarea {
   }
 }
 
-/* Instrumentation on the plate's outer edge. A measurement — where this build
-   hangs in the column — not a section number. */
-.plate__depth {
-  display: none;
+/* The same build on a phone, set against the window's inner corner — the
+   side facing the label, so it never runs off the page. Proportions follow a
+   current flagship (iPhone 17 Pro): a ~1% bezel inside a thin titanium rim,
+   and a status bar with the Dynamic Island above the page, as a real phone
+   shows a website. */
+.plate__phone {
+  position: absolute;
+  bottom: -1.75rem;
+  right: -0.5rem;
+  z-index: 5;
+  width: 27%;
+  max-width: 12rem;
+  border: 1px solid rgb(206 214 226 / 0.42);
+  border-radius: 14.5% / 6.6%;
+  padding: 1.1%;
+  background-color: #020306;
+  box-shadow:
+    inset 0 0 0 1px rgb(0 0 0 / 0.6),
+    0 30px 60px -24px rgb(0 0 0 / 0.9);
+}
+
+.plate__phone-screen {
+  position: relative;
+  overflow: hidden;
+  border-radius: 13.4% / 6.1%;
+  background-color: #000;
+}
+
+/* Status bar: black, with the island centred in it. */
+.plate__phone-status {
+  display: block;
+  height: 0;
+  padding-top: 11%;
+}
+
+.plate__phone-status::before {
+  content: "";
+  position: absolute;
+  top: 2.1%;
+  left: 50%;
+  width: 31%;
+  aspect-ratio: 3.4;
+  translate: -50% 0;
+  border-radius: 999px;
+  background-color: #101318;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.04);
+}
+
+.plate__phone-shot {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.plate[data-side="right"] .plate__phone {
+  right: auto;
+  left: -0.5rem;
 }
 
 @media (min-width: 1024px) {
-  .plate__depth {
-    position: absolute;
-    top: 0.25rem;
-    display: block;
-    writing-mode: vertical-rl;
-    font-size: var(--text-label);
-    letter-spacing: 0.16em;
-    color: color-mix(in srgb, var(--zone-ink) 52%, transparent);
-    font-variant-numeric: tabular-nums;
+  .plate__phone {
+    bottom: -2.75rem;
+    right: -2.25rem;
+    width: 24%;
   }
 
-  .plate[data-side="left"] .plate__depth {
-    left: -2.5rem;
-  }
-
-  .plate[data-side="right"] .plate__depth {
-    right: -2.5rem;
-  }
-
-  .plate__depth::after {
-    content: "";
-    position: absolute;
-    top: calc(100% + 0.85rem);
-    left: 50%;
-    width: 1px;
-    height: 4rem;
-    background-image: linear-gradient(
-      to bottom,
-      var(--zone-line-strong),
-      transparent
-    );
+  .plate[data-side="right"] .plate__phone {
+    left: -2.25rem;
   }
 }
 
@@ -907,6 +882,18 @@ textarea {
   .plate__tag {
     bottom: 1.25rem;
     left: 1.25rem;
+  }
+}
+
+/* The phone sits on this side of a right-hand plate; the tag moves clear. */
+.plate[data-side="right"] .plate__tag {
+  right: 0.875rem;
+  left: auto;
+}
+
+@media (min-width: 640px) {
+  .plate[data-side="right"] .plate__tag {
+    right: 1.25rem;
   }
 }
 
@@ -969,6 +956,113 @@ textarea {
   align-items: center;
   gap: 1rem 2rem;
   margin-top: 2.25rem;
+}
+
+.plate__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--zone-ink);
+  cursor: pointer;
+}
+
+.plate__toggle:focus-visible {
+  outline: 2px solid var(--color-accent-hi);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* A plus that turns into a minus. */
+.plate__toggle-mark {
+  position: relative;
+  width: 0.7rem;
+  height: 0.7rem;
+}
+
+.plate__toggle-mark::before,
+.plate__toggle-mark::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  translate: 0 -50%;
+  background-color: var(--color-accent-hi);
+  transition: rotate 420ms var(--ease-descent);
+}
+
+.plate__toggle-mark::after {
+  rotate: 90deg;
+}
+
+.plate[data-open="true"] .plate__toggle-mark::after {
+  rotate: 0deg;
+}
+
+/* The breakdown opens in place, under the whole plate. */
+.plate__breakdown {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-rows: 0fr;
+  order: 3;
+  transition: grid-template-rows 620ms var(--ease-descent);
+}
+
+.plate[data-open="true"] .plate__breakdown {
+  grid-template-rows: 1fr;
+}
+
+.plate__breakdown-inner {
+  display: grid;
+  gap: 2.25rem;
+  overflow: hidden;
+  min-height: 0;
+  opacity: 0;
+  transition: opacity 420ms var(--ease-descent);
+}
+
+.plate[data-open="true"] .plate__breakdown-inner {
+  opacity: 1;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--zone-line);
+  transition-delay: 160ms;
+}
+
+.plate__breakdown-head {
+  font-size: var(--text-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--zone-ink) 60%, transparent);
+}
+
+.plate__breakdown-body {
+  margin-top: 0.8rem;
+  max-width: 52ch;
+  color: color-mix(in srgb, var(--zone-ink) 80%, transparent);
+}
+
+.plate__decisions {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 0.8rem;
+  padding: 0;
+  list-style: none;
+}
+
+.plate__decision-title {
+  font-weight: 600;
+}
+
+.plate__decisions .plate__breakdown-body {
+  margin-top: 0.35rem;
+}
+
+@media (min-width: 1024px) {
+  .plate__breakdown-inner {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 3rem;
+  }
 }
 
 /* ============================================================
@@ -1579,7 +1673,7 @@ textarea {
     animation: none !important;
   }
 
-  [data-lamp] .plate__base {
+  [data-lamp] .plate__shot {
     filter: none;
   }
 

@@ -94,7 +94,10 @@ export interface ProcessCopy {
 export interface WorkSectionCopy {
   heading: string;
   intro: string;
+  /** Opens the in-place build breakdown under a plate. */
   readMore: string;
+  readLess: string;
+  breakdown: { problem: string; decisions: string; outcome: string };
   viewAll: string;
   /** Outbound link to a build that is actually live. */
   visitLive: string;

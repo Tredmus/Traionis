@@ -9,7 +9,10 @@
  *
  * This list is the gallery's content layer. Adding a project here adds a plate
  * to the descent — no layout work, no component surgery. The homepage shows
- * every entry with `inColumn`, in this order, at the depth each one declares.
+ * every entry with `inColumn`, in this order.
+ *
+ * MEDIA — `loop` and `phone` are captured from the live site itself (see
+ * public/work/PROVENANCE.md), never mocked up.
  */
 
 export type ProjectStatus =
@@ -32,6 +35,14 @@ export interface ProjectShot {
   alt: string;
 }
 
+/** A short silent screen recording of the live site, and its first frame. */
+export interface ProjectLoop {
+  src: string;
+  poster: string;
+  width: number;
+  height: number;
+}
+
 export interface CaseStudy {
   slug: string;
   name: string;
@@ -51,14 +62,11 @@ export interface CaseStudy {
   /** Public URL, when the thing is actually live and linkable. */
   live: { href: string; label: string } | null;
   shot: ProjectShot | null;
-  /** Position in the water column. A measurement, like every readout here. */
-  depth: string;
-  /**
-   * How much ambient light still reaches this plate, 0–1. Deeper plates sit
-   * closer to invisible until the lamp finds them — the same physics the
-   * atmosphere already runs on, applied to the evidence.
-   */
-  ambient: number;
+  /** What kind of build it is, in two or three words. Shown on the plate. */
+  kind: string;
+  loop: ProjectLoop | null;
+  /** The live site's first screen on a phone. */
+  phone: ProjectShot | null;
   /** Shown on the homepage gallery. */
   inColumn: boolean;
   /** Whether `/work/<slug>` has a real breakdown behind it. */
@@ -87,14 +95,25 @@ export const CASE_STUDIES: readonly CaseStudy[] = [
     year: null, // TODO(year): confirm the delivery date.
     stack: [],
     live: { href: "https://orvyx.tech/", label: "orvyx.tech" },
+    kind: "Product site",
+    loop: {
+      src: "/work/orvyx-loop.mp4",
+      poster: "/work/orvyx-poster.webp",
+      width: 1280,
+      height: 800,
+    },
+    phone: {
+      src: "/work/orvyx-phone-390.webp",
+      width: 780,
+      height: 1688,
+      alt: "The Orvyx site on a phone: “Seventy-two hours of autonomy” over the LifePod 72 case, with the 8 modules, IP67 and 72h spec row.",
+    },
     shot: {
       src: "/work/orvyx-lifepod.webp",
       width: 1400,
       height: 641,
       alt: "The Orvyx site: “Seventy-two hours of autonomy” set over the LifePod 72 hard case, with a spec row reading 8 modules, IP67 sealed, 72h autonomy.",
     },
-    depth: "−224m",
-    ambient: 0.58,
     inColumn: true,
     // Deliberately no breakdown page. There is no engineering story to tell
     // here, and inventing one would be the exact failure this file guards.
@@ -116,39 +135,51 @@ export const CASE_STUDIES: readonly CaseStudy[] = [
     status: "unconfirmed",
     statusLabel: "Built for a founder",
     year: null, // TODO(year)
-    stack: ["Next.js", "TypeScript", "PostgreSQL", "Interactive maps", "Auth"],
+    stack: ["Next.js", "TypeScript", "Supabase", "Mapbox"],
     live: { href: "https://park-qui.vercel.app/", label: "park-qui.vercel.app" },
+    kind: "Marketplace platform",
+    loop: {
+      src: "/work/parkqui-loop.mp4",
+      poster: "/work/parkqui-poster.webp",
+      width: 1280,
+      height: 800,
+    },
+    phone: {
+      src: "/work/parkqui-phone-390.webp",
+      width: 780,
+      height: 1688,
+      alt: "ParkQui on a phone: “Your parking spot is waiting”, with find and offer actions and the 2 min, 100%, 24/7 panel.",
+    },
     shot: {
       src: "/work/parkqui.webp",
       width: 1400,
       height: 641,
       alt: "The ParkQui site: a deep blue marketplace landing page in Bulgarian, with search and listing actions.",
     },
-    depth: "−468m",
-    ambient: 0.44,
     inColumn: true,
     caseStudy: true,
+    // Facts confirmed by Miroslav (Facebook groups before; Supabase + Mapbox)
+    // or visible on the live site itself (the two roles and what each can
+    // do). Nothing here claims usage numbers or outcomes.
     problem: [
-      "A 2,000-member community was matching parking spaces to drivers by hand, in a group chat. Listings went stale, the same space got promised twice, and there was no way to see what was actually free near you.",
-      // TODO(problem): confirm this framing with Miroslav — who asked for it,
-      // what specifically was breaking, and what they had tried before.
+      "A 2,000-member community was finding and offering parking through Facebook group posts. Posts scroll away within hours, and nothing shows what is actually free near where you need to be.",
     ],
     decisions: [
       {
-        title: "Listings and availability modelled separately",
-        body: "TODO(decision): why availability was split from the listing record, and what that made possible later. This is the kind of detail that proves engineering rather than assembly.",
+        title: "One platform, two roles",
+        body: "Drivers and space owners share one account system, each with their own side of the product: owners publish slots and set when they are available, drivers find and book them in advance.",
       },
       {
-        title: "Map search backed by real geospatial queries",
-        body: "TODO(decision): how map search and filtering were implemented, and what the alternative would have cost in responsiveness.",
+        title: "Search on a real map",
+        body: "Listings sit on a Mapbox map, so a driver searches by the place they need to be rather than scrolling a feed of posts.",
       },
       {
-        title: "Roles and permissions for owners, drivers and admins",
-        body: "TODO(decision): how the three roles were separated, and what moderation the admin dashboard needed to make the marketplace usable day to day.",
+        title: "Accounts and data on Supabase",
+        body: "Sign-in, profiles and the listings database run on one managed backend, which kept the build small without cutting corners on authentication.",
       },
     ],
     outcome: [
-      "TODO(outcome): what it does now — live, in use, parked, or handed over. State only what is true.",
+      "Live at park-qui.vercel.app. The public site is open to anyone; search, listings and the map sit behind sign-in.",
     ],
     metrics: [
       // TODO(metrics): leave empty unless real numbers exist. An empty array
@@ -170,14 +201,25 @@ export const CASE_STUDIES: readonly CaseStudy[] = [
     year: null,
     stack: [],
     live: { href: "https://popwrists.vercel.app/", label: "popwrists.vercel.app" },
+    kind: "Launch page",
+    loop: {
+      src: "/work/popwrists-loop.mp4",
+      poster: "/work/popwrists-poster.webp",
+      width: 1280,
+      height: 800,
+    },
+    phone: {
+      src: "/work/popwrists-phone-390.webp",
+      width: 780,
+      height: 1688,
+      alt: "PopWrists on a phone: “The Royal Pop. Now on your wrist.” above the waitlist field and colourway dots.",
+    },
     shot: {
       src: "/work/popwrists.webp",
       width: 1400,
       height: 641,
       alt: "The PopWrists site: oversized black and gradient type on a warm off-white ground, above a waitlist field.",
     },
-    depth: "−710m",
-    ambient: 0.34,
     inColumn: true,
     caseStudy: false,
     problem: [],
