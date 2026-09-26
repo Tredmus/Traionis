@@ -212,72 +212,360 @@ textarea {
   }
 }
 
-/*
- * Diagnostic glass — same idea as the header: dark water looking through
- * frost. A white wash over shallows reads as light blue; abyss tint keeps
- * the plate in the water instead of sitting on top of it.
- */
-.diagnostic-glass-track {
-  background-color: rgb(3 7 15 / 0.28);
-  border: 1px solid rgb(242 246 250 / 0.12);
-  box-shadow:
-    inset 0 1px 0 rgb(242 246 250 / 0.06),
-    0 18px 40px -28px rgb(3 7 15 / 0.5);
-  -webkit-backdrop-filter: blur(20px) saturate(1.15);
-  backdrop-filter: blur(20px) saturate(1.15);
+/* ============================================================
+   SERVICES — the drawings
+   ------------------------------------------------------------
+   Each offering is shown as the thing it is: an exploded page, a
+   running system. Hairline strokes in the zone ink, the accent only
+   where there is light (a filled control, a request in flight, the
+   part under the reader's pointer). Every stroke carries
+   pathLength="1" so one custom property draws the whole figure in.
+
+   Desktop pins each panel for a stretch of scroll; below `lg`
+   nothing pins and the callouts become a numbered list.
+   ============================================================ */
+
+.svc-panel__stage {
+  padding-block: 4.5rem 1rem;
 }
 
-.diagnostic-glass-panel {
-  background-color: rgb(3 7 15 / 0.34);
-  border: 1px solid rgb(242 246 250 / 0.14);
-  box-shadow:
-    inset 0 1px 0 rgb(242 246 250 / 0.07),
-    0 28px 60px -36px rgb(3 7 15 / 0.55);
-  -webkit-backdrop-filter: blur(24px) saturate(1.15);
-  backdrop-filter: blur(24px) saturate(1.15);
+.svc-panel__grid {
+  display: grid;
+  gap: 2.75rem;
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
 }
 
-.diagnostic-glass-tab-active {
-  background-color: rgb(3 7 15 / 0.22);
-  border: 1px solid rgb(18 168 212 / 0.45);
-  box-shadow:
-    inset 0 1px 0 rgb(242 246 250 / 0.08),
-    0 0 0 1px rgb(18 168 212 / 0.1),
-    0 10px 28px -16px rgb(18 168 212 / 0.3);
-  -webkit-backdrop-filter: blur(16px) saturate(1.2);
-  backdrop-filter: blur(16px) saturate(1.2);
+.svc-panel__title {
+  max-width: 16ch;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3vw, 2.6rem);
+  font-weight: 700;
+  font-stretch: 108%;
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
 }
 
-.diagnostic-glass-callout {
-  background-color: rgb(3 7 15 / 0.4);
-  border: 1px solid rgb(242 246 250 / 0.1);
-  -webkit-backdrop-filter: blur(12px) saturate(1.1);
-  backdrop-filter: blur(12px) saturate(1.1);
+.svc-panel__body {
+  margin-top: 1.25rem;
+  max-width: 46ch;
+  color: color-mix(in srgb, var(--zone-ink) 80%, transparent);
 }
 
-@media (prefers-reduced-transparency: reduce) {
-  .diagnostic-glass-track {
-    background-color: color-mix(in srgb, var(--color-zone-abyss) 55%, var(--color-zone-shallows));
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
+/* The timeline, set as a dimension on a drawing. */
+.svc-dim {
+  display: flex;
+  width: fit-content;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 2.25rem;
+}
+
+.svc-dim__label {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.svc-dim__rule {
+  display: block;
+  height: 9px;
+  border-inline: 1px solid color-mix(in srgb, var(--color-accent-hi) 70%, var(--zone-ink));
+  background: linear-gradient(
+      color-mix(in srgb, var(--color-accent-hi) 70%, var(--zone-ink)),
+      color-mix(in srgb, var(--color-accent-hi) 70%, var(--zone-ink))
+    )
+    center / 100% 1px no-repeat;
+}
+
+.svc-rebuild {
+  margin-top: 3rem;
+  max-width: 62ch;
+  border-top: 1px solid var(--zone-line);
+  padding-top: 1.5rem;
+  color: color-mix(in srgb, var(--zone-ink) 74%, transparent);
+}
+
+@media (min-width: 640px) {
+  .svc-panel__grid {
+    padding-inline: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  /* The pin: the panel is taller than the screen, the stage sticks, and the
+     extra height is the scroll the drawing scrubs against. */
+  .svc-panel {
+    height: 180vh;
   }
 
-  .diagnostic-glass-panel {
-    background-color: color-mix(in srgb, var(--color-zone-abyss) 62%, var(--color-zone-shallows));
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
+  /* The page drawing lifts, labels and restacks — it gets the longer pin. */
+  .svc-panel[data-kind="site"] {
+    height: 215vh;
   }
 
-  .diagnostic-glass-tab-active {
-    background-color: color-mix(in srgb, var(--color-zone-abyss) 45%, var(--color-zone-shallows));
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
+  .svc-panel__stage {
+    position: sticky;
+    top: var(--header-h);
+    display: flex;
+    height: calc(100svh - var(--header-h));
+    align-items: center;
+    padding-block: 0;
   }
 
-  .diagnostic-glass-callout {
-    background-color: rgb(3 7 15 / 0.72);
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
+  .svc-panel__grid {
+    grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+    align-items: center;
+    gap: 3.5rem;
+    padding-inline: 4rem;
+  }
+
+  .svc-panel[data-flip="true"] .svc-panel__grid {
+    grid-template-columns: minmax(0, 1.28fr) minmax(0, 0.72fr);
+  }
+
+  .svc-panel[data-flip="true"] .svc-panel__text {
+    order: 2;
+  }
+}
+
+/* --- The figure ------------------------------------------------ */
+
+.sx {
+  margin: 0;
+}
+
+.sx-frame {
+  position: relative;
+  width: 100%;
+  margin-inline: auto;
+}
+
+.sx-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: var(--sx-ratio);
+  overflow: visible;
+}
+
+@media (min-width: 1024px) {
+  /* Fit the pinned stage by height as well as width. */
+  .sx-frame {
+    width: min(100%, calc((100svh - var(--header-h) - 4rem) * var(--sx-k)));
+  }
+}
+
+.sx-plate {
+  fill: rgb(9 24 48 / 0.62);
+  fill-opacity: var(--sx-draw, 1);
+  stroke: color-mix(in srgb, var(--zone-ink) 40%, transparent);
+  stroke-width: 1;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - var(--sx-draw, 1));
+}
+
+.sx-stroke {
+  fill: none;
+  stroke: color-mix(in srgb, var(--zone-ink) 52%, transparent);
+  stroke-width: 1.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - var(--sx-draw, 1));
+}
+
+.sx-stroke--faint {
+  stroke: color-mix(in srgb, var(--zone-ink) 17%, transparent);
+}
+
+.sx-stroke--strong {
+  stroke: color-mix(in srgb, var(--zone-ink) 84%, transparent);
+  stroke-width: 1.8;
+}
+
+.sx-stroke--solid {
+  fill: var(--color-zone-shallows);
+  fill-opacity: var(--sx-draw, 1);
+}
+
+.sx-accent {
+  fill: var(--color-accent-hi);
+  opacity: calc(var(--sx-draw, 1) * 0.9);
+}
+
+.sx-edge {
+  fill: none;
+  stroke: color-mix(in srgb, var(--zone-ink) 30%, transparent);
+  stroke-width: 1.1;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - var(--sx-edges, 1));
+}
+
+/* Requests in flight — the one moving light in the drawing. Hidden (and
+   the clock paused) until the system has drawn in. */
+.sx-pulses {
+  opacity: 0;
+  transition: opacity 600ms var(--ease-descent);
+}
+
+.sx-svg[data-running="true"] .sx-pulses {
+  opacity: 1;
+}
+
+.sx-pulse {
+  fill: color-mix(in srgb, var(--color-accent-hi) 80%, white);
+  filter: drop-shadow(0 0 3px rgb(18 168 212 / 0.85));
+}
+
+.sx-leader {
+  fill: none;
+  stroke: color-mix(in srgb, var(--zone-ink) 40%, transparent);
+  stroke-width: 1;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+.sx-anchor {
+  fill: var(--color-accent-hi);
+}
+
+/* A drawn part with a callout is a hover target across its whole shape, not
+   just its hairlines — the enclosed area counts even where it is unfilled. */
+.sx-part[data-hoverable="true"] path {
+  pointer-events: all;
+}
+
+/* The part under the reader's pointer lights; the rest steps back. */
+.sx-part,
+.sx-edge,
+.sx-pulse,
+.sx-plate,
+.sx-stroke,
+.sx-leader {
+  transition:
+    opacity 300ms var(--ease-descent),
+    stroke 300ms var(--ease-descent);
+}
+
+.sx[data-active] .sx-part[data-lit="false"],
+.sx[data-active] .sx-edge[data-lit="false"],
+.sx[data-active] .sx-pulse[data-lit="false"] {
+  opacity: 0.4;
+}
+
+.sx-part[data-lit="true"] .sx-stroke,
+.sx-part[data-lit="true"] .sx-plate,
+.sx-edge[data-lit="true"],
+.sx-leaders [data-lit="true"] .sx-leader {
+  stroke: color-mix(in srgb, var(--color-accent-hi) 85%, white);
+}
+
+/* Numbered markers stand in for the leaders below `lg`. */
+.sx-marker circle {
+  fill: var(--color-zone-shallows);
+  stroke: var(--color-accent-hi);
+  stroke-width: 1.2;
+}
+
+.sx-marker text {
+  fill: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-anchor: middle;
+}
+
+.sx-leaders {
+  display: none;
+}
+
+/* --- Callouts: a numbered list, then labels in the gutters ------ */
+
+.sx-callouts {
+  display: grid;
+  gap: 0.75rem;
+  margin: 1.75rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sx-callout {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: color-mix(in srgb, var(--zone-ink) 84%, transparent);
+  transition: color 250ms var(--ease-descent);
+}
+
+.sx-callout__n {
+  display: inline-grid;
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--color-accent-hi) 70%, transparent);
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink);
+}
+
+@media (min-width: 1024px) {
+  .sx-markers {
+    display: none;
+  }
+
+  .sx-leaders {
+    display: inline;
+  }
+
+  .sx-callouts {
+    position: absolute;
+    inset: 0;
+    display: block;
+    margin: 0;
+    pointer-events: none;
+  }
+
+  .sx-callout {
+    position: absolute;
+    top: var(--sx-y);
+    display: block;
+    width: var(--sx-w);
+    transform: translateY(-50%);
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: color-mix(in srgb, var(--zone-ink) 74%, transparent);
+    pointer-events: auto;
+    text-wrap: pretty;
+  }
+
+  .sx-callout[data-side="left"] {
+    right: calc(100% - var(--sx-x));
+    text-align: right;
+  }
+
+  .sx-callout[data-side="right"] {
+    left: var(--sx-x);
+  }
+
+  .sx-callout[data-lit="true"] {
+    color: var(--color-ink);
+  }
+
+  .sx-callout__n {
+    display: none;
   }
 }
 

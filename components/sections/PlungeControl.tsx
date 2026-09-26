@@ -98,7 +98,7 @@ export function PlungeControl({ className = "" }: { className?: string }) {
         onClick={plunge}
         disabled={plunging}
         aria-label={copy.hero.ctaContinue}
-        className={`group relative flex flex-col items-center gap-3 text-label uppercase tracking-[0.2em] focus-visible:outline-none ${className}`.trim()}
+        className={`group relative flex cursor-pointer flex-col items-center gap-2 text-label uppercase tracking-[0.2em] focus-visible:outline-none ${className}`.trim()}
         style={{
           color: "color-mix(in srgb, var(--color-ink) 78%, rgb(58 104 148))",
         }}
@@ -119,14 +119,14 @@ export function PlungeControl({ className = "" }: { className?: string }) {
             makes to the surface, at the scale of an icon. */}
         <span
           aria-hidden="true"
-          className="relative mt-1 flex h-14 w-12 justify-center transition-colors duration-300 [transition-timing-function:var(--ease-descent)] group-hover:text-[var(--color-accent-hi)] group-focus-visible:text-[var(--color-accent-hi)]"
+          className="relative flex h-14 w-12 justify-center transition-colors duration-300 [transition-timing-function:var(--ease-descent)] group-hover:text-[var(--color-accent-hi)] group-focus-visible:text-[var(--color-accent-hi)]"
         >
           {/* The line */}
           <span
             className="absolute left-1/2 top-0 h-10 w-px -translate-x-1/2"
             style={{
               background:
-                "linear-gradient(to bottom, transparent, color-mix(in srgb, currentColor 45%, transparent))",
+                "linear-gradient(to bottom, color-mix(in srgb, currentColor 18%, transparent), color-mix(in srgb, currentColor 45%, transparent))",
             }}
           />
 

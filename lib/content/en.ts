@@ -38,45 +38,42 @@ export const en: SiteCopy = {
   },
 
   offerings: {
-    zoneLabel: "Services",
     heading: "What we build",
     intro: "Designed and built from scratch, around how your business actually works.",
-    problems: [
+    offerings: [
       {
         id: "site",
-        question: "Websites",
-        label: "Websites",
         title: "Websites that do commercial work",
         body: "The site a prospect judges you by before they ever speak to you. Designed around what it has to sell, coded from scratch, and tuned for the phone most of your visitors are holding.",
-        deliverables: [
-          "Custom design and front-end, coded by hand",
-          "Fast on mid-range phones, measured on real devices",
-          "Structured for Google and AI search answers",
-          "Bilingual when your market is",
-          "Code, hosting and domain in your name",
+        // Anchors are layers of the exploded page, bottom to top.
+        callouts: [
+          { anchor: "foundation", text: "Code, hosting and domain in your name" },
+          { anchor: "structure", text: "Structured for Google and AI search answers" },
+          { anchor: "content", text: "Bilingual when your market is" },
+          { anchor: "design", text: "Custom design and front-end, coded by hand" },
+          { anchor: "interaction", text: "Fast on mid-range phones, measured on real devices" },
         ],
         proof: { href: "#plate-orvyx", label: "See Orvyx" },
         timeline: "Live in 1–3 weeks",
       },
       {
-        id: "operation",
-        question: "Web & mobile applications",
-        label: "Applications",
+        id: "app",
         title: "Applications the business runs on",
         body: "Booking systems, marketplaces, client portals, operations and internal tools — web and mobile, built around how your business actually works.",
-        deliverables: [
-          "Data modelling, accounts, roles and permissions",
-          "Maps and location search",
-          "Admin dashboards and moderation",
-          "Payments, notifications and third-party integrations",
-          "Automation and AI assistants, built into the product",
+        // Anchors are parts of the system diagram.
+        callouts: [
+          { anchor: "admin", text: "Admin dashboards and moderation" },
+          { anchor: "maps", text: "Maps and location search" },
+          { anchor: "integrations", text: "Payments, notifications and third-party integrations" },
+          { anchor: "automation", text: "Automation and AI assistants, built into the product" },
+          { anchor: "data", text: "Data modelling, accounts, roles and permissions" },
         ],
         proof: { href: "#plate-parkqui", label: "See ParkQui" },
         timeline: "First working release in 2–5 weeks",
       },
     ],
     rebuild:
-      "Already have a site? We rebuild it from the foundations. It's easier to build a mansion than to turn an old hut into one.",
+      "Already have a site? We rebuild it from the foundations — and your domain, your content and your search rankings come with it.",
   },
 
   process: {
@@ -143,7 +140,7 @@ export const en: SiteCopy = {
         id: "rebuild",
         question: "Can you rebuild our existing site?",
         answer: [
-          "Yes — from the foundations. We don't patch old sites or work in WordPress; it's easier to build a mansion than to turn an old hut into one. You keep your domain, and we carry your search rankings over through the move.",
+          "Yes — from the foundations. We don't patch old sites or work in WordPress; a clean rebuild is faster and holds up longer. You keep your domain and content, and we carry your search rankings over through the move.",
         ],
       },
       {

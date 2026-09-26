@@ -25,7 +25,9 @@ export const bg: DeepPartial<SiteCopy> = {
 
   // TODO(bg): meta — title and description, written for Bulgarian search, not translated.
   // TODO(bg): hero — headline and lead. The spine must work idiomatically.
-  // TODO(bg): offerings — zone label, heading, intro, both offerings (tab names, labels, titles, bodies, deliverables, proof, timelines) and the rebuild line.
+  // TODO(bg): offerings — heading, intro, both offerings (titles, bodies, callout
+  //           texts — keep each `anchor` as is — proof labels, timelines) and the
+  //           rebuild line. `offerings` is an array: translate both or neither.
   // TODO(bg): process — four steps.
   // TODO(bg): work — section heading, intro, and the three link labels
   //           (readMore, viewAll, visitLive). Project names, summaries and the

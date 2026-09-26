@@ -42,7 +42,7 @@ Everything Traionis delivers is built from the ground up — no themes, no page 
 
 - This is a claim about **the work**, not about who the buyer talks to. It stays true whether the first conversation is with the founder or with a sales partner.
 - The site does not frame the studio by team size in either direction. It never claims a headcount, a team, or departments it does not have, and it never draws attention to being a one-person operation.
-- Rebuilds follow the same principle: an existing site is not patched or reskinned, it is rebuilt from the ground up on the same idea — the meaning of "it is easier to build a mansion than to turn an old hut into one." No WordPress work.
+- Rebuilds follow the same principle: an existing site is not patched or reskinned, it is rebuilt from the ground up. No WordPress work. The site never disparages the buyer's current site (the "mansion vs. old hut" image is for sales calls, not the page — the reader owns the hut); it states the approach and removes the risk: domain, content and search rankings carry over.
 
 The previous spine ("you talk to the person who builds it") is retired. It was not always true (sales partners handle some conversations), buyers do not weigh it heavily, and it foregrounded a small operation.
 

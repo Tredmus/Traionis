@@ -47,17 +47,24 @@ export interface HeroCopy {
   ctaContinue: string;
 }
 
-export interface ProblemCopy {
-  id: string;
-  /** Tab label — the offering's plain name. */
-  question: string;
-  /** Small mono label above the title. */
-  label: string;
+/**
+ * One capability, attached to a part of the offering's drawing. `anchor` names
+ * the part (see components/services) — it is structure, not copy, so a
+ * translation changes `text` and leaves `anchor` alone.
+ */
+export interface CalloutCopy {
+  anchor: string;
+  text: string;
+}
+
+export interface OfferingCopy {
+  /** "site" → exploded page drawing; "app" → system diagram. */
+  id: "site" | "app";
   /** Framed as an outcome for the buyer, never as a flat service line. */
   title: string;
   body: string;
-  /** What the build includes — capabilities, stated as facts. */
-  deliverables: readonly string[];
+  /** What the build includes, each pinned to a part of the drawing. */
+  callouts: readonly CalloutCopy[];
   /** Proof link to the matching project on the page. */
   proof: { href: string; label: string };
   /** Stated timeline, e.g. "Live in 1–3 weeks". */
@@ -65,11 +72,9 @@ export interface ProblemCopy {
 }
 
 export interface OfferingsCopy {
-  /** Zone name alone — never a numeric depth reading. */
-  zoneLabel: string;
   heading: string;
   intro: string;
-  problems: readonly ProblemCopy[];
+  offerings: readonly OfferingCopy[];
   /** Rebuild line — existing sites are rebuilt from the foundations. */
   rebuild: string;
 }
