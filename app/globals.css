@@ -1079,6 +1079,137 @@ textarea {
   gap: clamp(3.5rem, 8vw, 6.5rem);
 }
 
+/* A row is a step and, across the current from it, what that step leaves in
+   the client's hands. Below `md` the drawing sits under its step, on the same
+   side, so the centre corridor stays clear for the path. */
+.process-trail__row {
+  display: flex;
+  flex-direction: column;
+}
+
+.process-trail__art {
+  width: min(62%, 15rem);
+  margin-top: 1.5rem;
+}
+
+.process-trail__row--left .process-trail__art {
+  align-self: flex-start;
+}
+
+.process-trail__row--right .process-trail__art {
+  align-self: flex-end;
+}
+
+@media (min-width: 768px) {
+  .process-trail__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+  }
+
+  .process-trail__row > .process-trail__step {
+    width: min(92%, 26rem);
+  }
+
+  .process-trail__row--left > .process-trail__step {
+    grid-column: 1;
+    justify-self: start;
+  }
+
+  .process-trail__row--right > .process-trail__step {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+  }
+
+  .process-trail__art {
+    width: min(78%, 17rem);
+    margin-top: 0;
+  }
+
+  .process-trail__row--left .process-trail__art {
+    grid-column: 2;
+    justify-self: end;
+  }
+
+  .process-trail__row--right .process-trail__art {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+  }
+}
+
+/* Phones: one straight current down the left edge. A snaking path between
+   alternating steps has to cross the full width between them, which is
+   exactly where the drawings sit — so below `md` every station lines up on
+   the left and the path runs straight, clear of the copy and the drawings. */
+@media (max-width: 767px) {
+  .process-trail__row > .process-trail__step {
+    width: 100%;
+    align-self: stretch;
+    text-align: left;
+  }
+
+  .process-trail__step--left .process-trail__station {
+    order: -1;
+  }
+
+  .process-trail__row > .process-trail__step--right .process-trail__copy {
+    align-items: flex-start;
+  }
+
+  .process-trail__row > .process-trail__step--right .process-trail__title {
+    background-position: left bottom;
+  }
+
+  .process-trail__row--left .process-trail__art,
+  .process-trail__row--right .process-trail__art {
+    align-self: flex-start;
+    width: min(72%, 16rem);
+    margin-left: calc(11px + 1.1rem);
+  }
+}
+
+.process-art {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* Drawn in when the jellyfish reaches the station; undrawn quickly if the
+   reader scrolls back above it. No attribute (no JS) = drawn. */
+.process-art__stroke {
+  fill: none;
+  stroke: color-mix(in srgb, var(--zone-ink) 50%, transparent);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1100ms var(--ease-descent) calc(var(--i, 0) * 45ms);
+}
+
+.process-art__stroke--strong {
+  stroke: color-mix(in srgb, var(--zone-ink) 86%, transparent);
+  stroke-width: 1.6;
+}
+
+.process-art__stroke--faint {
+  stroke: color-mix(in srgb, var(--zone-ink) 22%, transparent);
+}
+
+.process-art__stroke--accent {
+  stroke: var(--color-accent-hi);
+  stroke-width: 1.5;
+}
+
+.process-trail__row[data-reached="false"] .process-art__stroke {
+  stroke-dashoffset: 1;
+  transition-duration: 320ms;
+  transition-delay: 0s;
+}
+
 .process-trail__step {
   position: relative;
   display: flex;

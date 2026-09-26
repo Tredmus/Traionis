@@ -10,6 +10,7 @@ import {
 
 import { ZoneInner } from "@/components/depth/DepthZone";
 import { Reveal } from "@/components/motion/Reveal";
+import { ProcessArt } from "@/components/sections/ProcessArt";
 import { useCopy } from "@/lib/locale-context";
 
 /**
@@ -220,6 +221,9 @@ export function Process() {
       const stop = stops[i] ?? 0;
       const reached = progress >= stop - 0.008;
       node.dataset.lit = reached ? "true" : "false";
+      // The row's deliverable draws itself once the jellyfish gets there.
+      const row = node.closest(".process-trail__row");
+      if (row instanceof HTMLElement) row.dataset.reached = reached ? "true" : "false";
       const step = node.closest(".process-trail__step");
       if (step instanceof HTMLElement) {
         step.dataset.current = i === activeIndex ? "true" : "false";
@@ -460,7 +464,7 @@ export function Process() {
               const side = i % 2 === 0 ? "left" : "right";
               const copyBlock = (
                 <Reveal className="process-trail__copy" index={i + 2}>
-                  <h3 className="process-trail__title font-display text-[1.2rem] font-semibold leading-snug tracking-[-0.015em] text-balance sm:text-[1.35rem]">
+                  <h3 className="process-trail__title font-display text-[clamp(1.45rem,2.3vw,2rem)] font-semibold leading-[1.15] tracking-[-0.02em] text-balance">
                     {step.title}
                   </h3>
                   <p className="mt-4 max-w-[42ch] text-body text-[color-mix(in_srgb,var(--zone-ink)_72%,transparent)]">
@@ -482,19 +486,26 @@ export function Process() {
               return (
                 <li
                   key={step.id}
-                  className={`process-trail__step process-trail__step--${side}`}
+                  className={`process-trail__row process-trail__row--${side}`}
                 >
-                  {side === "left" ? (
-                    <>
-                      {copyBlock}
-                      {station}
-                    </>
-                  ) : (
-                    <>
-                      {station}
-                      {copyBlock}
-                    </>
-                  )}
+                  <div className={`process-trail__step process-trail__step--${side}`}>
+                    {side === "left" ? (
+                      <>
+                        {copyBlock}
+                        {station}
+                      </>
+                    ) : (
+                      <>
+                        {station}
+                        {copyBlock}
+                      </>
+                    )}
+                  </div>
+                  {/* Across the current from its step: what that stage leaves
+                      in the client's hands. */}
+                  <div className="process-trail__art">
+                    <ProcessArt id={step.id} />
+                  </div>
                 </li>
               );
             })}
