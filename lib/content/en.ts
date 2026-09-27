@@ -162,15 +162,16 @@ export const en: SiteCopy = {
         answer: ["Yes. We work remotely, in English and Bulgarian."],
       },
     ],
+    more: { prompt: "Something else?", link: "Ask it in your brief" },
   },
 
   founder: {
     heading: "Behind the work",
     name: "Miroslav Todorov",
     role: "Founder & Lead Engineer",
+    statement: "Every project we ship is held to the standard of the site you're reading now.",
     body: [
       "I started Traionis in 2023 to bring the standard of enterprise software teams to businesses of any size. Before that, I built front-end for a European enterprise healthcare platform and trained at Endava.",
-      "Every project we ship is held to the standard of the site you're reading now.",
     ],
     facts: "Est. 2023 · Varna, Bulgaria · English / Bulgarian",
   },

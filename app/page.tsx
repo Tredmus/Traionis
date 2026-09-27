@@ -1,5 +1,4 @@
 import { DepthZone } from "@/components/depth/DepthZone";
-import { ZoneThreshold } from "@/components/depth/ZoneThreshold";
 import { Contact } from "@/components/sections/Contact";
 import { Faq } from "@/components/sections/Faq";
 import { Founder } from "@/components/sections/Founder";
@@ -36,8 +35,6 @@ export default function HomePage() {
         overflow="visible"
         className="relative z-0 -mt-[var(--hero-waterline-overlap)] pb-20 pt-[calc(var(--hero-waterline-overlap)+5.5rem)] sm:pb-28 sm:pt-[calc(var(--hero-waterline-overlap)+7rem)]"
       >
-        {/* Zone name lives in the services rail (SHALLOWS). Numeric −40m
-            threshold removed for this band — readings elsewhere stay. */}
         <Offerings />
       </DepthZone>
 
@@ -48,7 +45,6 @@ export default function HomePage() {
         blendFrom="shallows"
         className="pb-20 pt-16 sm:pb-28 sm:pt-24"
       >
-        <ZoneThreshold zone="mid" />
         <WorkZone />
         {/* Proof, then procedure. Someone holding three proposals wants to see
             that you can build the thing before hearing how the work is run. */}
@@ -61,7 +57,6 @@ export default function HomePage() {
         blendFrom="mid"
         className="pb-20 pt-16 sm:pb-28 sm:pt-24"
       >
-        <ZoneThreshold zone="deep" />
         <Faq />
       </DepthZone>
 
@@ -71,7 +66,6 @@ export default function HomePage() {
         blendFrom="deep"
         className="pb-20 pt-16 sm:pb-28 sm:pt-24"
       >
-        <ZoneThreshold zone="abyss" />
         <Founder />
         <Contact />
       </DepthZone>

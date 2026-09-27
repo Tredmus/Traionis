@@ -107,6 +107,8 @@ export interface FounderCopy {
   heading: string;
   name: string;
   role: string;
+  /** The standard, in one sentence. Set large, in the serif. */
+  statement: string;
   /** First person singular — the one place the site says "I". */
   body: readonly string[];
   /** Short checkable facts line, e.g. "Est. 2023 · Varna, Bulgaria". */
@@ -129,6 +131,8 @@ export interface FaqCopy {
   heading: string;
   intro: string;
   items: readonly FaqItemCopy[];
+  /** Closing line under the list, linking to the brief. */
+  more: { prompt: string; link: string };
 }
 
 export interface ContactCopy {
