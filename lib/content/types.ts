@@ -139,22 +139,18 @@ export interface ContactCopy {
   heading: string;
   intro: string;
   /**
-   * Declaration order is the render order, and it leads with the work rather
-   * than the person. Asking for a name first says "identify yourself"; asking
-   * what they are building says "tell me about the work" — and anyone without
-   * a project to describe stalls on the first field, which is the filter doing
-   * its job without a gate.
+   * Three fields: name, email, and the project in the visitor's own words.
+   * Timeline and company were cut — the placeholder asks for timing, and an
+   * email domain usually names the company. Every extra field makes the
+   * brief feel like a test, and a test does not get sent.
    *
    * There is no budget field. Confirmed decision: scope is captured in prose
-   * and money comes up on the call. A bracket selector reads as a price gate,
-   * and there is no floor for it to enforce.
+   * and money comes up on the call.
    */
   fields: {
-    project: { label: string; placeholder: string; help: string };
-    timeline: { label: string; placeholder: string };
     name: { label: string; placeholder: string };
     email: { label: string; placeholder: string };
-    company: { label: string; placeholder: string; optional: string };
+    project: { label: string; placeholder: string; help: string };
   };
   submit: string;
   submitting: string;
@@ -166,6 +162,9 @@ export interface ContactCopy {
   errorSubmit: string;
   /** Build-time guard. Rendered only when no endpoint is configured. */
   errorUnconfigured: string;
+  /** Beside the form: what happens after sending, and the direct lines. */
+  next: { heading: string; steps: readonly string[] };
+  direct: { heading: string; email: string; call: string };
 }
 
 export interface FooterCopy {

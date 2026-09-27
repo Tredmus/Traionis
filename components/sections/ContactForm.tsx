@@ -35,15 +35,13 @@ type FieldName = keyof ContactBrief;
 type Status = "idle" | "sending" | "sent" | "error";
 
 const EMPTY: ContactBrief = {
-  project: "",
-  timeline: "",
   name: "",
   email: "",
-  company: "",
+  project: "",
 };
 
-/** Company is the only optional field. */
-const REQUIRED: readonly FieldName[] = ["project", "timeline", "name", "email"];
+/** All three are required — there are only three. */
+const REQUIRED: readonly FieldName[] = ["name", "email", "project"];
 
 interface FieldProps {
   id: string;
@@ -106,7 +104,7 @@ function Field({
 
       <div className="abyss-field__line">
         {multiline ? (
-          <textarea {...shared} rows={5} />
+          <textarea {...shared} rows={4} />
         ) : (
           <input {...shared} type={type} />
         )}
@@ -218,30 +216,6 @@ export function ContactForm() {
 
   return (
     <form className="abyss-form" onSubmit={onSubmit} noValidate>
-      <Field
-        id={fieldId("project")}
-        label={copy.contact.fields.project.label}
-        placeholder={copy.contact.fields.project.placeholder}
-        help={copy.contact.fields.project.help}
-        value={brief.project}
-        onChange={(value) => update("project", value)}
-        onBlur={() => check("project")}
-        error={errors.project}
-        disabled={sending}
-        multiline
-      />
-
-      <Field
-        id={fieldId("timeline")}
-        label={copy.contact.fields.timeline.label}
-        placeholder={copy.contact.fields.timeline.placeholder}
-        value={brief.timeline}
-        onChange={(value) => update("timeline", value)}
-        onBlur={() => check("timeline")}
-        error={errors.timeline}
-        disabled={sending}
-      />
-
       <div className="abyss-form__pair">
         <Field
           id={fieldId("name")}
@@ -269,15 +243,16 @@ export function ContactForm() {
       </div>
 
       <Field
-        id={fieldId("company")}
-        label={copy.contact.fields.company.label}
-        placeholder={copy.contact.fields.company.placeholder}
-        optional={copy.contact.fields.company.optional}
-        value={brief.company}
-        onChange={(value) => update("company", value)}
-        onBlur={() => check("company")}
-        autoComplete="organization"
+        id={fieldId("project")}
+        label={copy.contact.fields.project.label}
+        placeholder={copy.contact.fields.project.placeholder}
+        help={copy.contact.fields.project.help}
+        value={brief.project}
+        onChange={(value) => update("project", value)}
+        onBlur={() => check("project")}
+        error={errors.project}
         disabled={sending}
+        multiline
       />
 
       {/* Not display:none — some bots skip anything hidden that way. */}

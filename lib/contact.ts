@@ -17,12 +17,19 @@ export const CONTACT_ENDPOINT = process.env.NEXT_PUBLIC_CONTACT_ENDPOINT ?? "";
 
 export const CONTACT_CONFIGURED = CONTACT_ENDPOINT.length > 0;
 
+/**
+ * Direct lines, beside the form. Both optional: each one renders only once it
+ * is set, so the page never shows an address or a link that goes nowhere.
+ */
+export const CONTACT_EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "";
+/** A booking page for the discovery call (e.g. a Cal.com event link). */
+export const BOOKING_URL = process.env.NEXT_PUBLIC_BOOKING_URL ?? "";
+
+/** Three fields, on purpose: a short form gets sent; a long one gets closed. */
 export interface ContactBrief {
-  project: string;
-  timeline: string;
   name: string;
   email: string;
-  company: string;
+  project: string;
 }
 
 /**
@@ -50,19 +57,34 @@ export async function sendBrief(brief: ContactBrief): Promise<void> {
       Accept: "application/json",
     },
     body: JSON.stringify({
-      project: brief.project,
-      timeline: brief.timeline,
       name: brief.name,
       email: brief.email,
-      company: brief.company,
+      project: brief.project,
       // Most form services read this to set the reply-to address, so hitting
       // reply in the inbox answers the person rather than the service.
       _replyto: brief.email,
       _subject: `Project brief — ${brief.name}`,
+      // FormSubmit: a readable table in the inbox, and no captcha page (its
+      // AJAX endpoint cannot show one anyway). Other services ignore these.
+      _template: "table",
+      _captcha: "false",
     }),
   });
 
   if (!response.ok) {
     throw new Error(`Form endpoint returned ${response.status}`);
+  }
+
+  // Some services (FormSubmit among them) answer 200 with a failure in the
+  // body — e.g. an endpoint not yet activated. Treat that as a failure, so the
+  // visitor is told rather than shown a success that never arrived.
+  const data: unknown = await response.json().catch(() => null);
+  if (
+    data &&
+    typeof data === "object" &&
+    "success" in data &&
+    String((data as { success: unknown }).success) === "false"
+  ) {
+    throw new Error("Form endpoint refused the submission.");
   }
 }

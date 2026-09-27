@@ -181,16 +181,13 @@ export const en: SiteCopy = {
     intro:
       "Tell us what you're building. We'll reply within two working days with next steps.",
     fields: {
-      project: {
-        label: "What are you building?",
-        placeholder:
-          "What it needs to do, who will use it, and when you'd like it live.",
-        help: "A few rough lines are enough.",
-      },
-      timeline: { label: "Ideal launch date", placeholder: "e.g. before March" },
       name: { label: "Name", placeholder: "Your name" },
       email: { label: "Email", placeholder: "you@company.com" },
-      company: { label: "Company", placeholder: "Company name", optional: "Optional" },
+      project: {
+        label: "What are you building?",
+        placeholder: "What it needs to do, who will use it, and when you'd like it live.",
+        help: "A few rough lines are enough.",
+      },
     },
     submit: "Send brief",
     submitting: "Sending…",
@@ -203,6 +200,19 @@ export const en: SiteCopy = {
     // deploy environment. Visible on purpose — a form that silently accepts a
     // brief and drops it is the worst bug this site could ship.
     errorUnconfigured: "This form isn't connected yet.",
+    next: {
+      heading: "What happens next",
+      steps: [
+        "We read your brief.",
+        "You get a reply within two working days.",
+        "A short call to scope it — then a written scope and a fixed price.",
+      ],
+    },
+    direct: {
+      heading: "Prefer to talk first?",
+      email: "Write to us directly",
+      call: "Book a 30-minute call",
+    },
   },
 
   footer: {
