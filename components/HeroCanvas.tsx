@@ -553,7 +553,16 @@ export function HeroCanvas({ className = "" }: HeroCanvasProps) {
       // (phone) canvases sample the shortest train ~16× and stroke with
       // quadratics; wide canvases keep the original step and lineTo.
       const desktopStep = Math.max(10, Math.round(9 * dpr));
-      const farWl = width * 0.045;
+      // Wave proportions. Wavelength follows the width and amplitude follows
+      // the depth of water on screen, which is right on a landscape screen
+      // and wrong on a portrait one: a phone narrows the wavelength ~3x while
+      // the water gets deeper, and the sea turns into ridges. So the scene's
+      // wave scale never drops below the water depth, and amplitude never
+      // exceeds the steepness a desktop sea has (depth ≈ 0.42 × width). On a
+      // landscape screen both limits sit exactly on the old values.
+      const waveW = Math.max(width, depthBelow * 1.2);
+      const waveD = Math.min(depthBelow, waveW * 0.42);
+      const farWl = waveW * 0.045;
       const stepX = dense ? Math.max(2, Math.round(farWl / 16)) : desktopStep;
       const rippleR = width * 0.16;
       const pointerLit =
@@ -576,8 +585,8 @@ export function HeroCanvas({ className = "" }: HeroCanvasProps) {
         // plunge those trains give way to the shared silhouette, so the
         // last crests are the same water as the cut, not a foreign wave.
         const towardEdge = smoothstep((q - 0.42) / 0.58);
-        const amp = depthBelow * (0.0018 + 0.017 * q);
-        const wl1 = width * (0.045 + 0.17 * q);
+        const amp = waveD * (0.0018 + 0.017 * q);
+        const wl1 = waveW * (0.045 + 0.17 * q);
         const wl2 = wl1 * 0.38;
         // Two trains. The second turns its phase over much faster from row to
         // row, so it crosses the first at an angle instead of marching with
@@ -724,7 +733,9 @@ export function HeroCanvas({ className = "" }: HeroCanvasProps) {
     }
 
     function silhouetteAmp() {
-      return Math.min(heroHeight * 0.046, 42 * dpr);
+      // The same steepness cap for the plunge silhouette: its shape spans the
+      // width, so on a phone a height-based amplitude builds a mountain range.
+      return Math.min(heroHeight * 0.046, 42 * dpr, width * 0.03);
     }
 
     function waterlineY(x: number, t: number, baseY: number, amp: number) {
