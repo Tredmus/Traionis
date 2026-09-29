@@ -2,14 +2,15 @@
 
 import { DepthZone, ZoneInner } from "./depth/DepthZone";
 import { HoverLink } from "./ui/HoverLink";
-import { useCopy } from "@/lib/locale-context";
+import { sectionHref } from "@/lib/links";
+import { useLocale } from "@/lib/locale-context";
 
 /**
  * The floor. Carries the second placement of the crawlable positioning
  * phrase, so it appears on every route rather than only on the homepage.
  */
 export function SiteFooter() {
-  const copy = useCopy();
+  const { copy, locale } = useLocale();
   const year = new Date().getFullYear();
 
   return (
@@ -43,7 +44,7 @@ export function SiteFooter() {
                 <ul className="mt-5 space-y-3 text-body">
                   {column.links.map((link) => (
                     <li key={link.href}>
-                      <HoverLink href={link.href}>{link.label}</HoverLink>
+                      <HoverLink href={sectionHref(locale, link.href)}>{link.label}</HoverLink>
                     </li>
                   ))}
                 </ul>

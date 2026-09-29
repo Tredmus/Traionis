@@ -6,7 +6,8 @@ import { DepthZone, ZoneInner } from "@/components/depth/DepthZone";
 import { HeroCanvas } from "@/components/HeroCanvas";
 import { PlungeControl } from "@/components/sections/PlungeControl";
 import { ButtonLink } from "@/components/ui/Button";
-import { useCopy } from "@/lib/locale-context";
+import { sectionHref } from "@/lib/links";
+import { useLocale } from "@/lib/locale-context";
 
 /**
  * SURFACE — 0m. Standing at the water, last light.
@@ -24,7 +25,7 @@ import { useCopy } from "@/lib/locale-context";
  * instead of growing up underneath it.
  */
 export function Hero() {
-  const copy = useCopy();
+  const { copy, locale } = useLocale();
 
   return (
     <DepthZone
@@ -35,7 +36,7 @@ export function Hero() {
       background="linear-gradient(to bottom, var(--color-zone-surface) 0%, var(--color-zone-surface) calc(100% - var(--hero-waterline-overlap)), transparent 100%)"
       className="z-20 h-[calc(100dvh+var(--hero-waterline-overlap))] min-h-[calc(100dvh+var(--hero-waterline-overlap))]"
       contentClassName="relative h-full"
-      ariaLabel="Introduction"
+      ariaLabel={copy.nav.introLabel}
     >
       <HeroCanvas className="absolute inset-x-0 top-0 z-[1] h-[calc(100%+3rem)] w-full" />
 
@@ -85,10 +86,10 @@ export function Hero() {
           className="hero-in mt-[min(1.25rem,2.6dvh)] flex flex-col gap-3 sm:mt-[min(1.5rem,3dvh)] sm:flex-row sm:items-center sm:gap-4"
           style={{ "--i": 2 } as CSSProperties}
         >
-          <ButtonLink href="/#contact" style={{ height: "var(--hero-cta-h)" }}>
+          <ButtonLink href={sectionHref(locale, "contact")} style={{ height: "var(--hero-cta-h)" }}>
             {copy.hero.ctaPrimary}
           </ButtonLink>
-          <ButtonLink href="/#work" variant="outline" style={{ height: "var(--hero-cta-h)" }}>
+          <ButtonLink href={sectionHref(locale, "work")} variant="outline" style={{ height: "var(--hero-cta-h)" }}>
             {copy.hero.ctaSecondary}
           </ButtonLink>
         </div>

@@ -33,9 +33,9 @@
   --color-zone-abyss: #03070f; /* the floor          18.7:1 */
 
   /* --- Typography ------------------------------------------ */
-  --font-display: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
-  --font-sans: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-prose: var(--font-newsreader), ui-serif, Georgia, serif;
+  --font-display: var(--font-archivo), var(--font-cyr-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-instrument-sans), var(--font-cyr-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-prose: var(--font-newsreader), var(--font-cyr-serif), ui-serif, Georgia, serif;
 
   --text-display-xl: clamp(3.25rem, 9vw, 7.5rem);
   --text-display-xl--line-height: 0.92;
@@ -154,6 +154,25 @@ body {
   background-color: var(--color-zone-abyss);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/* Bulgarian: the Cyrillic faces lead. Each Latin family is paired by
+   next/font with a metric-matched fallback that covers every character, so
+   left in second place the Cyrillic face would never be reached - Arial would
+   set the Bulgarian. Here it goes first; brand names in Latin (Traionis,
+   Orvyx) are set by the same family, which keeps each line in one voice. */
+[data-locale="bg"] {
+  --font-display: var(--font-cyr-sans), var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-cyr-sans), var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-prose: var(--font-cyr-serif), var(--font-newsreader), ui-serif, Georgia, serif;
+  font-family: var(--font-sans);
+}
+
+/* Cyrillic runs wider than the Latin in the same measure; the hero's two
+   sentences must still sit on two lines under the header. */
+[data-locale="bg"] [data-hero-reflect] {
+  font-stretch: 100% !important;
+  font-size: calc(var(--hero-brand) * 0.9);
 }
 
 /* No word left alone on the last line of a paragraph, anywhere. Classes
@@ -1610,6 +1629,134 @@ textarea {
   .faq-item[open]::details-content {
     block-size: auto;
     content-visibility: visible;
+  }
+}
+
+/* ============================================================
+   404 — nothing on the floor
+   ------------------------------------------------------------
+   Abyss black, one point of cyan light, and a sonar that keeps
+   pinging outward and finds nothing to return.
+   ============================================================ */
+
+.lost {
+  position: relative;
+  display: grid;
+  min-height: calc(100svh - var(--header-h));
+  place-items: center;
+  overflow: clip;
+  padding: calc(var(--header-h) + 3rem) 1.5rem 5rem;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 42%, rgb(18 42 72 / 0.55), transparent 70%),
+    var(--color-zone-abyss);
+  color: var(--color-ink);
+}
+
+.lost__sonar {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  width: 0;
+  height: 0;
+}
+
+.lost__core {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: var(--color-accent-hi);
+  box-shadow: 0 0 18px 3px rgb(18 168 212 / 0.55);
+}
+
+.lost__ring {
+  position: absolute;
+  width: min(78vmin, 44rem);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border: 1px solid rgb(18 168 212 / 0.5);
+  border-radius: 50%;
+  opacity: 0;
+  scale: 0.02;
+  animation: lost-ping 5.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+.lost__ring:nth-child(2) {
+  animation-delay: 1.8s;
+}
+
+.lost__ring:nth-child(3) {
+  animation-delay: 3.6s;
+}
+
+@keyframes lost-ping {
+  0% {
+    opacity: 0;
+    scale: 0.02;
+  }
+  12% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    scale: 1;
+  }
+}
+
+.lost__copy {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  max-width: 34rem;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.lost__code {
+  font-family: var(--font-display);
+  font-size: clamp(5rem, 16vw, 10rem);
+  font-weight: 700;
+  font-stretch: 120%;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  color: transparent;
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--color-ink) 45%, transparent);
+}
+
+.lost__heading {
+  margin-top: 1.5rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.6vw, 2.6rem);
+  font-weight: 700;
+  font-stretch: 108%;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.lost__body {
+  margin-top: 1rem;
+  max-width: 40ch;
+  color: color-mix(in srgb, var(--color-ink) 70%, transparent);
+}
+
+/* Still rings, spread out, so the picture reads without the motion. */
+@media (prefers-reduced-motion: reduce) {
+  .lost__ring {
+    animation: none;
+    opacity: 0.35;
+    scale: 0.35;
+  }
+
+  .lost__ring:nth-child(2) {
+    scale: 0.65;
+    opacity: 0.2;
+  }
+
+  .lost__ring:nth-child(3) {
+    scale: 0.95;
+    opacity: 0.1;
   }
 }
 

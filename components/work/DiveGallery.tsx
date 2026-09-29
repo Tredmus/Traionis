@@ -4,8 +4,8 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 import { HoverAnchor } from "@/components/ui/HoverLink";
-import { useCopy } from "@/lib/locale-context";
-import { COLUMN_PROJECTS, type CaseStudy } from "@/lib/work";
+import { useCopy, useLocale } from "@/lib/locale-context";
+import { COLUMN_PROJECTS, localizeProject, type CaseStudy } from "@/lib/work";
 
 /**
  * The work gallery — objects in the water column, and the lamp you carry.
@@ -431,6 +431,7 @@ function ProjectPlate({
 export function DiveGallery() {
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const plateRefs = useRef<(HTMLElement | null)[]>([]);
+  const { locale } = useLocale();
 
   useDiveLamp(sectionRef, plateRefs);
 
@@ -439,7 +440,7 @@ export function DiveGallery() {
       <span className="dive-lamp" aria-hidden="true" />
 
       <div className="dive-column__plates">
-        {COLUMN_PROJECTS.map((project, index) => (
+        {COLUMN_PROJECTS.map((source) => localizeProject(source, locale)).map((project, index) => (
           <ProjectPlate
             key={project.slug}
             project={project}

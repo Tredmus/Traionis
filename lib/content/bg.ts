@@ -1,42 +1,245 @@
 import type { DeepPartial, SiteCopy } from "./types";
 
 /**
- * Bulgarian — STUB.
+ * Bulgarian - served at /bg.
  *
- * Anything omitted here falls back to English automatically (see `resolveCopy`),
- * so this file can be filled in incrementally and the site is never broken
- * halfway through a translation pass.
+ * Written, not machine-translated: same claims as the English, in Bulgarian
+ * that reads as if it were written first. Formal address throughout, with the
+ * capitalised "Вие / Ваш" of a business letter. No long dashes (see the
+ * no-em-dashes rule); plain hyphens only.
  *
- * Only navigation is populated, to prove the fallback path works end to end.
- * Everything else is TODO. Do not machine-translate the positioning copy —
- * the spine and the exclusions line have to land in Bulgarian on their own
- * terms, not as a literal rendering of the English.
+ * Anything omitted here falls back to English (see `resolveCopy`). Arrays
+ * replace wholesale, so every list below is translated in full.
  */
 export const bg: DeepPartial<SiteCopy> = {
+  meta: {
+    title: "Traionis - Изработка на уебсайтове и приложения, Варна",
+    description:
+      "Traionis е студио за уеб разработка във Варна. Изработка на уебсайтове, уеб и мобилни приложения по поръчка - проектирани и изградени от нулата.",
+    ogTitle: "Traionis - Вие носите идеята. Ние изграждаме продукта.",
+    ogDescription:
+      "Уебсайтове, уеб и мобилни приложения по поръчка, проектирани и изградени от нулата от студио във Варна.",
+  },
+
   nav: {
     services: "Услуги",
     work: "Проекти",
     process: "Процес",
-    contact: "Контакти",
+    contact: "Контакт",
     cta: "Започнете проект",
     skipToContent: "Към съдържанието",
     localeLabel: "Език",
+    primaryLabel: "Основно меню",
+    introLabel: "Въведение",
   },
 
-  // TODO(bg): meta — title and description, written for Bulgarian search, not translated.
-  // TODO(bg): hero — headline and lead. The spine must work idiomatically.
-  // TODO(bg): offerings — heading, intro, both offerings (titles, bodies, callout
-  //           texts — keep each `anchor` as is — proof labels, timelines) and the
-  //           rebuild line. `offerings` is an array: translate both or neither.
-  // TODO(bg): process — four steps.
-  // TODO(bg): work — section heading, intro, and the three link labels
-  //           (readMore, viewAll, visitLive). Project names, summaries and the
-  //           `proves` lines live in lib/work.ts and are English-only for now.
-  // TODO(bg): faq — heading, intro, and every question/answer pair. Arrays are
-  //           replaced wholesale, so a partial `items` array would drop the
-  //           rest: translate all of them or none.
-  // TODO(bg): founder — heading and bio, once the English bio is chosen.
-  // TODO(bg): contact — heading, intro, the five field labels and placeholders,
-  //           the submit/sending/success copy, and all error strings. No budget options: that field is gone.
-  // TODO(bg): footer — description and location.
+  hero: {
+    eyebrow: "Студио за уеб разработка · Варна, България · От 2023",
+    headline: "Вие носите идеята. Ние изграждаме продукта.",
+    lead: "Уебсайтове, уеб и мобилни приложения, проектирани и изградени от първия ред код.",
+    ctaPrimary: "Започнете проект",
+    ctaSecondary: "Вижте проектите",
+    ctaContinue: "Гмурнете се",
+  },
+
+  offerings: {
+    heading: "Какво изграждаме",
+    intro: "Проектирано и изградено от нулата, около начина, по който реално работи Вашият бизнес.",
+    offerings: [
+      {
+        id: "site",
+        title: "Уебсайтове, които носят клиенти",
+        body: "Сайтът, по който потенциалният клиент Ви преценява, преди изобщо да говори с Вас. Проектиран около това, което трябва да продава, написан от нулата и оптимизиран за телефона, от който разглеждат повечето Ваши посетители.",
+        callouts: [
+          { anchor: "foundation", text: "Код, хостинг и домейн на Ваше име" },
+          { anchor: "structure", text: "Структуриран за Google и отговорите на AI търсачките" },
+          { anchor: "content", text: "На два езика, когато пазарът Ви го изисква" },
+          { anchor: "design", text: "Уникален дизайн, изграден от нулата за Вашата марка" },
+          { anchor: "interaction", text: "Бърз на всеки телефон - тестван на реални устройства" },
+        ],
+        proof: { href: "#plate-orvyx", label: "Вижте Orvyx" },
+        timeline: "Готов за 1-3 седмици",
+      },
+      {
+        id: "app",
+        title: "Приложения, на които работи бизнесът",
+        body: "Системи за резервации, маркетплейси, клиентски портали, оперативни и вътрешни инструменти - уеб и мобилни, изградени около начина, по който реално работи Вашият бизнес.",
+        callouts: [
+          { anchor: "admin", text: "Админ панели и модерация" },
+          { anchor: "maps", text: "Карти и търсене по локация" },
+          { anchor: "integrations", text: "Плащания, известия и интеграции с външни услуги" },
+          { anchor: "automation", text: "Автоматизация и AI асистенти, вградени в продукта" },
+          { anchor: "data", text: "Модел на данните, акаунти, роли и права" },
+        ],
+        proof: { href: "#plate-parkqui", label: "Вижте ParkQui" },
+        timeline: "Първа работеща версия за 2-3 седмици",
+      },
+    ],
+    rebuild:
+      "Вече имате сайт? Изграждаме го наново от основите - а домейнът, съдържанието и позициите Ви в търсачките остават с Вас.",
+  },
+
+  process: {
+    heading: "Как протича един проект",
+    intro: "Четири етапа, всеки завършва с нещо конкретно в ръцете Ви.",
+    steps: [
+      {
+        id: "call",
+        title: "Разговор за проекта",
+        body: "Тридесет до четиридесет и пет минути за това какво трябва да прави, кой ще го използва и какво определя сроковете. Тръгвате с ясна следваща стъпка.",
+      },
+      {
+        id: "scope",
+        title: "Обхват и фиксирана цена",
+        body: "Обхват, срокове и цена в писмен вид, преди да е написан и ред код. Какво е включено е на хартия, както и какво не е.",
+      },
+      {
+        id: "build",
+        title: "Изграждане пред очите Ви",
+        body: "Работещ линк още от първата седмица, обновяван, докато работим. Следите напредъка, когато пожелаете.",
+      },
+      {
+        id: "handover",
+        title: "Пускане и предаване",
+        body: "Код, хостинг и домейн на Ваше име, плюс обяснение как всичко работи заедно. Включени са тридесет дни поправки.",
+      },
+    ],
+  },
+
+  work: {
+    heading: "Избрани проекти",
+    intro: "На живо и с линк. Отворете всеки от тях на телефона си.",
+    readMore: "Как го изградихме",
+    readLess: "Затвори",
+    breakdown: {
+      problem: "Проблемът",
+      decisions: "Решенията",
+      outcome: "Къде е днес",
+    },
+    viewAll: "Всички проекти",
+    visitLive: "Към сайта",
+  },
+
+  faq: {
+    heading: "Преди да попитате",
+    intro: "Въпросите, които обикновено възникват още на първия разговор.",
+    items: [
+      {
+        id: "timeline",
+        question: "Колко време отнема един проект?",
+        answer: [
+          "Уебсайтовете отнемат от една до три седмици. Приложенията достигат първа работеща версия за две до три седмици, след което продължаваме да ги развиваме. Точните срокове се записват в писмения обхват.",
+        ],
+      },
+      {
+        id: "ownership",
+        question: "Чий е кодът?",
+        answer: [
+          "Ваш. Хранилището с кода, хостингът и домейнът са във Ваши акаунти от деня на пускането.",
+        ],
+      },
+      {
+        id: "after-launch",
+        question: "Какво се случва след пускането?",
+        answer: [
+          "Всеки проект включва тридесет дни поправки. След това можете да ни задържите на месечен план за поддръжка - хостинг, обновления, наблюдение и дребни промени - или да поемете проекта, накъдето пожелаете.",
+        ],
+      },
+      {
+        id: "rebuild",
+        question: "Можете ли да изградите наново сегашния ни сайт?",
+        answer: [
+          "Да, от основите. Не кърпим стари сайтове и не работим с WordPress; чистото изграждане е по-бързо и издържа по-дълго. Запазвате домейна и съдържанието си, а ние пренасяме позициите Ви в търсачките при преместването.",
+        ],
+      },
+      {
+        id: "mobile",
+        question: "Правите ли мобилни приложения?",
+        answer: [
+          "Да, като част от работата по приложения. Когато продуктът трябва да е в телефона, мобилното приложение се изгражда заедно с уеб платформата, върху същия бекенд.",
+        ],
+      },
+      {
+        id: "international",
+        question: "Работите ли с клиенти извън България?",
+        answer: ["Да. Работим дистанционно, на английски и на български."],
+      },
+    ],
+    more: { prompt: "Друг въпрос?", link: "Задайте го в запитването си" },
+  },
+
+  founder: {
+    heading: "Зад работата",
+    name: "Мирослав Тодоров",
+    role: "Основател и водещ инженер",
+    statement: "Всеки проект, който предаваме, отговаря на стандарта на сайта, който четете в момента.",
+    body: [
+      "Основах Traionis през 2023 г., за да донеса стандарта на корпоративните софтуерни екипи до бизнеси от всякакъв мащаб, след като сам работих в такъв екип. Днес изграждаме целия продукт - от интерфейса, който виждат клиентите Ви, до базата данни зад него.",
+    ],
+    facts: "От 2023 · Варна, България · Английски / Български",
+  },
+
+  contact: {
+    heading: "Започнете проект",
+    intro:
+      "Разкажете ни какво изграждате. Ще Ви отговорим до два работни дни със следващите стъпки.",
+    fields: {
+      name: { label: "Име", placeholder: "Вашето име" },
+      email: { label: "Имейл", placeholder: "ime@firma.bg" },
+      project: {
+        label: "Какво изграждате?",
+        placeholder: "Какво трябва да прави, кой ще го използва и кога искате да е готово.",
+        help: "Няколко груби реда са достатъчни.",
+      },
+    },
+    submit: "Изпратете запитване",
+    submitting: "Изпращане…",
+    successHeading: "Запитването е получено.",
+    success: "Ще се свържем с Вас до два работни дни.",
+    errorRequired: "Това поле е задължително.",
+    errorEmail: "Въведете валиден имейл адрес.",
+    errorSubmit: "Запитването не беше изпратено. Моля, опитайте отново след малко.",
+    errorUnconfigured: "Формата все още не е свързана.",
+    next: {
+      heading: "Какво следва",
+      steps: [
+        "Прочитаме запитването Ви.",
+        "Получавате отговор до два работни дни.",
+        "Кратък разговор за обхвата - след това писмен обхват и фиксирана цена.",
+      ],
+    },
+    direct: {
+      heading: "Предпочитате първо да поговорим?",
+      email: "Пишете ни директно",
+      call: "Запазете 30-минутен разговор",
+      phone: "Или се обадете",
+      hours: "Пон-Пет, 9:00-18:00",
+    },
+  },
+
+  footer: {
+    description:
+      "Traionis е студио за уеб разработка във Варна, България, което изгражда уебсайтове, уеб и мобилни приложения по поръчка.",
+    legalName: "Трайонис ЕООД",
+    location: "Варна, България",
+    rights: "Всички права запазени.",
+    columns: [
+      {
+        heading: "Сайт",
+        links: [
+          { label: "Услуги", href: "offerings" },
+          { label: "Проекти", href: "work" },
+          { label: "Процес", href: "process" },
+          { label: "Контакт", href: "contact" },
+        ],
+      },
+    ],
+  },
+
+  notFound: {
+    title: "Страницата не е намерена",
+    heading: "Тук долу няма нищо.",
+    body: "Тази страница е отплавала или никога не е съществувала. Всичко, което съществува, е на един клик разстояние.",
+    cta: "Обратно на повърхността",
+  },
 };

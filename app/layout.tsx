@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Archivo, Instrument_Sans, Newsreader } from "next/font/google";
+import { Archivo, Instrument_Sans, Literata, Newsreader, Roboto_Flex } from "next/font/google";
 
 import { DepthRail } from "@/components/depth/DepthRail";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -18,7 +18,7 @@ import "./globals.css";
  */
 const archivo = Archivo({
   variable: "--font-archivo",
-  subsets: ["latin", "latin-ext"], // latin-ext carries Bulgarian Cyrillic's neighbours
+  subsets: ["latin", "latin-ext"],
   axes: ["wdth"],
   display: "swap",
 });
@@ -35,6 +35,32 @@ const newsreader = Newsreader({
   subsets: ["latin", "latin-ext"],
   axes: ["opsz"],
   display: "swap",
+});
+
+/**
+ * Cyrillic companions. None of the three families above has Cyrillic, so
+ * these sit second in each stack and set only the Bulgarian letters; Latin
+ * keeps its own faces. Cyrillic subset only and not preloaded: the English
+ * page never downloads them (the browser fetches a face only when a
+ * character in its unicode-range appears).
+ *
+ * Roboto Flex carries a width axis like Archivo's, so the stretched display
+ * voice survives in Bulgarian; Literata has optical sizes like Newsreader.
+ */
+const robotoFlex = Roboto_Flex({
+  variable: "--font-cyr-sans",
+  subsets: ["cyrillic"],
+  axes: ["wdth"],
+  display: "swap",
+  preload: false,
+});
+
+const literata = Literata({
+  variable: "--font-cyr-serif",
+  subsets: ["cyrillic"],
+  axes: ["opsz"],
+  display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -71,29 +97,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       // Next 16 no longer overrides scroll-behavior on navigation; this opts
       // back in, so route changes stay instant while in-page anchors glide.
       data-scroll-behavior="smooth"
-      className={`${archivo.variable} ${instrumentSans.variable} ${newsreader.variable} h-full`}
+      className={`${archivo.variable} ${instrumentSans.variable} ${newsreader.variable} ${robotoFlex.variable} ${literata.variable} h-full`}
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col" suppressHydrationWarning>
-        {/*
-          The direction this band was built to. Emitted as a real HTML comment
-          (not a JSX one, which the compiler strips) so it survives the
-          production build and can be audited against the render.
-        */}
-        <div
-          hidden
-          dangerouslySetInnerHTML={{
-            __html: `<!--
-impeccable:direction - work gallery (MID band)
-THESIS: evidence you have to find. The portfolio refuses the grid of equal thumbnails; the work hangs in the water column and resolves only where the lamp falls.
-OWN-WORLD: the descent's own five flat bands, cyan bioluminescent accent, hairlines, Archivo on its width axis. No new palette, no new components.
-STORY: three real builds, each labelled with what it honestly proves; the visitor sweeps the light, finds them, and follows one out to the live site.
-FIRST VIEWPORT: heading and one line at the measure, then the nearest plate at full width, dark, with the lamp already lit and trailing the cursor.
-FORM: a column of unequal plates receding by width and by ambient light; extension of an established surface, so no concept tournament was run.
-FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance.
--->` ,
-          }}
-        />
         <LocaleProvider>
           <SkipLink />
           <SiteHeader />

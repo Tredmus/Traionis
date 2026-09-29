@@ -25,6 +25,8 @@ export const en: SiteCopy = {
     cta: "Start a project",
     skipToContent: "Skip to content",
     localeLabel: "Language",
+    primaryLabel: "Primary",
+    introLabel: "Introduction",
   },
 
   hero: {
@@ -227,12 +229,19 @@ export const en: SiteCopy = {
       {
         heading: "Site",
         links: [
-          { label: "Services", href: "/#offerings" },
-          { label: "Work", href: "/#work" },
-          { label: "Process", href: "/#process" },
-          { label: "Contact", href: "/#contact" },
+          { label: "Services", href: "offerings" },
+          { label: "Work", href: "work" },
+          { label: "Process", href: "process" },
+          { label: "Contact", href: "contact" },
         ],
       },
     ],
+  },
+
+  notFound: {
+    title: "Page not found",
+    heading: "Nothing down here.",
+    body: "This page drifted off, or it never existed. Everything that does is one click up.",
+    cta: "Back to the surface",
   },
 };

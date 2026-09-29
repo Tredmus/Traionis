@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import { useCopy } from "@/lib/locale-context";
+import { homePath, sectionHref } from "@/lib/links";
+import { useLocale } from "@/lib/locale-context";
 import { ButtonLink } from "./ui/Button";
 import { HoverLink } from "./ui/HoverLink";
 import { LocaleToggle } from "./LocaleToggle";
@@ -22,7 +23,7 @@ import { LocaleToggle } from "./LocaleToggle";
  * sharp. Ink never changes: every band is light-on-dark.
  */
 export function SiteHeader() {
-  const copy = useCopy();
+  const { copy, locale } = useLocale();
   const [glazed, setGlazed] = useState(false);
 
   useEffect(() => {
@@ -92,23 +93,23 @@ export function SiteHeader() {
 
       <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl items-center justify-between gap-6 px-6 sm:px-10 lg:px-16">
         <Link
-          href="/"
+          href={homePath(locale)}
           className="font-display text-[1.05rem] font-bold uppercase tracking-[0.2em]"
           style={{ fontStretch: "125%" }}
         >
           {copy.hero.brand}
         </Link>
 
-        <nav aria-label="Primary" className="ml-auto flex items-center gap-7">
+        <nav aria-label={copy.nav.primaryLabel} className="ml-auto flex items-center gap-7">
           <ul className="hidden items-center gap-7 text-body sm:flex">
             <li>
-              <HoverLink href="/#offerings">{copy.nav.services}</HoverLink>
+              <HoverLink href={sectionHref(locale, "offerings")}>{copy.nav.services}</HoverLink>
             </li>
             <li>
-              <HoverLink href="/#work">{copy.nav.work}</HoverLink>
+              <HoverLink href={sectionHref(locale, "work")}>{copy.nav.work}</HoverLink>
             </li>
             <li>
-              <HoverLink href="/#process">{copy.nav.process}</HoverLink>
+              <HoverLink href={sectionHref(locale, "process")}>{copy.nav.process}</HoverLink>
             </li>
           </ul>
 
@@ -116,7 +117,7 @@ export function SiteHeader() {
 
           <div className="hidden md:block">
             <ButtonLink
-              href="/#contact"
+              href={sectionHref(locale, "contact")}
               variant="outline"
               className="!h-9 !px-4 text-label uppercase"
             >

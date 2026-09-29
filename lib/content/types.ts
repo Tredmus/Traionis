@@ -6,8 +6,9 @@
  * site is never half-broken mid-translation.
  *
  * COPY RULE — enforced by review, not by types:
- * no nautical vocabulary anywhere — the only exception is the hero's scroll
- * cue (`hero.ctaContinue`), which literally makes the page dive. No "dive", "deep dive", "go deeper",
+ * no nautical vocabulary anywhere — the only exceptions are the hero's scroll
+ * cue (`hero.ctaContinue`), which literally makes the page dive, and the 404
+ * page (`notFound`), the one place a little play earns its keep. No "dive", "deep dive", "go deeper",
  * "surface-level", "navigate", "waters", "current". The descent lives
  * entirely in the visual system. The moment copy names it, the structure
  * becomes a theme, and a theme reads as whimsy to a buyer spending €15k.
@@ -27,6 +28,9 @@ export interface NavCopy {
   cta: string;
   skipToContent: string;
   localeLabel: string;
+  /** Screen-reader names for the main menu and the hero region. */
+  primaryLabel: string;
+  introLabel: string;
 }
 
 export interface HeroCopy {
@@ -174,6 +178,7 @@ export interface FooterCopy {
   legalName: string;
   location: string;
   rights: string;
+  /** `href` is a home-page section id; the footer builds the localized link. */
   columns: readonly { heading: string; links: readonly { label: string; href: string }[] }[];
 }
 
@@ -182,6 +187,14 @@ export interface MetaCopy {
   description: string;
   ogTitle: string;
   ogDescription: string;
+}
+
+/** The 404 page. */
+export interface NotFoundCopy {
+  title: string;
+  heading: string;
+  body: string;
+  cta: string;
 }
 
 export interface SiteCopy {
@@ -195,6 +208,7 @@ export interface SiteCopy {
   founder: FounderCopy;
   contact: ContactCopy;
   footer: FooterCopy;
+  notFound: NotFoundCopy;
 }
 
 /** Arrays are replaced wholesale, never merged element-wise. */

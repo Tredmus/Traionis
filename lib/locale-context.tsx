@@ -1,67 +1,48 @@
 "use client";
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from "react";
+import { usePathname } from "next/navigation";
+import { createContext, useContext, useEffect, useMemo, type ReactNode } from "react";
 
-import { DEFAULT_LOCALE, LOCALES, resolveCopy, type Locale, type SiteCopy } from "./content";
-
-const STORAGE_KEY = "traionis:locale";
+import { resolveCopy, type Locale, type SiteCopy } from "./content";
+import { localeFromPath } from "./links";
 
 interface LocaleContextValue {
   locale: Locale;
-  setLocale: (next: Locale) => void;
   copy: SiteCopy;
 }
 
 const LocaleContext = createContext<LocaleContextValue | null>(null);
 
-function isLocale(value: string | null): value is Locale {
-  return value !== null && (LOCALES as readonly string[]).includes(value);
-}
-
 /**
- * Server always renders DEFAULT_LOCALE, so the HTML crawlers receive is
- * English — which is what the site's search performance depends on. A stored
- * Bulgarian preference is applied after hydration.
+ * The language is the address: `/` is English, `/bg` is Bulgarian. It is read
+ * from the path during the server render, so each page's HTML — what Google
+ * indexes — is already in its own language. Switching language is a link to
+ * the other page, never a client-side swap.
  */
 export function LocaleProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(DEFAULT_LOCALE);
+  const locale = localeFromPath(usePathname());
 
-  useEffect(() => {
-    try {
-      const stored = window.localStorage.getItem(STORAGE_KEY);
-      if (isLocale(stored) && stored !== DEFAULT_LOCALE) setLocaleState(stored);
-    } catch {
-      // Private mode or blocked storage — English is a fine outcome.
-    }
-  }, []);
-
+  // The root layout renders `lang="en"`; the Bulgarian page corrects it on
+  // load. Search engines read hreflang and the content itself for language.
   useEffect(() => {
     document.documentElement.lang = locale;
   }, [locale]);
 
-  const setLocale = useCallback((next: Locale) => {
-    setLocaleState(next);
-    try {
-      window.localStorage.setItem(STORAGE_KEY, next);
-    } catch {
-      // Preference just won't persist. Not worth surfacing.
-    }
-  }, []);
-
   const value = useMemo<LocaleContextValue>(
-    () => ({ locale, setLocale, copy: resolveCopy(locale) }),
-    [locale, setLocale],
+    () => ({ locale, copy: resolveCopy(locale) }),
+    [locale],
   );
 
-  return <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>;
+  // `data-locale` lets the Bulgarian page lead its font stacks with the
+  // Cyrillic faces (see globals.css). `display: contents` keeps it out of
+  // layout; custom properties still inherit through it.
+  return (
+    <LocaleContext.Provider value={value}>
+      <div data-locale={locale} className="contents">
+        {children}
+      </div>
+    </LocaleContext.Provider>
+  );
 }
 
 export function useLocale(): LocaleContextValue {

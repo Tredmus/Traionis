@@ -245,3 +245,91 @@ export function caseStudySlugs(): string[] {
     (project) => project.slug,
   );
 }
+
+// ── Bulgarian ─────────────────────────────────────────────────────────────
+// The same claims as above, in Bulgarian. Only the words change: status,
+// media and links stay shared, so a translation can never drift from what
+// the English says a project is.
+
+type ProjectText = Pick<CaseStudy, "summary" | "proves" | "kind" | "problem" | "decisions" | "outcome"> & {
+  shotAlt?: string;
+  phoneAlt?: string;
+};
+
+const WORK_BG: Record<string, ProjectText> = {
+  orvyx: {
+    kind: "Продуктов сайт",
+    summary:
+      "Продуктов сайт за LifePod 72 - запечатан куфар с IP67 защита, създаден да опази човек жив в продължение на 72 часа.",
+    proves:
+      "Сайт за пускането на продукта в собствената тъмна, инженерна визия на клиента - изграден бързо и работещ и днес.",
+    problem: [],
+    decisions: [],
+    outcome: [],
+    shotAlt:
+      "Сайтът на Orvyx: „Seventy-two hours. One case.“ до запечатания куфар LifePod 72, над който преминава сканираща линия, преди куфарът да се отвори и да покаже осемте си модула.",
+    phoneAlt:
+      "Сайтът на Orvyx на телефон: „Seventy-two hours. One case.“ над бутоните за запитване и отваряне на куфара, със запечатания LifePod 72 отдолу.",
+  },
+  parkqui: {
+    kind: "Платформа-маркетплейс",
+    summary: "Пълноценна платформа за паркоместа за общност от 2000 души в България.",
+    proves:
+      "Акаунти и роли, търсене по карта в реални обяви и админ частта, която поддържа платформата в движение.",
+    problem: [
+      "Общност от 2000 души търсеше и предлагаше паркоместа чрез публикации във Facebook групи. Публикациите потъват за часове, а нищо не показва какво реално е свободно близо до мястото, където трябва да бъдете.",
+    ],
+    decisions: [
+      {
+        title: "Една платформа, две роли",
+        body: "Шофьорите и собствениците на паркоместа използват една система за акаунти, всеки със своята част от продукта: собствениците публикуват места и задават кога са свободни, шофьорите ги намират и резервират предварително.",
+      },
+      {
+        title: "Търсене върху истинска карта",
+        body: "Обявите са върху карта на Mapbox, така че шофьорът търси по мястото, където трябва да бъде, вместо да превърта поток от публикации.",
+      },
+      {
+        title: "Акаунти и данни в Supabase",
+        body: "Вписването, профилите и базата с обяви работят върху един управляван бекенд, което запази проекта компактен, без компромиси с удостоверяването.",
+      },
+    ],
+    outcome: [
+      "На живо на park-qui.vercel.app. Публичният сайт е отворен за всички; търсенето, обявите и картата са достъпни след вход.",
+    ],
+    shotAlt:
+      "Сайтът на ParkQui: тъмносиня начална страница на маркетплейс за паркоместа, с търсене и действия за обяви.",
+    phoneAlt:
+      "ParkQui на телефон: „Вашето паркомясто Ви очаква“, с бутони за търсене и предлагане и панел 2 мин, 100%, 24/7.",
+  },
+  popwrists: {
+    kind: "Страница за пускане",
+    summary:
+      "Сайт за пускане и списък с чакащи за неофициален адаптер за китка за AP × Swatch Royal Pop.",
+    proves: "Разчита изцяло на типографията и цвета, с едно действие: запишете се в списъка.",
+    problem: [],
+    decisions: [],
+    outcome: [],
+    shotAlt:
+      "Сайтът на PopWrists: едър черен и преливащ шрифт върху топъл светъл фон, над поле за списъка с чакащи.",
+    phoneAlt:
+      "PopWrists на телефон: „The Royal Pop. Now on your wrist.“ над полето за списъка и точките с цветове.",
+  },
+};
+
+/** A project in the given language. English is the source; others overlay it. */
+export function localizeProject(project: CaseStudy, locale: "en" | "bg"): CaseStudy {
+  if (locale !== "bg") return project;
+  const t = WORK_BG[project.slug];
+  if (!t) return project;
+  return {
+    ...project,
+    kind: t.kind,
+    summary: t.summary,
+    proves: t.proves,
+    problem: t.problem.length ? t.problem : project.problem,
+    decisions: t.decisions.length ? t.decisions : project.decisions,
+    outcome: t.outcome.length ? t.outcome : project.outcome,
+    shot: project.shot && t.shotAlt ? { ...project.shot, alt: t.shotAlt } : project.shot,
+    phone: project.phone && t.phoneAlt ? { ...project.phone, alt: t.phoneAlt } : project.phone,
+  };
+}
