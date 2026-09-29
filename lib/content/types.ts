@@ -164,7 +164,7 @@ export interface ContactCopy {
   errorUnconfigured: string;
   /** Beside the form: what happens after sending, and the direct lines. */
   next: { heading: string; steps: readonly string[] };
-  direct: { heading: string; email: string; call: string };
+  direct: { heading: string; email: string; call: string; phone: string; hours: string };
 }
 
 export interface FooterCopy {

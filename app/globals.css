@@ -156,6 +156,13 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* No word left alone on the last line of a paragraph, anywhere. Classes
+   that set text-wrap themselves (balance) still win. */
+p,
+li {
+  text-wrap: pretty;
+}
+
 /* Focus: visible, never removed, and legible on every band.
    Two rings so it survives both the light surface and the abyss. */
 :focus-visible {
@@ -233,7 +240,9 @@ textarea {
   display: grid;
   gap: 2.75rem;
   width: 100%;
-  max-width: 80rem;
+  /* Same measure as ZoneInner (max-w-6xl), so the text column shares its
+     left edge with every other section. The drawing bleeds past it. */
+  max-width: 72rem;
   margin-inline: auto;
   padding-inline: 1.5rem;
 }
@@ -318,18 +327,77 @@ textarea {
   }
 
   .svc-panel__grid {
-    grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
     align-items: center;
     gap: 3.5rem;
     padding-inline: 4rem;
   }
 
   .svc-panel[data-flip="true"] .svc-panel__grid {
-    grid-template-columns: minmax(0, 1.28fr) minmax(0, 0.72fr);
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
   }
 
   .svc-panel[data-flip="true"] .svc-panel__text {
     order: 2;
+  }
+
+  .svc-panel__drawing {
+    width: calc(100% + min(7vw, 8rem));
+    margin-right: calc(-1 * min(7vw, 8rem));
+  }
+
+  .svc-panel[data-flip="true"] .svc-panel__drawing {
+    margin-right: 0;
+    margin-left: calc(-1 * min(7vw, 8rem));
+  }
+}
+
+/* Big monitors: the drawing and the type grow into the stage instead of
+   floating small in the middle of it. */
+@media (min-width: 1600px) {
+  /* The text column stays on the page's left edge, aligned with every other
+     section; only the drawing grows, out into the side margin — right for
+     the first panel, left for the flipped one. */
+  .svc-panel__drawing {
+    width: calc(100% + min(12vw, 16rem));
+    margin-right: calc(-1 * min(12vw, 16rem));
+  }
+
+  .svc-panel[data-flip="true"] .svc-panel__drawing {
+    margin-right: 0;
+    margin-left: calc(-1 * min(12vw, 16rem));
+  }
+
+  .svc-panel__title {
+    font-size: clamp(2.6rem, 2.4vw, 3.3rem);
+  }
+
+  .svc-panel__body {
+    font-size: 1.1875rem;
+  }
+
+  .svc-dim__label {
+    font-size: 1.3rem;
+  }
+}
+
+/* Tall screens: each stage centres its content in a full screen of height,
+   so the space between one panel releasing and the next arriving is two
+   half-stages of empty water. Pull the panels (and the line after them) up
+   into that empty space. Laptop heights keep the plain stack — their stages
+   are already full, and an overlap there would collide. */
+@media (min-width: 1024px) and (min-height: 900px) {
+  .svc-panel:not(.svc-panel + .svc-panel) {
+    margin-top: -8vh;
+  }
+
+  .svc-panel + .svc-panel {
+    margin-top: -18vh;
+  }
+
+  .svc-rebuild {
+    position: relative;
+    margin-top: -12vh;
   }
 }
 
@@ -566,6 +634,12 @@ textarea {
 
   .sx-callout__n {
     display: none;
+  }
+}
+
+@media (min-width: 1600px) {
+  .sx-callout {
+    font-size: 0.9375rem;
   }
 }
 
@@ -1579,8 +1653,10 @@ textarea {
 
 @media (min-width: 1024px) {
   .founder {
-    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-    gap: 5rem;
+    /* Same split and gutter as the FAQ above it, so the two right-hand
+       columns start on one line when both are on screen. */
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: 4rem;
     align-items: end;
   }
 }
@@ -1706,6 +1782,13 @@ textarea {
   margin: 1.1rem 0 0;
   padding: 0;
   list-style: none;
+}
+
+.abyss-direct__hours {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.8125rem;
+  color: color-mix(in srgb, var(--zone-ink) 50%, transparent);
 }
 
 .abyss-direct__label {

@@ -11,7 +11,7 @@ import "./globals.css";
 /**
  * Three families, each with exactly one job.
  *
- * Archivo carries the display voice via its width axis — wide and structural,
+ * Archivo carries the display voice via its width axis - wide and structural,
  * reading as signage rather than fashion. Deliberately not a high-contrast
  * serif, which is the default look for this kind of page and would undercut
  * the engineering claim.
@@ -40,8 +40,8 @@ const newsreader = Newsreader({
 export const metadata: Metadata = {
   metadataBase: new URL("https://traionis.com"),
   title: {
-    default: "Traionis — Custom websites & applications, Varna, Bulgaria",
-    template: "%s — Traionis",
+    default: "Traionis - Custom websites & applications, Varna, Bulgaria",
+    template: "%s - Traionis",
   },
   description:
     "Traionis is a web development studio in Varna, Bulgaria. We design and build custom websites and web and mobile applications from the ground up.",
@@ -51,13 +51,13 @@ export const metadata: Metadata = {
     siteName: "Traionis",
     locale: "en",
     url: "/",
-    title: "Traionis — You bring the idea. We build the product.",
+    title: "Traionis - You bring the idea. We build the product.",
     description:
       "Custom websites and web and mobile applications, designed and built from the ground up by a studio in Varna, Bulgaria.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Traionis — You bring the idea. We build the product.",
+    title: "Traionis - You bring the idea. We build the product.",
     description:
       "Custom websites and web and mobile applications, designed and built from the ground up by a studio in Varna, Bulgaria.",
   },
@@ -84,7 +84,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           hidden
           dangerouslySetInnerHTML={{
             __html: `<!--
-impeccable:direction — work gallery (MID band)
+impeccable:direction - work gallery (MID band)
 THESIS: evidence you have to find. The portfolio refuses the grid of equal thumbnails; the work hangs in the water column and resolves only where the lamp falls.
 OWN-WORLD: the descent's own five flat bands, cyan bioluminescent accent, hairlines, Archivo on its width axis. No new palette, no new components.
 STORY: three real builds, each labelled with what it honestly proves; the visitor sweeps the light, finds them, and follows one out to the live site.

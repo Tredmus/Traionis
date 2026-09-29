@@ -22,7 +22,7 @@ export async function generateMetadata(
     alternates: { canonical: `/work/${project.slug}` },
     openGraph: {
       type: "article",
-      title: `${project.name} — Traionis`,
+      title: `${project.name} - Traionis`,
       description: project.summary,
       url: `/work/${project.slug}`,
     },

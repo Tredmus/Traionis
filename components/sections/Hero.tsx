@@ -69,7 +69,7 @@ export function Hero() {
         </h1>
 
         <p
-          className="hero-in mt-[min(0.875rem,1.8dvh)] max-w-[48ch] text-[length:var(--hero-lead)] leading-relaxed sm:mt-[min(1.1rem,2dvh)]"
+          className="hero-in mt-[min(0.875rem,1.8dvh)] max-w-[48ch] text-balance text-[length:var(--hero-lead)] leading-relaxed sm:mt-[min(1.1rem,2dvh)]"
           style={
             {
               // Tinted from the water, never grey.

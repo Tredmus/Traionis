@@ -295,14 +295,20 @@ export function HeroCanvas({ className = "" }: HeroCanvasProps) {
 
       const srcH = reflectCanvas.height;
       const srcW = reflectCanvas.width;
-      const nearest = horizon - (reflectTop + srcH); // text bottom → horizon
+      // Fitted once, against the horizon at rest, then carried down with the
+      // water as the camera lowers. Refitting against the live horizon would
+      // shrink the open water under it mid-scroll and snap the reflection
+      // from one fit to the other.
+      const rest = viewHeight * horizonFrac;
+      const drift = horizon - rest;
+      const nearest = rest - (reflectTop + srcH); // text bottom → horizon
       if (nearest <= 0) return;
 
       // Open water between the horizon and the Continue control. A true
       // mirror (same distance below as the headline sits above) when it fits;
       // otherwise the reflection keeps a readable height and moves up toward
       // the horizon, which is what a phone's taller type block needs.
-      const room = reflectFloor - 16 * dpr - horizon;
+      const room = reflectFloor - 16 * dpr - rest;
       const c = Math.min(0.8, (room * 0.85) / srcH);
       if (c < 0.25) return;
       const band = srcH * c;
@@ -312,7 +318,7 @@ export function HeroCanvas({ className = "" }: HeroCanvasProps) {
           ? mirrorGap
           : Math.max(4 * dpr, (room - band) * 0.45);
 
-      const yA = horizon + gap;
+      const yA = rest + gap + drift;
       const yB = yA + band;
 
       const strip = Math.max(2, Math.round((coarse ? 1.5 : 2) * dpr));

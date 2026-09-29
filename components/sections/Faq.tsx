@@ -86,7 +86,7 @@ export function Faq() {
           <Reveal
             as="p"
             index={1}
-            className="mt-7 max-w-[54ch] text-body text-[color-mix(in_srgb,var(--zone-ink)_72%,transparent)]"
+            className="mt-7 max-w-[54ch] text-body text-balance text-[color-mix(in_srgb,var(--zone-ink)_72%,transparent)]"
           >
             {copy.faq.intro}
           </Reveal>

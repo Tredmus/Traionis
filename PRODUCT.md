@@ -81,7 +81,7 @@ Offerings are framed as outcomes and capability, never as a flat services list.
 **Timelines (stated on the site)**
 
 - Websites: **1–3 weeks**.
-- Applications: **a first working release in 2–5 weeks**, scope-dependent.
+- Applications: **a first working release in 2–3 weeks**, scope-dependent. (Researched 2026-09-30: AI-native studios now promise MVPs in 2–3 weeks; speed reads as premium when framed as method, not as a template shortcut. Websites stay 1–3 weeks to cover content, feedback rounds and concurrent projects.)
 - A working link from the first week, kept current — progress is something the client checks, not something they are told about.
 
 **After launch (stated on the site, FAQ only)**
@@ -127,7 +127,7 @@ A **gallery that holds 3–5 projects and accepts a new one as a content-layer c
 - Name and title.
 - Two or three sentences on how he approaches building.
 - "Traionis, est. 2023."
-- Enterprise background, stated precisely: previously built front-end for a European enterprise healthcare platform; trained at Endava.
+- Background, stated precisely: worked inside an enterprise engineering team (a European enterprise healthcare platform) before founding Traionis. Not "front-end" (undersells the full stack) and not Endava (weak, and nobody asks).
 
 **What it does not say:** years of experience, number of clients, or non-development roles. Domain knowledge from running day-to-day operations for a 70-truck logistics fleet is true and valuable, but it belongs on calls with logistics buyers, not on the site.
 

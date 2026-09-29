@@ -16,8 +16,8 @@ function easeOutCubic(t: number) {
 /**
  * The invite past the fold.
  *
- * Copy stays neutral — the descent is never named. Idle state is a drop
- * falling into a ripple ring; accent travels down the tether as the click cue.
+ * Copy stays neutral — the descent is never named. Idle state is a slim
+ * gauge with a light sinking inside it; accent travels down the tether as the click cue.
  * On click: splash the surface, then scroll once that break has played out
  * (button only — ordinary scroll never fires the splash).
  */
@@ -114,54 +114,36 @@ export function PlungeControl({ className = "" }: { className?: string }) {
           {copy.hero.ctaContinue}
         </span>
 
-        {/* A drop into still water: light slides down the line, and where it
-            lands a flat ring opens and fades. The same gesture the click
-            makes to the surface, at the scale of an icon. */}
+        {/* A slim gauge with a light sinking inside it: a closed, finished
+            shape that says "down", and the descent the click starts. The
+            outline takes the accent on hover with the label. */}
         <span
           aria-hidden="true"
-          className="relative flex h-14 w-12 justify-center transition-colors duration-300 [transition-timing-function:var(--ease-descent)] group-hover:text-[var(--color-accent-hi)] group-focus-visible:text-[var(--color-accent-hi)]"
+          className="relative flex h-[1.9rem] w-[1.15rem] justify-center rounded-full border transition-colors duration-300 [transition-timing-function:var(--ease-descent)] group-hover:text-[var(--color-accent-hi)] group-focus-visible:text-[var(--color-accent-hi)]"
+          style={{ borderColor: "color-mix(in srgb, currentColor 55%, transparent)" }}
         >
-          {/* The line */}
-          <span
-            className="absolute left-1/2 top-0 h-10 w-px -translate-x-1/2"
+          <motion.span
+            className="absolute left-1/2 top-[0.35rem] size-[5px] -translate-x-1/2 rounded-full"
             style={{
-              background:
-                "linear-gradient(to bottom, color-mix(in srgb, currentColor 18%, transparent), color-mix(in srgb, currentColor 45%, transparent))",
+              background: "var(--color-accent-hi)",
+              boxShadow: "0 0 6px rgb(18 168 212 / 0.8)",
             }}
+            animate={
+              reduced || plunging
+                ? { y: 0, opacity: 1 }
+                : { y: [0, 0, 13, 13], opacity: [0, 1, 0, 0] }
+            }
+            transition={
+              reduced || plunging
+                ? { duration: 0.2 }
+                : {
+                    duration: 2.1,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    times: [0, 0.18, 0.78, 1],
+                  }
+            }
           />
-
-          {/* Resting ring — always there, so the icon reads without motion. */}
-          <span
-            className="absolute left-1/2 top-[2.6rem] h-[5px] w-4 -translate-x-1/2 rounded-[50%] border"
-            style={{ borderColor: "color-mix(in srgb, currentColor 55%, transparent)" }}
-          />
-
-          {!reduced && !plunging && (
-            <>
-              <motion.span
-                className="absolute left-1/2 top-0 h-2.5 w-[2px] -translate-x-1/2 rounded-full"
-                style={{ background: "var(--color-accent-hi)" }}
-                animate={{ y: [0, 34, 34], opacity: [0, 1, 0] }}
-                transition={{
-                  duration: 2.2,
-                  repeat: Infinity,
-                  ease: ["easeIn", "linear"],
-                  times: [0, 0.42, 0.5],
-                }}
-              />
-              <motion.span
-                className="absolute left-1/2 top-[2.6rem] h-[5px] w-4 rounded-[50%] border"
-                style={{ borderColor: "var(--color-accent-hi)", x: "-50%" }}
-                animate={{ scale: [0.4, 0.4, 2.6], opacity: [0, 0.9, 0] }}
-                transition={{
-                  duration: 2.2,
-                  repeat: Infinity,
-                  ease: "easeOut",
-                  times: [0, 0.44, 1],
-                }}
-              />
-            </>
-          )}
         </span>
       </motion.button>
 

@@ -1,17 +1,17 @@
 /**
  * Case studies.
  *
- * EVIDENCE RULES — these are load-bearing, not stylistic:
+ * EVIDENCE RULES - these are load-bearing, not stylistic:
  *  - No invented clients, logos, testimonials, metrics, or outcomes.
  *  - Anything not yet supplied is TODO, never filled with something plausible.
  *  - `status` decides how a project is labelled. A build that no client ever
  *    adopted is never described as client work.
  *
  * This list is the gallery's content layer. Adding a project here adds a plate
- * to the descent — no layout work, no component surgery. The homepage shows
+ * to the descent - no layout work, no component surgery. The homepage shows
  * every entry with `inColumn`, in this order.
  *
- * MEDIA — `loop` and `phone` are captured from the live site itself (see
+ * MEDIA - `loop` and `phone` are captured from the live site itself (see
  * public/work/PROVENANCE.md), never mocked up.
  */
 
@@ -49,7 +49,7 @@ export interface CaseStudy {
   /** One line. What it is, for whom. */
   summary: string;
   /**
-   * What this build honestly proves — different for each one, and the reason
+   * What this build honestly proves - different for each one, and the reason
    * a three-item gallery is not three of the same thing. Kept short enough to
    * read in the beam.
    */
@@ -75,7 +75,7 @@ export interface CaseStudy {
   problem: readonly string[];
   decisions: readonly CaseDecision[];
   outcome: readonly string[];
-  /** TODO slots. Rendered only when populated — never as empty scaffolding. */
+  /** TODO slots. Rendered only when populated - never as empty scaffolding. */
   metrics: readonly { label: string; value: string }[];
 }
 
@@ -84,35 +84,35 @@ export const CASE_STUDIES: readonly CaseStudy[] = [
     slug: "orvyx",
     name: "Orvyx",
     summary:
-      "Product site for LifePod 72 — a sealed IP67 hard case built to keep someone alive for 72 hours.",
+      "Product site for LifePod 72 - a sealed IP67 hard case built to keep someone alive for 72 hours.",
     // Confirmed by Miroslav: nothing about this build was technically hard.
     // It must never be written up as an engineering case study, and it carries
     // no invented decisions, constraints, or difficulty.
     proves:
       "A launch site in the client's own dark, engineered brand, shipped fast and live today.",
     status: "client",
-    statusLabel: "Client project — live",
+    statusLabel: "Client project - live",
     year: null, // TODO(year): confirm the delivery date.
     stack: [],
     live: { href: "https://orvyx.tech/", label: "orvyx.tech" },
     kind: "Product site",
     loop: {
-      src: "/work/orvyx-loop.mp4",
-      poster: "/work/orvyx-poster.webp",
+      src: "/work/orvyx-loop-v2.mp4",
+      poster: "/work/orvyx-poster-v2.webp",
       width: 1280,
       height: 800,
     },
     phone: {
-      src: "/work/orvyx-phone-390.webp",
+      src: "/work/orvyx-phone-v2.webp",
       width: 780,
       height: 1688,
-      alt: "The Orvyx site on a phone: “Seventy-two hours of autonomy” over the LifePod 72 case, with the 8 modules, IP67 and 72h spec row.",
+      alt: "The Orvyx site on a phone: “Seventy-two hours. One case.” above the request-availability and open-the-case actions, with the sealed LifePod 72 case below.",
     },
     shot: {
-      src: "/work/orvyx-lifepod.webp",
-      width: 1400,
-      height: 641,
-      alt: "The Orvyx site: “Seventy-two hours of autonomy” set over the LifePod 72 hard case, with a spec row reading 8 modules, IP67 sealed, 72h autonomy.",
+      src: "/work/orvyx-poster-v2.webp",
+      width: 1280,
+      height: 800,
+      alt: "The Orvyx site: “Seventy-two hours. One case.” beside the sealed LifePod 72 case, which a scan line passes over before the case opens to show its eight modules.",
     },
     inColumn: true,
     // Deliberately no breakdown page. There is no engineering story to tell
@@ -227,7 +227,7 @@ export const CASE_STUDIES: readonly CaseStudy[] = [
     outcome: [],
     metrics: [],
   },
-  // Morion Stones — built, never adopted. Its link and source are lost, so it
+  // Morion Stones - built, never adopted. Its link and source are lost, so it
   // is not published rather than published without evidence. Restore it here
   // if either turns up; the gallery takes it without a layout change.
 ];

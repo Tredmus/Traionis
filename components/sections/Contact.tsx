@@ -4,7 +4,7 @@ import { ZoneInner } from "@/components/depth/DepthZone";
 import { Reveal } from "@/components/motion/Reveal";
 import { ContactForm } from "@/components/sections/ContactForm";
 import { HoverAnchor } from "@/components/ui/HoverLink";
-import { BOOKING_URL, CONTACT_EMAIL } from "@/lib/contact";
+import { BOOKING_URL, CONTACT_EMAIL, CONTACT_PHONE } from "@/lib/contact";
 import { useCopy } from "@/lib/locale-context";
 
 /**
@@ -35,7 +35,7 @@ export function Contact() {
           <span aria-hidden="true" className="abyss-contact__rule" />
         </Reveal>
 
-        <Reveal as="p" index={2} className="mt-6 max-w-[52ch] text-lead opacity-70">
+        <Reveal as="p" index={2} className="mt-6 max-w-[52ch] text-lead text-balance opacity-70">
           {copy.contact.intro}
         </Reveal>
 
@@ -60,7 +60,7 @@ export function Contact() {
               ))}
             </ol>
 
-            {(CONTACT_EMAIL || BOOKING_URL) && (
+            {(CONTACT_EMAIL || CONTACT_PHONE || BOOKING_URL) && (
               <div className="abyss-direct">
                 <h3 className="abyss-contact__aside-head">{copy.contact.direct.heading}</h3>
                 <ul className="abyss-direct__list">
@@ -82,6 +82,15 @@ export function Contact() {
                       <HoverAnchor href={`mailto:${CONTACT_EMAIL}`} className="text-body font-medium">
                         {CONTACT_EMAIL}
                       </HoverAnchor>
+                    </li>
+                  )}
+                  {CONTACT_PHONE && (
+                    <li>
+                      <span className="abyss-direct__label">{copy.contact.direct.phone}</span>
+                      <HoverAnchor href={`tel:${CONTACT_PHONE.replace(/\s+/g, "")}`} className="text-body font-medium">
+                        {CONTACT_PHONE}
+                      </HoverAnchor>
+                      <span className="abyss-direct__hours">{copy.contact.direct.hours}</span>
                     </li>
                   )}
                 </ul>

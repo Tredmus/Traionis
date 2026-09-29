@@ -7,7 +7,6 @@ scrollbar off the right edge.
 
 | File | Source | Captured | Notes |
 |---|---|---|---|
-| `orvyx-lifepod.webp` | https://orvyx.tech/ | 2026-09-07 | Home, top of page, page zoom 0.82 so the headline, product and spec row all sit in one frame. |
 | `parkqui.webp` | https://park-qui.vercel.app/ | 2026-09-07 | Home, top of page, 1:1 zoom. The map view sits behind authentication and was not captured. |
 | `popwrists.webp` | https://popwrists.vercel.app/ | 2026-09-07 | Home, top of page, 1:1 zoom. |
 
@@ -18,7 +17,7 @@ encoded to WebP at quality 84.
 
 | Files | Source | Captured | Notes |
 |---|---|---|---|
-| `orvyx-loop.mp4`, `orvyx-poster.webp`, `orvyx-phone-390.webp` | https://orvyx.tech/ | 2026-09-27 | English version. |
+| `orvyx-loop-v2.mp4`, `orvyx-poster-v2.webp`, `orvyx-phone-v2.webp` | https://orvyx.tech/ | 2026-09-30 | English version, re-shot after the site's redesign; scrolls 3700px so the loop reaches the case opening. |
 | `parkqui-loop.mp4`, `parkqui-poster.webp`, `parkqui-phone-390.webp` | https://park-qui.vercel.app/ | 2026-09-27 | English version, public landing page only (the map sits behind sign-in). |
 | `popwrists-loop.mp4`, `popwrists-poster.webp`, `popwrists-phone-390.webp` | https://popwrists.vercel.app/ | 2026-09-27 | |
 

@@ -1,7 +1,7 @@
 /**
  * The project brief submission.
  *
- * There is no backend, no database and no API route — a deliberate constraint.
+ * There is no backend, no database and no API route - a deliberate constraint.
  * The brief therefore POSTs to a third-party form endpoint, which is the one
  * constraint the client chose to reverse in order to keep the submit inside
  * the page. The endpoint URL is public by nature (it accepts anonymous POSTs),
@@ -22,6 +22,8 @@ export const CONTACT_CONFIGURED = CONTACT_ENDPOINT.length > 0;
  * is set, so the page never shows an address or a link that goes nowhere.
  */
 export const CONTACT_EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "";
+/** Phone, shown with working hours. International format, e.g. +359888123456. */
+export const CONTACT_PHONE = process.env.NEXT_PUBLIC_CONTACT_PHONE ?? "";
 /** A booking page for the discovery call (e.g. a Cal.com event link). */
 export const BOOKING_URL = process.env.NEXT_PUBLIC_BOOKING_URL ?? "";
 
@@ -34,7 +36,7 @@ export interface ContactBrief {
 
 /**
  * Deliberately permissive. The purpose is to catch a typo before the visitor
- * loses the brief they just wrote, not to adjudicate RFC 5322 — over-strict
+ * loses the brief they just wrote, not to adjudicate RFC 5322 - over-strict
  * client-side email rules reject real addresses and the server sees it anyway.
  */
 export const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -63,7 +65,7 @@ export async function sendBrief(brief: ContactBrief): Promise<void> {
       // Most form services read this to set the reply-to address, so hitting
       // reply in the inbox answers the person rather than the service.
       _replyto: brief.email,
-      _subject: `Project brief — ${brief.name}`,
+      _subject: `Project brief - ${brief.name}`,
       // FormSubmit: a readable table in the inbox, and no captcha page (its
       // AJAX endpoint cannot show one anyway). Other services ignore these.
       _template: "table",
@@ -76,7 +78,7 @@ export async function sendBrief(brief: ContactBrief): Promise<void> {
   }
 
   // Some services (FormSubmit among them) answer 200 with a failure in the
-  // body — e.g. an endpoint not yet activated. Treat that as a failure, so the
+  // body - e.g. an endpoint not yet activated. Treat that as a failure, so the
   // visitor is told rather than shown a success that never arrived.
   const data: unknown = await response.json().catch(() => null);
   if (

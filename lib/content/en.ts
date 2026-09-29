@@ -1,7 +1,7 @@
 import type { SiteCopy } from "./types";
 
 /**
- * English — the populated source of truth.
+ * English - the populated source of truth.
  *
  * Every claim here is checkable. Nothing asserts a client, a metric, a
  * testimonial, or a capability that does not exist. Voice rules live in
@@ -9,10 +9,10 @@ import type { SiteCopy } from "./types";
  */
 export const en: SiteCopy = {
   meta: {
-    title: "Traionis — Custom websites & applications, Varna, Bulgaria",
+    title: "Traionis - Custom websites & applications, Varna, Bulgaria",
     description:
       "Traionis is a web development studio in Varna, Bulgaria. We design and build custom websites and web and mobile applications from the ground up.",
-    ogTitle: "Traionis — You bring the idea. We build the product.",
+    ogTitle: "Traionis - You bring the idea. We build the product.",
     ogDescription:
       "Custom websites and web and mobile applications, designed and built from the ground up by a studio in Varna, Bulgaria.",
   },
@@ -50,16 +50,16 @@ export const en: SiteCopy = {
           { anchor: "foundation", text: "Code, hosting and domain in your name" },
           { anchor: "structure", text: "Structured for Google and AI search answers" },
           { anchor: "content", text: "Bilingual when your market is" },
-          { anchor: "design", text: "Custom design and front-end, coded by hand" },
-          { anchor: "interaction", text: "Fast on mid-range phones, measured on real devices" },
+          { anchor: "design", text: "Custom design, built from scratch for your brand" },
+          { anchor: "interaction", text: "Fast on every phone - tested on real devices" },
         ],
         proof: { href: "#plate-orvyx", label: "See Orvyx" },
-        timeline: "Live in 1–3 weeks",
+        timeline: "Live in 1-3 weeks",
       },
       {
         id: "app",
         title: "Applications the business runs on",
-        body: "Booking systems, marketplaces, client portals, operations and internal tools — web and mobile, built around how your business actually works.",
+        body: "Booking systems, marketplaces, client portals, operations and internal tools - web and mobile, built around how your business actually works.",
         // Anchors are parts of the system diagram.
         callouts: [
           { anchor: "admin", text: "Admin dashboards and moderation" },
@@ -69,11 +69,11 @@ export const en: SiteCopy = {
           { anchor: "data", text: "Data modelling, accounts, roles and permissions" },
         ],
         proof: { href: "#plate-parkqui", label: "See ParkQui" },
-        timeline: "First working release in 2–5 weeks",
+        timeline: "First working release in 2-3 weeks",
       },
     ],
     rebuild:
-      "Already have a site? We rebuild it from the foundations — and your domain, your content and your search rankings come with it.",
+      "Already have a site? We rebuild it from the foundations - and your domain, your content and your search rankings come with it.",
   },
 
   process: {
@@ -125,7 +125,7 @@ export const en: SiteCopy = {
         id: "timeline",
         question: "How long does a project take?",
         answer: [
-          "Websites take one to three weeks. Applications reach a first working release in two to five weeks, and we build on it from there. The exact timeline goes into the written scope.",
+          "Websites take one to three weeks. Applications reach a first working release in two to three weeks, and we build on it from there. The exact timeline goes into the written scope.",
         ],
       },
       {
@@ -139,14 +139,14 @@ export const en: SiteCopy = {
         id: "after-launch",
         question: "What happens after launch?",
         answer: [
-          "Every project includes thirty days of fixes. After that, you can keep us on a monthly care plan — hosting, updates, monitoring and small changes — or take the project anywhere you like.",
+          "Every project includes thirty days of fixes. After that, you can keep us on a monthly care plan - hosting, updates, monitoring and small changes - or take the project anywhere you like.",
         ],
       },
       {
         id: "rebuild",
         question: "Can you rebuild our existing site?",
         answer: [
-          "Yes — from the foundations. We don't patch old sites or work in WordPress; a clean rebuild is faster and holds up longer. You keep your domain and content, and we carry your search rankings over through the move.",
+          "Yes - from the foundations. We don't patch old sites or work in WordPress; a clean rebuild is faster and holds up longer. You keep your domain and content, and we carry your search rankings over through the move.",
         ],
       },
       {
@@ -171,7 +171,7 @@ export const en: SiteCopy = {
     role: "Founder & Lead Engineer",
     statement: "Every project we ship is held to the standard of the site you're reading now.",
     body: [
-      "I started Traionis in 2023 to bring the standard of enterprise software teams to businesses of any size. Before that, I built front-end for a European enterprise healthcare platform and trained at Endava.",
+      "I started Traionis in 2023 to bring the standard of enterprise software teams to businesses of any size, after working inside one myself. Today we build the whole stack, from the interface your customers see to the database behind it.",
     ],
     facts: "Est. 2023 · Varna, Bulgaria · English / Bulgarian",
   },
@@ -197,7 +197,7 @@ export const en: SiteCopy = {
     errorEmail: "Enter a valid email address.",
     errorSubmit: "That didn't go through. Please try again in a moment.",
     // TODO(endpoint): remove once NEXT_PUBLIC_CONTACT_ENDPOINT is set in the
-    // deploy environment. Visible on purpose — a form that silently accepts a
+    // deploy environment. Visible on purpose - a form that silently accepts a
     // brief and drops it is the worst bug this site could ship.
     errorUnconfigured: "This form isn't connected yet.",
     next: {
@@ -205,13 +205,15 @@ export const en: SiteCopy = {
       steps: [
         "We read your brief.",
         "You get a reply within two working days.",
-        "A short call to scope it — then a written scope and a fixed price.",
+        "A short call to scope it - then a written scope and a fixed price.",
       ],
     },
     direct: {
       heading: "Prefer to talk first?",
       email: "Write to us directly",
       call: "Book a 30-minute call",
+      phone: "Or call",
+      hours: "Mon-Fri, 9:00-18:00",
     },
   },
 
