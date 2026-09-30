@@ -33,6 +33,57 @@ import {
  *  - prefers-reduced-motion renders one static frame and never starts a loop.
  */
 
+let canvasFilterSupport: boolean | null = null;
+
+/**
+ * Safari ignores `ctx.filter` (the property is missing or a no-op), which
+ * leaves the shafts as hard-edged wedges. Test it by blurring one pixel and
+ * checking that its neighbour picked some up.
+ */
+function supportsCanvasFilter(): boolean {
+  if (canvasFilterSupport !== null) return canvasFilterSupport;
+  const probe = document.createElement("canvas");
+  probe.width = 5;
+  probe.height = 5;
+  const pctx = probe.getContext("2d", { willReadFrequently: true });
+  if (!pctx || !("filter" in pctx)) return (canvasFilterSupport = false);
+  pctx.filter = "blur(1px)";
+  pctx.fillRect(2, 2, 1, 1);
+  canvasFilterSupport = pctx.getImageData(1, 2, 1, 1).data[3] > 0;
+  return canvasFilterSupport;
+}
+
+/**
+ * Blur without `ctx.filter`: halve the image repeatedly, then scale it back
+ * up in the same steps with smoothing. Each round trip widens the soft edge;
+ * about log2(2.4 * blur) rounds lands close to a Gaussian of that radius.
+ */
+function softenInPlace(target: HTMLCanvasElement, blur: number) {
+  const steps = Math.max(1, Math.round(Math.log2(blur * 2.4)));
+  const levels: HTMLCanvasElement[] = [target];
+  for (let i = 1; i <= steps; i += 1) {
+    const prev = levels[i - 1];
+    const next = document.createElement("canvas");
+    next.width = Math.max(1, Math.ceil(prev.width / 2));
+    next.height = Math.max(1, Math.ceil(prev.height / 2));
+    const nctx = next.getContext("2d");
+    if (!nctx) return;
+    nctx.imageSmoothingEnabled = true;
+    nctx.imageSmoothingQuality = "high";
+    nctx.drawImage(prev, 0, 0, next.width, next.height);
+    levels.push(next);
+  }
+  for (let i = steps - 1; i >= 0; i -= 1) {
+    const dest = levels[i];
+    const dctx = dest.getContext("2d");
+    if (!dctx) return;
+    dctx.clearRect(0, 0, dest.width, dest.height);
+    dctx.imageSmoothingEnabled = true;
+    dctx.imageSmoothingQuality = "high";
+    dctx.drawImage(levels[i + 1], 0, 0, dest.width, dest.height);
+  }
+}
+
 interface AtmosphereProps {
   zone: ZoneId;
   className?: string;
@@ -117,7 +168,8 @@ export function Atmosphere({ zone, className = "" }: AtmosphereProps) {
         gradient.addColorStop(0.55, config.shaftColor.replace(/[\d.]+\)$/, "0.06)"));
         gradient.addColorStop(1, "rgb(0 0 0 / 0)");
 
-        octx.filter = `blur(${blur}px)`;
+        const native = supportsCanvasFilter();
+        if (native) octx.filter = `blur(${blur}px)`;
         octx.fillStyle = gradient;
         octx.beginPath();
         octx.moveTo(ax - col.spread, 0);
@@ -126,7 +178,8 @@ export function Atmosphere({ zone, className = "" }: AtmosphereProps) {
         octx.lineTo(ax - col.spread * 2.4 + col.lean, height);
         octx.closePath();
         octx.fill();
-        octx.filter = "none";
+        if (native) octx.filter = "none";
+        else softenInPlace(off, blur);
 
         shaftSprites.push({
           canvas: off,
