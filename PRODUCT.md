@@ -61,7 +61,7 @@ The previous spine ("you talk to the person who builds it") is retired. It was n
 - `/` — English. `/bg` — Bulgarian. Each is the complete single-page site, cross-linked with `hreflang` alternates.
 - Header navigation links to **sections on the same page** (`#work`, `#process`, `#contact`, …), never to other routes.
 - Previously indexed paths `/work`, `/contact`, `/about` and `/work/[slug]` are **301-redirected** to the matching section of `/` so their ranking consolidates onto the homepage. They must never return 404.
-- Case-study depth (ParkQui) lives inside the homepage work section — expandable in place — rather than on its own route.
+- Case-study depth (FastCat) lives inside the homepage work section — expandable in place — rather than on its own route.
 
 ## Capabilities and Constraints
 
@@ -148,12 +148,15 @@ Orvyx sells **LifePod 72**, a hard-case system built to keep someone alive for 7
 - Real paid client work; the fee is never mentioned.
 - What it is honestly evidence of: **shipped, live, paid, and visually strong** — nothing more. The build was not technically hard (largely generated video plus small tweaks). It is never written up as an engineering case study and never carries invented decisions, constraints or difficulty. A short, plain, honest treatment.
 
-**ParkQui — marketplace platform. Live at https://park-qui.vercel.app/ (map view behind authentication).**
+**FastCat — food delivery platform. Customer web app live at https://fastcat-customer.vercel.app/ (restaurant, driver and admin apps behind sign-in).**
 
-Full-stack parking marketplace: interactive maps, authentication, listing management, admin dashboard, built for a 2,000-member Bulgarian community.
+Four apps on one Supabase backend: customer app (Expo: iOS, Android and web from one codebase, live order tracking on a map), restaurant app (phone, tablet, Sunmi Android POS), driver app (live location, automatic offers, cash on hand) and a Next.js admin. Dispatch runs inside the database on a 10-second schedule; row-level security on every table; 79 automated database tests; white-label, a brand is a config file; fully bilingual. First commit 28 Sep 2026.
 
-- Built **for a founder**, for that community. It is described that way — "built for a founder" is true — without claiming a fee or calling it paid client work. The commercial arrangement and how it ended stay off the site.
-- **The only evidence of engineering depth.** It carries the case-study structure: problem → decisions and why → what it does now.
+- Built **for a local delivery business in Gabrovo** as the alternative to the subscription delivery software they were about to sign up for. Not a signed client: "built for a local delivery business", never "client work".
+- **In final polish.** Works end to end on live infrastructure with demo accounts only: no users, orders or revenue are ever claimed. Cash on delivery works; **card payments are not connected** and online payments are never claimed. Still to come: final name and branding, real photos, card payments, app store publishing.
+- **The evidence of engineering depth.** It carries the case-study structure: problem → decisions and why → where it is today.
+
+**ParkQui — removed from the gallery (2026-09-30).** The project stopped. The entry stays in `lib/work.ts` with `inColumn: false` so `/work/parkqui` resolves until it is redirected; it is not shown or claimed anywhere.
 
 **PopWrists — in-house product concept. Live at https://popwrists.vercel.app/.**
 

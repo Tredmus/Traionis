@@ -71,7 +71,7 @@ export const bg: DeepPartial<SiteCopy> = {
           { anchor: "automation", text: "Автоматизация и AI асистенти, вградени в продукта" },
           { anchor: "data", text: "Модел на данните, акаунти, роли и права" },
         ],
-        proof: { href: "#plate-parkqui", label: "Вижте ParkQui" },
+        proof: { href: "#plate-fastcat", label: "Вижте FastCat" },
         timeline: "Първа работеща версия за 2-3 седмици",
       },
     ],

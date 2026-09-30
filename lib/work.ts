@@ -124,6 +124,65 @@ export const CASE_STUDIES: readonly CaseStudy[] = [
     metrics: [],
   },
   {
+    slug: "fastcat",
+    name: "FastCat",
+    summary:
+      "A multi-app food delivery platform, built for a local delivery business in Gabrovo, Bulgaria.",
+    proves:
+      "Four apps on one backend: ordering on iOS, Android and web, a restaurant app, a driver app and an admin dashboard, with live tracking on a map.",
+    // Facts supplied by Miroslav (2026-09-30). Not a signed client: the
+    // business has not decided whether to use it, so it is described as
+    // "built for", never as client work. No users, orders or revenue claimed.
+    // Card payments are not connected: never claim online payments.
+    status: "unconfirmed",
+    statusLabel: "Built for a local delivery business",
+    year: null,
+    stack: ["TypeScript", "Turborepo", "Expo (React Native)", "Next.js", "Supabase", "OpenStreetMap"],
+    live: { href: "https://fastcat-customer.vercel.app/", label: "fastcat-customer.vercel.app" },
+    shot: {
+      src: "/work/fastcat-poster.webp",
+      width: 1280,
+      height: 800,
+      alt: "The FastCat customer app: “Gabrovo's favourite food, at your door” on a purple header, with dish categories, offers and the restaurants in Gabrovo below.",
+    },
+    kind: "Delivery platform",
+    loop: {
+      src: "/work/fastcat-loop.mp4",
+      poster: "/work/fastcat-poster.webp",
+      width: 1280,
+      height: 800,
+    },
+    phone: {
+      src: "/work/fastcat-phone.webp",
+      width: 780,
+      height: 1688,
+      alt: "FastCat on a phone: “What are we eating today?” with the delivery address, restaurant search, dish categories and the app's bottom tab bar.",
+    },
+    inColumn: true,
+    caseStudy: true,
+    problem: [
+      "A local delivery business in Gabrovo was about to sign up for subscription delivery software: a recurring fee, for a platform they would never own. FastCat was built as the alternative - their own platform, under their own brand.",
+    ],
+    decisions: [
+      {
+        title: "Four apps, one backend",
+        body: "Customers order on iOS, Android and the web from a single Expo codebase. Restaurants run their own app, built to work on Android POS terminals too; drivers have theirs; the business runs everything from a Next.js admin. All four share one Supabase backend and one design system.",
+      },
+      {
+        title: "Dispatch inside the database",
+        body: "A scheduled job every ten seconds runs the order timers and offers each order to drivers whose location is fresh, never re-offering it to a driver who just declined. There is no separate dispatch server to keep alive.",
+      },
+      {
+        title: "Security where the data lives",
+        body: "Row-level security on every table and the business logic in database functions, covered by 79 automated database tests. And the whole platform is white-label: a new brand is a config file, not a fork.",
+      },
+    ],
+    outcome: [
+      "Working end to end on live infrastructure within days of the first commit: a customer's order is accepted by the restaurant, dispatched to a driver automatically and tracked live on the map. Cash on delivery works end to end. In final polish, with demo restaurants and no real orders yet; card payments and app store publishing are next.",
+    ],
+    metrics: [],
+  },
+  {
     slug: "parkqui",
     name: "ParkQui",
     summary:
@@ -156,7 +215,9 @@ export const CASE_STUDIES: readonly CaseStudy[] = [
       height: 641,
       alt: "The ParkQui site: a deep blue marketplace landing page in Bulgarian, with search and listing actions.",
     },
-    inColumn: true,
+    // Out of the gallery since 2026-09-30: the project has stopped. The entry
+    // stays so /work/parkqui keeps resolving until it is redirected.
+    inColumn: false,
     caseStudy: true,
     // Facts confirmed by Miroslav (Facebook groups before; Supabase + Mapbox)
     // or visible on the live site itself (the two roles and what each can
@@ -270,6 +331,37 @@ const WORK_BG: Record<string, ProjectText> = {
       "Сайтът на Orvyx: „Seventy-two hours. One case.“ до запечатания куфар LifePod 72, над който преминава сканираща линия, преди куфарът да се отвори и да покаже осемте си модула.",
     phoneAlt:
       "Сайтът на Orvyx на телефон: „Seventy-two hours. One case.“ над бутоните за запитване и отваряне на куфара, със запечатания LifePod 72 отдолу.",
+  },
+  fastcat: {
+    kind: "Платформа за доставки",
+    summary:
+      "Платформа за доставка на храна от няколко приложения, изградена за местен бизнес за доставки в Габрово.",
+    proves:
+      "Четири приложения върху един бекенд: поръчки за iOS, Android и уеб, приложение за ресторанти, приложение за шофьори и админ панел, със следене на поръчката на живо върху карта.",
+    problem: [
+      "Местен бизнес за доставки в Габрово щеше да се абонира за софтуер за доставки: абонаментна такса за платформа, която никога нямаше да притежава. FastCat беше изграден като алтернатива - собствена платформа, под собствената им марка.",
+    ],
+    decisions: [
+      {
+        title: "Четири приложения, един бекенд",
+        body: "Клиентите поръчват от iOS, Android и уеб от един общ код на Expo. Ресторантите имат свое приложение, което работи и на Android POS терминали; шофьорите имат свое; бизнесът управлява всичко от админ панел на Next.js. И четирите споделят един бекенд в Supabase и обща дизайн система.",
+      },
+      {
+        title: "Разпределението е в базата данни",
+        body: "Задача на всеки десет секунди управлява таймерите на поръчките и предлага всяка поръчка на шофьори с актуална локация, без да я предлага отново на шофьор, който току-що е отказал. Няма отделен сървър за разпределяне, който да се поддържа.",
+      },
+      {
+        title: "Сигурност там, където са данните",
+        body: "Защита на ниво ред във всяка таблица и бизнес логика във функции на базата данни, покрити от 79 автоматизирани теста. А цялата платформа е white-label: нова марка е един конфигурационен файл, а не нов проект.",
+      },
+    ],
+    outcome: [
+      "Работи от край до край върху реална инфраструктура само дни след първия ред код: поръчката на клиента се приема от ресторанта, разпределя се автоматично към шофьор и се следи на живо върху картата. Плащането с наложен платеж работи изцяло. Във финална доработка, с демо ресторанти и все още без реални поръчки; следващи са плащанията с карта и публикуването в магазините за приложения.",
+    ],
+    shotAlt:
+      "Клиентското приложение на FastCat: „Gabrovo's favourite food, at your door“ върху лилав хедър, с категории ястия, оферти и ресторантите в Габрово отдолу.",
+    phoneAlt:
+      "FastCat на телефон: „What are we eating today?“ с адреса за доставка, търсене на ресторанти, категории ястия и долната лента с раздели на приложението.",
   },
   parkqui: {
     kind: "Платформа-маркетплейс",

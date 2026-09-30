@@ -70,7 +70,7 @@ export const en: SiteCopy = {
           { anchor: "automation", text: "Automation and AI assistants, built into the product" },
           { anchor: "data", text: "Data modelling, accounts, roles and permissions" },
         ],
-        proof: { href: "#plate-parkqui", label: "See ParkQui" },
+        proof: { href: "#plate-fastcat", label: "See FastCat" },
         timeline: "First working release in 2-3 weeks",
       },
     ],

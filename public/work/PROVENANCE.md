@@ -20,6 +20,7 @@ encoded to WebP at quality 84.
 | `orvyx-loop-v2.mp4`, `orvyx-poster-v2.webp`, `orvyx-phone-v2.webp` | https://orvyx.tech/ | 2026-09-30 | English version, re-shot after the site's redesign; scrolls 3700px so the loop reaches the case opening. |
 | `parkqui-loop.mp4`, `parkqui-poster.webp`, `parkqui-phone-390.webp` | https://park-qui.vercel.app/ | 2026-09-27 | English version, public landing page only (the map sits behind sign-in). |
 | `popwrists-loop.mp4`, `popwrists-poster.webp`, `popwrists-phone-390.webp` | https://popwrists.vercel.app/ | 2026-09-27 | |
+| `fastcat-loop.mp4`, `fastcat-poster.webp`, `fastcat-phone.webp` | https://fastcat-customer.vercel.app/ | 2026-09-30 | English version of the public customer web app, demo data. The app scrolls an inner container, not the document, so the capture scrolls that element. Restaurant, driver and admin apps sit behind sign-in and were not captured. |
 
 Loops: headless Chromium at 1440x900, recorded from the browser's own
 screencast (JPEG q92), choreographed as hold → eased scroll down → hold →
