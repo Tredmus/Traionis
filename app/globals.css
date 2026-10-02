@@ -968,7 +968,15 @@ textarea {
   font-size: var(--text-label);
   letter-spacing: 0.08em;
   color: color-mix(in srgb, var(--zone-ink) 78%, transparent);
-  pointer-events: none;
+  transition:
+    border-color 240ms var(--ease-descent),
+    color 240ms var(--ease-descent);
+}
+
+.plate__tag:hover,
+.plate__tag:focus-visible {
+  border-color: rgb(18 168 212 / 0.6);
+  color: var(--zone-ink);
 }
 
 @media (min-width: 640px) {

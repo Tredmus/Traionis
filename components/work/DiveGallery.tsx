@@ -354,10 +354,15 @@ function ProjectPlate({
           <span className="plate__beam" aria-hidden="true" />
 
           {project.live && (
-            <figcaption className="plate__tag">
+            <a
+              className="plate__tag"
+              href={project.live.href}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <span>{project.live.label}</span>
               <LiveMark />
-            </figcaption>
+            </a>
           )}
         </div>
 

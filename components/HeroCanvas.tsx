@@ -566,7 +566,14 @@ export function HeroCanvas({ className = "" }: HeroCanvasProps) {
       // wave scale never drops below the water depth, and amplitude never
       // exceeds the steepness a desktop sea has (depth ≈ 0.42 × width). On a
       // landscape screen both limits sit exactly on the old values.
-      const waveW = Math.max(width, depthBelow * 1.2);
+      //
+      // The wave scale is taken from the water at rest, not the live depth.
+      // Wavelength is the phase divisor, so letting it follow the descent
+      // squeezes every crest toward x = 0 as you scroll, and the sea slides
+      // sideways. Amplitude may still follow the live depth: that is the
+      // surface flattening as the camera drops, which is the effect wanted.
+      const restDepth = Math.max(1, heroHeight - viewHeight * horizonFrac);
+      const waveW = Math.max(width, restDepth * 1.2);
       const waveD = Math.min(depthBelow, waveW * 0.42);
       const farWl = waveW * 0.045;
       const stepX = dense ? Math.max(2, Math.round(farWl / 16)) : desktopStep;
@@ -649,11 +656,19 @@ export function HeroCanvas({ className = "" }: HeroCanvasProps) {
           const texture =
             Math.sin((x / wl1) * TAU + phase) * amp +
             Math.sin((x / wl2) * TAU - phase2) * amp * 0.4;
+          // Near the plunge the rows take the cut's ripple as well as its
+          // shape. Their own ripple scales with the row amplitude, which all
+          // but vanishes once the sea thins to a ribbon, while the cut's
+          // scales with the silhouette: left alone, the cut dips under the
+          // pointer and opens a gap of bare water above it.
+          const ripple =
+            rippleDelta(x, y, t, amp) * (1 - towardEdge) +
+            rippleDelta(x, heroHeight, t, edgeAmp * 0.28) * towardEdge;
           return (
             y +
             texture * (1 - towardEdge) * (1 - towardEdge) +
             waveShape(x, t) * edgeAmp * towardEdge +
-            rippleDelta(x, y, t, amp)
+            ripple
           );
         };
 
